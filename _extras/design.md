@@ -16,27 +16,21 @@ We are loosely following the reverse instructional design process described in t
 ## Assumptions
 
 **Audience:**
-
 **Number of students:** 12
-
 **Number of educators:** 2 + 1 helper
-
-**Contact time:** 2 days
-
+**Contact time:**
 **Practical time:**
-
 **Skill level:** Beginner through to lower intermediate. 
-
 **Background:** CSIRO employees, including research scientists, technicians, and support staff. 
-
-**Prior learning:** Intro to unix
+**Prior learning:**
 
 ## 1. Final task (Practical exercise)
 
 ### Task 
-What should learners be able to do, at the end of this unit? Please describe this in one to two sentences, in terms of a practical, real-world task. 
 
-Your task(s) should be achievable in the practical time allotted. Individual tasks should take 1/2 to 2 days. 
+Take two (provided) unseen datasets, read them into R and answer specific questions about the features? of the data. Save the transformed data into a new file. Provide a script to perform these steps to a colleague and have them run it.
+
+(Estimated time: 1 day learning - 30-45 minute task)
 
 **Task:**  
 
