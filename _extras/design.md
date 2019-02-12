@@ -46,6 +46,8 @@ Can you design this exercise on a predesigned data set if necessary? If so, what
 
 What are all the ideas, connections, and assumptions a learner must master to achieve the task(s) described above? Please take photos of your concept maps and upload to the figures directory, with a link below.
 
+![Concept map][fig/81564D82-1F29-48B4-B2DE-8826424B4743.jpeg]
+
 ## 3. Episodes
 
 Break your concept map up into smaller 'chunks'. Each new map should only contain 5-6 ideas. These form the individual teaching 'episodes' from which our larger topic unit is composed. 
