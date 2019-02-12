@@ -32,9 +32,6 @@ Take two (provided) unseen datasets, read them into R and answer specific questi
 
 (Estimated time: 1 day learning - 30-45 minute task)
 
-**Task:**  
-
-**Task:**
 
 ### Data
 
@@ -46,7 +43,7 @@ Can you design this exercise on a predesigned data set if necessary? If so, what
 
 What are all the ideas, connections, and assumptions a learner must master to achieve the task(s) described above? Please take photos of your concept maps and upload to the figures directory, with a link below.
 
-![Concept map][fig/81564D82-1F29-48B4-B2DE-8826424B4743.jpeg]
+![Concept map](../fig/81564D82-1F29-48B4-B2DE-8826424B4743.jpeg)
 
 ## 3. Episodes
 
