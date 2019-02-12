@@ -16,13 +16,20 @@ We are loosely following the reverse instructional design process described in t
 ## Assumptions
 
 **Audience:**
+
 **Number of students:** 12
+
 **Number of educators:** 2 + 1 helper
-**Contact time:**
+
+**Contact time:** 2 days
+
 **Practical time:**
+
 **Skill level:** Beginner through to lower intermediate. 
+
 **Background:** CSIRO employees, including research scientists, technicians, and support staff. 
-**Prior learning:**
+
+**Prior learning:** Intro to unix
 
 ## 1. Final task (Practical exercise)
 
