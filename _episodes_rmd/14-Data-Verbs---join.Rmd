@@ -1,5 +1,5 @@
 ---
-title: 
+title: Joins
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,22 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("14-")
 ```
+
+## Binding Data
+
+* Bind Columns
+* Bind Rows
+
+## Joins
+
+* Inner
+* Left
+* Right
+* Full
+* Anti
+* Semi
 
 
 

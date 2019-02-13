@@ -1,5 +1,5 @@
 ---
-title: 
+title: Dataframes
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,27 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("06-")
 ```
+
+## Dataframes
+List of vectors
+
+## Dataframes as a Tidy structure
+
+## Structor of the dataframe
+
+## Inspecting the data
+* Head/Tail
+* Glimpse
+* Pairs
+* Summary
+* Class
+
+NOTE:  for tidy data frames with many vectors, how do you get the full list of vectors?
+
+DATASET: Diamonds Data
+GOTCHA:  $ notations
 
 
 

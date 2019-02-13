@@ -1,5 +1,5 @@
 ---
-title: 
+title: DATA
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,22 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("03-")
 ```
+
+## Data Types
+* Character / String
+* Integer / Numeric
+* Boolean / Logical
+* Date
+
+## Why does the datatype matter?
+Converting datatype examples.
+
+## Factors
+
+## Dates
+Conversion
 
 
 

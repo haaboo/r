@@ -1,17 +1,40 @@
 ---
-title: 
-teaching: 
-exercises: 
+title: Cleaning/munging Data 
+teaching: 15
+exercises: 30
 questions:
+  - How can I process data that is untidy/inconsistent/missing parts?
 objectives:
+  - Identify inconsistencies in data
+  - Appropriately fix errors in data without overwriting the original
+  - Reshape and manipulate data to make it tidy
+  - Set data to missing where necessary
 keypoints:
+  - Real world data is messy
+  - It takes time and care to prepare it for analysis and visualisation
 source: Rmd
 ---
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("16-")
 ```
 
+## Coded missing values
+- Converting coded missing values to NA (eg 999 or -1)
+- `mutate` with `case_when` or `ifelse`
+
+## Removing outliers/errors
+- It can be appropriate to remove outliers
+- Do so conservatively by creating a new variable without outliers
+
+## Fill
+- Fill down for missing values that shouldn't be empty
+
+> ## Challenge 1
+> Use [dataset] to:
+> 1. Reshape it to be tidy
+> 2. Recode values stored as -1 to be NA
+{: .challenge}
 
 
