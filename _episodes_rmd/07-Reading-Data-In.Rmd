@@ -1,5 +1,5 @@
 ---
-title: 
+title: Reading Data In
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,42 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("07-")
 ```
 
+## Common file types that may be a source of data
+  * .csv/.tsv
+  * .xls
+  * .txt
 
+## Refresher on file paths
+  * Relative and absolute
+  * Refer back to project structure discussion in episode 1
+  
+## `read_XXX` family of functions
+  * `read_csv`
+  * `readxl::read_excel`
+  * basic use of each function
 
+> ## Challenge 
+>
+>  Reading in datasets from csv and excel files
+>  Compare results. Different inputs, both are now identical data_frames
+{: .challenge}
+
+## More control over import parameters
+  * Review help for `read_XXX` functions
+  * Highlight some common uses of these parameters commonly needed to import wild datasets
+  * Specifically focus on the `col_types` parameter for forcing data types
+  
+> ## Challenge 
+>
+>  Reading in dataset forcing a data type conversion
+>  Compare with previously imported dataset using default parameters
+{: .challenge}
+  
+> ## Base warning  
+>
+>  Raise the `stringsAsFactors` issue. Default behaviour of R not what is typically expected 
+>  Caution needed in using `read.XXX` functions (always check your data)
+{: .callout}

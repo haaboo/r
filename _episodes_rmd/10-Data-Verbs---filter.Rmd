@@ -1,5 +1,5 @@
 ---
-title: 
+title: Data Verbs - `filter`
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,18 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("10-")
 ```
 
+`filter` to select rows of a dataframe
+
+## Using logical operators on dataframe columns
+
+## Using a logical vector
+  * ie. Logical operators produce a logical vector used for subsetting
+
+## First exposure to `group_by`
+  * Filtering on group characteristics (eg. `> mean(value)`)
+  
 
 

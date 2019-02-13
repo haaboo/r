@@ -1,5 +1,5 @@
 ---
-title: 
+title: Workflow Process
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,30 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("08-")
 ```
 
+Well done! We've started a data analysis.
 
-
+## Concept of an 'analysis workflow'
+  * Analysis as a series of small steps from reading in, wrangling (cleaning/tidying), manipulating, and ?communicating 
+  * Compare to a lab protocol for those with experience?
+  * Use some version of the Hadley diagram?
+  
+> ## Challenge 
+>
+>  Take a simple data analysis (possibly one you have performed) 
+>  and break down each of the steps in the workflow
+>  
+>  Try to get as specific as possible under the broad reading/wrangling/manipulating headings
+{: .challenge}  
+    
+  
+## A clean environment
+  * Why it's important for this understanding of an analysis as a whole workflow
+  * What can go wrong
+  * How to keep it clean
+  
+## Tidyverse philosophy 
+  * Ideally, each step outlined in the challenge above would correspond to a single tidyverse 'verb'
+  * Do one small thing well, and link them together
