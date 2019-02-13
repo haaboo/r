@@ -1,5 +1,5 @@
 ---
-title: 
+title:   R and R Studio 
 teaching: 
 exercises: 
 questions:
@@ -12,6 +12,25 @@ source: Rmd
 source("../bin/chunk-options.R")
 knitr_fig_path("01-")
 ```
+
+## Why would you use R?
+
+## Show code in R 
+
+## Show code in R Studio
+Examples, basic calculation 1 + 2, date
+
+## Tour of R Studio
+Discuss Projects
+
+## Exercise
+* Create Project
+* Create Script File
+* Initialise Git Repository
+
+NOTE:  Are you assuming you have already done GIT?
+
+
 
 
 
