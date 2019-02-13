@@ -1,17 +1,42 @@
 ---
-title: 
-teaching: 
-exercises: 
+title: Writing data
+teaching: 15
+exercises: 10
 questions:
+  - How do I write data to disk after working in R?
 objectives:
+  - Know when and how to write data
 keypoints:
+  - Intermediate data objects do not need to be written to disk
+  - Write data in an appropriate format
+  - Write data to the most useful location
 source: Rmd
 ---
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("17-")
 ```
 
+## When (not) to write data
+- Intermediate files do not need to be written
 
+## Where (not) to write data
+- Write to a relative path if it should be stored in the repository/project
+- Only for moderately sized data that should travel with the project
+- Absolute paths may be appropriate for fixed storage locations (would be better set as a variable...)
 
+## Data writing formats
+- Similar considerations for reading - where will it be going?
+- Plain text is usually best, especially for dataframes
+
+## How to write
+- `write_` family of functions, especially `write_csv`
+
+> ## Challenge 1
+>
+> Write out [dataset] to disk.
+>
+> Commit the script and the dataset to git
+>
+{: .challenge}
