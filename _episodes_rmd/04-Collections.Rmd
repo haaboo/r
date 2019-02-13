@@ -1,5 +1,5 @@
 ---
-title: 
+title: Collections
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,24 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("04-")
 ```
 
+## Introduction
+Why do you need Collections?
+
+## Vectors and Vector Matrices
+
+## Accessing elements of Vector
+
+## Logical Vectors
+
+## Lists
+
+## Accessing elements of List
+
+
+NOTE:  I would not talk about vectors in the context of matrices here! Runs a big risk of mental overload IMO.
+NOTE:  Can explicity mention and link back to this on matrix algabra day
 
 

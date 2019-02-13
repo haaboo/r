@@ -1,5 +1,5 @@
 ---
-title: 
+title: Gather & Spread
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,19 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("15-")
 ```
+
+## Introduction
+What will make this dataset tidy?
+
+Why tidy data matters? (practial examples)
+
+## Gather
+
+## Spread
+
+## Gather & Spread combined
 
 
 

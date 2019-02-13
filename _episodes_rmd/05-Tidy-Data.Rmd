@@ -1,5 +1,5 @@
 ---
-title: 
+title: Tidy Data
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,21 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("05-")
 ```
+
+## Tidy Data Concepts
+* What is it?
+* Why do you want it?
+
+## TidyVerse
+* What is it?
+* Loading
+
+## What makes a dataset tidy?
+
+NOTE:  Long vs Wide (with stats in mind)
+
 
 
 

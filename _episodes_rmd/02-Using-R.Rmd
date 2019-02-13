@@ -1,5 +1,5 @@
 ---
-title: 
+title: Using R
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,29 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("02-")
 ```
 
+## Interactions
+Sending code from script to console and repeating the previous lines from script
 
+## Functions
+How would you call a function (name and arguments)
+
+## Help
+
+## Assignment
+Naming Conventions
+
+## Environment
+
+## Packages
+
+## Commenting
+
+## Exercise
+Assign Function output to variable and investigate
+
+## Types
+TypeOf
 

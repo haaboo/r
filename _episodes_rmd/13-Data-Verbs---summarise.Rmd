@@ -1,5 +1,5 @@
 ---
-title: 
+title: Summarise and Grouping
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,13 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("13-")
 ```
+
+## Summarise
+
+## GroupBy
+
 
 
 
