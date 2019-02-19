@@ -1,7 +1,7 @@
 ---
-title:   R and R Studio 
-teaching: 
-exercises: 
+title:   Introduction to R and R Studio 
+teaching: 45
+exercises: 10
 questions:
 objectives:
 keypoints:
@@ -13,23 +13,99 @@ source("../bin/chunk-options.R")
 knitr_fig_path("01-")
 ```
 
-## Why would you use R?
+## Why should you use R?
 
-## Show code in R 
-
-## Show code in R Studio
-Examples, basic calculation 1 + 2, date
 
 ## Tour of R Studio
-Discuss Projects
+*Basic layout**
 
-## Exercise
-* Create Project
-* Create Script File
-* Initialise Git Repository
+When you first open RStudio, you will be greeted by three panels:
 
-NOTE:  Are you assuming you have already done GIT?
+  * The interactive R console/terminal (entire left)
+  * Environment/History (tabbed in upper right)
+  * Files/Plots/Packages/Help/Viewer (tabbed in lower right)
 
+<!--![RStudio layout](../fig/01-rstudio.png) -->
+
+Once you open files, such as R scripts, an editor panel will also open
+in the top left.
+
+<!--![RStudio layout with .R file open](../fig/01-rstudio-script.png) -->
+
+You can move the panels around in RStudio so that their arrangement suits you.
+
+Your time in R will be split between the R interactive
+console working in scripts. The console is where you will run all of your code, and can be a useful environment to try out ideas before adding them to an R script
+file. This console in RStudio is the same as the one you would get if
+you typed in `R` in your command-line environment.
+
+
+## Show code in R
+
+R can be used as a calculator:
+
+```{r}
+1 + 100
+```
+## Show code in R Studio
+
+Now you will enter some calculations into your script file, and either copy this to the 
+console window or highlight the code and Control Enter to run the code.  Notice that
+the output is show in the console window.
+```{r}
+(3 + 5) * 2
+```
+
+
+
+
+## Work flow within RStudio
+There are two main ways one can work within RStudio.
+
+1. Test and play within the interactive R console then copy code into
+a .R file to run later.
+   *  This works well when doing small tests and initially starting off.
+   *  It quickly becomes laborious
+2. Start writing in an .R file and use RStudio's short cut keys for the Run command
+to push the current line, selected lines or modified lines to the
+interactive R console.
+   * This is a great way to start; all your code is saved for later
+   * You will be able to run the file you create from within RStudio
+   or using R's `source()`  function.
+
+> ## Tip: Running segments of your code
+>
+> RStudio offers you great flexibility in running code from within the editor
+> window. There are buttons, menu choices, and keyboard shortcuts. To run the
+> current line, you can 1. click on the `Run` button above the editor panel,
+> or 2. select "Run Lines" from the "Code" menu, or 3. hit
+> <kbd>Ctrl</kbd>+<kbd>Return</kbd> in Windows or Linux or
+> <kbd>&#8984;</kbd>+<kbd>Return</kbd> on OS X. (This shortcut can also 
+> be seen by hovering
+> the mouse over the button). To run a block of code, select it and then `Run`.
+> If you have modified a line of code within a block of code you have just run,
+> there is no need to reselct the section and `Run`, you can use the next button
+> along, `Re-run the previous region`. This will run the previous code block
+> including the modifications you have made.
+{: .callout}
+
+
+# Projects
+
+R Studio provides in-built support for keeping all files associated with a project 
+together.  This includes the input data, R Scripts, analytical results and figures.
+
+> ## Challenge: Creating a self-contained project
+>
+> We're going to create a new project in RStudio:
+>
+> 1. Click the "File" menu button, then "New Project".
+> 2. Click "New Directory".
+> 3. Click "Empty Project".
+> 4. Type in the name of the directory to store your project, e.g. "my_project".
+> 5. If available, select the checkbox for "Create a git repository."
+> 6. Click the "Create Project" button.
+{: .challenge}
 
 
 

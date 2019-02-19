@@ -1,10 +1,17 @@
 ---
 title: DATA
 teaching: 
-exercises: 
 questions:
+- "What are the basic data types in R?"
+- "How do I represent categorical information in R?"
 objectives:
+- "To be aware of the different types of data."
+- "To begin exploring data frames, and understand how they are related to vectors, factors and lists."
+- "To be able to ask questions from R about the type, class, and structure of an object."
 keypoints:
+- "Use `read.csv` to read tabular data in R."
+- "The basic data types in R are double, integer, complex, logical, and character."
+- "Use factors to represent categories in R."
 source: Rmd
 ---
 
@@ -19,13 +26,144 @@ knitr_fig_path("03-")
 * Boolean / Logical
 * Date
 
-## Why does the datatype matter?
-Converting datatype examples.
+## Data Types
+
+An important concept in programming called *data types*. There are 5 
+main types: `double`, `integer`, `complex`, `logical` and `character`.
+
+```{r}
+typeof(3.14)
+typeof(1L) # The L suffix forces the number to be an integer, since by default R uses float numbers
+typeof(1+1i)
+typeof(TRUE)
+typeof('banana')
+```
+
+No matter how complicated our analyses become, all data in R is 
+interpreted as one of these basic data types. This strictness has some 
+really important consequences.
+
+When reading in data, the package readr uses a heuristic to figure out the 
+type of each column. This can be emulated using guess_parser(), which returns
+readr's best guess:
+
+```{r}
+guess_parser("2019-12-01")
+guess_parser("15:01")
+guess_parser(c("TRUE", "FALSE"))
+guess_parser(c("1", "33", "21"))
+guess_parser(c("12,341,234"))
+```
+
+The heuristic tries each of the following types, stopping when it finds a
+match:
+<li>logical: contains only "T", "F", "TRUE" or "FALSE"</li>
+<li>integer: contains only numeric, positive and negative</li>
+<li>double: contains only valid doubles, including scientific notations</li>
+<li>number: contains valid doubles with the grouping mark inside</li>
+<li>time: matches the default time_format</li>
+<li>date: matches the default date_format</li>
+<li>date-time: any ISO8602 date </li>
+
+If none of these rules apply, then the column will stay as a vector of strings.
+
+There are many ways to view the data and look at its data types, and the
+structure of the data.  To look at the first 5 rows of the diamonds dataset:
+
+```{r}
+head(diamonds, 5)
+```
+
+and the last 10 rows:
+
+```{r}
+tail(diamonds, 10)
+```
+
+To look at the structure of the data:
+
+```{r}
+glimpse(diamonds)
+```
+
+```{r}
+pairs(diamonds)
+```
+
+```{r}
+class(diamonds)
+```
+
 
 ## Factors
 
+Another important data structure is called a *factor*. Factors usually look like
+character data, but are typically used to represent categorical information. For
+example, let's make a vector of strings labelling cat colorations for all the
+cats in our study:
+
+```{r}
+coats <- c('tabby', 'tortoiseshell', 'tortoiseshell', 'black', 'tabby')
+coats
+str(coats)
+```
+
+We can turn a vector into a factor like so:
+
+```{r}
+CATegories <- factor(coats)
+class(CATegories)
+glimpse(CATegories)
+```
+
+Now R has noticed that there are three possible categories in our data - but it
+also did something surprising; instead of printing out the strings we gave it,
+we got a bunch of numbers instead. R has replaced our human-readable categories
+with numbered indices under the hood, this is necessary as many statistical
+calculations utilise such numerical representations for categorical data:
+
+```{r}
+typeof(coats)
+typeof(CATegories)
+```
+
+
+In modelling functions, it's important to know what the baseline levels are. This
+is assumed to be the first factor, but by default factors are labelled in
+alphabetical order. You can change this by specifying the levels:
+
+```{r}
+mydata <- c("case", "control", "control", "case")
+factor_ordering_example <- factor(mydata, levels = c("control", "case"))
+glimpse(factor_ordering_example)
+```
+
+In this case, we've explicitly told R that "control" should represented by 1, and
+"case" by 2. This designation can be very important for interpreting the
+results of statistical models!
+
+
 ## Dates
-Conversion
 
+The lubridate package reading and working with dates and times easier. To get the current date or date-time:
+```{r}
+today()
+```
+```{r}
+now()
+```
 
+When working dates, you can specify the format when reading a string:
 
+```{r}
+ymd("2019-02-13")
+mdy("February 2nd, 2019")
+dmy("13-Feb-2019")
+```
+
+Date-time can be created:
+
+```{r}
+ymd_hms("2019-02-13 20:11:23")
+mdy_hm("2019-02-13 08:02")
+```

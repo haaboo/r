@@ -3,8 +3,14 @@ title: Tidy Data
 teaching: 
 exercises: 
 questions:
+- "How can I use a consistent underlying data structure?"
 objectives:
+- "To recognise tidy vs messy data"
+- "To know where to find more information about the tidyverse"
 keypoints:
+- "For data to be tidy, each variable must be in its own column"
+- "For data to be tidy, each case must be in its own row"
+- "For data to be tidy, each value must be in its own cell"
 source: Rmd
 ---
 
@@ -26,5 +32,95 @@ knitr_fig_path("05-")
 NOTE:  Long vs Wide (with stats in mind)
 
 
+```{r, include=FALSE}
+library(tidyr)
+library(kableExtra)
+source("../bin/chunk-options.R")
+knitr_fig_path("13-")
+# Silently load in the data so the rest of the lesson works
+gapminder <- read.csv("data/gapminder-FiveYearData.csv", header=TRUE)
+```
+
+> Happy families are all alike; every unhappy family is unhappy in its own way
+>
+> *Leo Tolstoy*
+
+> Tidy data are all alike; every untidy data is untidy in its own way
+>
+>*Hadley Wickham*
+
+Data can come in many different shapes and forms, and often people invent whatever makes sense to them. This often means that a great deal of time is spent modifying data to be structured in a format that R can use.
+
+Within R, different packages can have different expectations about data structures, which can make it difficult to move between functions in different packages.
+
+The [tidyverse](https://www.tidyverse.org/) is a subset of R packages that conform to a particular philosophy about data structure.
+
+The concept of tidy data can be distilled into three principles. A data set can be considered 'tidy' if:
+
+1. Each variable is in its own column
+2. Each case is in its own row
+3. Each value is in its own cell
+
+```{r example-tidy, echo=FALSE}
+set.seed(123)
+messy1 <- data.frame(id = 1:3,
+                    rep1 = round(rnorm(3, 2), 2),
+                    rep2 = round(rnorm(3, 2), 2))
+
+tidy1 <- messy1 %>% 
+  gather(rep, value, -id) %>% 
+  mutate(rep = sub("rep", "", rep))
+
+```
+
+> ## Challenge 1
+>
+> In the following table, what makes it untidy?
+>```{r echo = FALSE, results='asis'}
+>kable_styling(kable(messy1, format="html"), full_width = FALSE, position = "left")
+>```
+{: .challenge}
+
+> ## Challenge 2
+>
+> What it would look like if it was tidy?
+> > ## Solution to Challenge 2
+> >```{r echo = FALSE, results='asis'}
+> >kable_styling(kable(tidy1, format="html"), full_width = FALSE, position = "left")
+> >```
+> {: .solution}
+{: .challenge}
+
+In the above the same variable (a measurement value) was stored in two different columns. In this case making the data tidy required converting those two columns into one, which made the dataset have twice as many rows. This is usually called going from "wide" to "long" format, which is often done in the simplest cases of tidying data.
 
 
+> ## Challenge 3
+>
+> Open the file `plates.xlsx` (download [here]({{ page.root }}/data/gapminder_sex_ratios.csv)). This is a very common format to store data
+> from 96-well plates. What would this look like if it was tidy? Discuss the steps you would need to go through to convert it to a tidy format.
+{: .challenge}
+
+As well as consistency of the underlying data structure, packages in the tidyverse are also all compatible with the `%>%` operator.
+
+There is a tidyverse package, which doesn't have any functionality, except to import core packages of the tidyverse. 
+```{r}
+library(tidyverse)
+```
+
+is the equivalent of 
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(purrr)
+library(tibble)
+library(stringr)
+library(forcats)
+```
+
+
+## Other great resources
+
+* [The original tidy data paper](https://www.jstatsoft.org/article/view/v059i10/v59i10.pdf)
