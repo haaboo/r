@@ -1,5 +1,5 @@
 ---
-title: 
+title: Data Verbs - `mutate`
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,22 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("12-")
 ```
 
+`mutate` to produce new columns in the data
 
-
+## Basic mathematical operations
+  * add columns, etc
+  
+## Using functions
+  * build on mathematical operations - `log`, `sqrt`, etc.
+  * string manipulation functions
+  
+## Chaining mutates
+  * Can use created columns later in same mutate call
+  
+## Grouping and mutating
+  
+## Arranging? 
+  * Not quite sure on best location for this

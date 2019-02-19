@@ -1,5 +1,5 @@
 ---
-title: 
+title: Data Verbs - `select` 
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,19 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("09-")
 ```
 
+## `select` 
+  * to select specific columns from a dataframe 
+    * by name
+    * by position
+    * by negation
+    * functions (eg. `everything()`?)
+
+## `rename` 
+  * to rename columns
+  * link back in to discussion of naming requirements/conventions in episode 2
+  
 
 

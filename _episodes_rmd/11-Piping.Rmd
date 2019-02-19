@@ -1,5 +1,5 @@
 ---
-title: 
+title: Piping
 teaching: 
 exercises: 
 questions:
@@ -10,8 +10,40 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-")
+knitr_fig_path("11-")
 ```
 
+## %>% as the piping operator
+  * Draw comparison with unix `|`
 
+## How the pipe works
+  * Passing left hand side as first argument of right hand side
+  * Single function example 
+  
+> ## Challenge 
+>
+>  Take a line of code from the select or filter episode and show it as a piped version
+{: .challenge}  
 
+## Chaining
+  * Value comes in being able to chain functions in stepwise fashion
+  * More readable code, maps better on to conceptualisation of a workflow
+
+> ## Challenge 
+>
+>  Look at a two function example from the select/filter episodes. Convert it to a piped version
+{: .challenge}   
+
+## Passing arguments
+  * Can pass arguments as normal
+  * Use of `.` to refer to passed dataset? (only if we can think of a *really* clear example)
+  
+## Common pitfalls
+  * Have to pass some data in first to kick off the chain
+  * Have to assign it somewhere at the end
+  * Really long chains become very dificult to debug
+  
+## Style
+  * Each step on separate line
+  * Can include comments mid-chain, is it best option though?
+  
