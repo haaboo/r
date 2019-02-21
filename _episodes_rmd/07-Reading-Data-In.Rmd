@@ -1,48 +1,323 @@
 ---
 title: Reading Data In
-teaching: 
-exercises: 
-questions:
+teaching: 15
+exercises: 10
+questions: 
 objectives:
 keypoints:
 source: Rmd
 ---
 
-```{r, include=FALSE}
+```{r setup, include=FALSE}
 source("../bin/chunk-options.R")
+
 knitr_fig_path("07-")
 ```
 
-## Common file types that may be a source of data
-  * .csv/.tsv
-  * .xls
-  * .txt
+So far, we have been using datasets that are already available within R. Chances are though that the
+data you want to work with exists separately, perhaps as a spreadsheet or CSV file. In order to 
+start working with this data, we need to learn how to read it in to R.
 
-## Refresher on file paths
-  * Relative and absolute
-  * Refer back to project structure discussion in episode 1
+## Common file types 
+
+There are many different ways that data could be stored, but for now we will focus on 
+reading in tabular data. This is data that is already in a 
+[data frame]({{ page.root }}{% link _episodes/06-Dataframes.md %})-like structure and so we will 
+want to read it in to R as a data frame. 
+
+Two of the most common ways you might find data like this are:
+
+#### Plain text files
+
+These are text files where the columns of data are separated by some delimiting character. Examples of these might include
+
+* CSV (**c**omma **s**eparated **v**alue) files that use a comma to delimit the columns
+
+~~~
+carat,cut,color,clarity,depth,table,price,x,y,z
+0.23,Ideal,E,SI2,61.5,55,326,3.95,3.98,2.43
+0.21,Premium,E,SI1,59.8,61,326,3.89,3.84,2.31
+0.23,Good,E,VS1,56.9,65,327,4.05,4.07,2.31
+0.29,Premium,I,VS2,62.4,58,334,4.2,4.23,2.63
+0.31,Good,J,SI2,63.3,58,335,4.34,4.35,2.75
+~~~
+
+* TSV (**t**ab **s**eparated **v**alue) files, which use a tab instead
+
+~~~
+carat	cut	color	clarity	depth	table	price	x	y	z
+0.23	Ideal	E	SI2	61.5	55	326	3.95	3.98	2.43
+0.21	Premium	E	SI1	59.8	61	326	3.89	3.84	2.31
+0.23	Good	E	VS1	56.9	65	327	4.05	4.07	2.31
+0.29	Premium	I	VS2	62.4	58	334	4.2	4.23	2.63
+0.31	Good	J	SI2	63.3	58	335	4.34	4.35	2.75
+~~~
+
+#### Spreadsheet files
+
+All spreadsheet programs (Excel, Calc, Numbers, etc.) will have a way to export data into one 
+of the plain text formats above. This will usually be the best way to get data into R. For excel 
+files (.xls or .xlsx) however, it is possible to read them in directly which we will demonstrate later
   
-## `read_XXX` family of functions
-  * `read_csv`
-  * `readxl::read_excel`
-  * basic use of each function
+## Gapminder data {#gapminder}
 
-> ## Challenge 
+For this section, we will be reading in data from the [Gapminder](www.gapminder.org) organisation, 
+which records various statistics for 142 countries betwen 1952 and 2007. This
+data is available as an [R package](https://cran.r-project.org/web/packages/gapminder/index.html),
+but we have prepared [csv]({{ page.root }}{% link data/gapminder.csv %}), 
+[tsv]({{ page.root }}{% link data/gapminder.tsv %}), and 
+[excel]({{ page.root }}{% link data/gapminder.xlsx %}) versions for you to practice with.
+
+> ## Challenge 1
 >
->  Reading in datasets from csv and excel files
->  Compare results. Different inputs, both are now identical data_frames
+>  Download the three versions of the Gapminder above and save them to your project folder.
+>  
+>  Open one of the files and describe what statistics are recorded
+> > ## Solution to Challenge 1
+> > Using the ideas discussed previously about [project structure]({{ page.root }}{% link _episodes/01-R-and-RStudio.md %}), 
+> > we will save the files into a data directory within our project. We can then access them with 
+> > a relative path `data/gapminder.csv` (for the csv example)
+> >
+> > Opening a file we can see that there are six columns of data: a country name and continent, the
+> > year that the data was recorded, and the life expectancy, population and GDP per capita.
+> {: .solution}
 {: .challenge}
 
-## More control over import parameters
-  * Review help for `read_XXX` functions
-  * Highlight some common uses of these parameters commonly needed to import wild datasets
-  * Specifically focus on the `col_types` parameter for forcing data types
-  
-> ## Challenge 
+To load this data into R, we will use the [`readr`](http://readr.tidyverse.org) package (which will 
+be loaded automatically if you have preciously run `library(tidyverse)`, but here we will 
+load it separately). 
+
+```{r read-01}
+library(readr)
+
+gapminder_csv <- read_csv("data/gapminder.csv")
+
+gapminder_csv
+```
+
+Here, we can see that `read_csv` provides us with some information on what it thinks the data types 
+are as it reads the file in (two columns of character data and four columns of double in this case).
+We can also see that it has imported the data in the 
+[tibble format]({{ page.root }}{% link _episodes/06-Dataframes.md %}) discussed previously.
+
+Similarly, for the tsv file there is a `read_tsv` function
+
+> ## Challenge 2
 >
->  Reading in dataset forcing a data type conversion
->  Compare with previously imported dataset using default parameters
+>  Read in the `gapminder.tsv` file using `read_tsv`
+>
+>  Confirm that reading from csv or tsv files produce the same output (you might find the `all.equal`
+>  function useful)
+>  
+> > ## Solution to Challenge 2
+> > 
+> > ```{r ch2-sol, message = FALSE}
+> > gapminder_tsv <- read_tsv("data/gapminder.tsv")
+> > 
+> > gapminder_tsv
+> > 
+> > all.equal(gapminder_csv, gapminder_tsv)
+> > ```
+> {: .solution}
 {: .challenge}
+
+## Control of import parameters
+
+> ## QUESTION FOR INSTRUCTORS
+> **How should we deal with examples that we don't intend to provide example files for 
+> (such as this section)? For now I am just going to show what an example file would look like and 
+> then refer to it with a descriptive name in the example code**
+{: .discussion}
+
+Both `read_csv` and `read_tsv` have a number of parameters that may be needed to help import a file.
+You can read more about these in the help file for the functions, but some more commonly encountered
+situations are:
+
+#### Ignoring comments or metadata from the top of a file
+
+Sometimes files will have metadata information included along with the data. Use `skip` to ignore a
+set number of lines from the top of the file or `comment` if metadata lines are indicated by a 
+specific character such as `#`.
+
+Eg. a file such as:
+~~~~
+#Metadata information detailing data collection process
+#Not part of the data, but included to explain it
+country	continent	year	lifeExp	pop	gdpPercap
+Afghanistan	Asia	1952	28.801	8425333	779.4453145
+Afghanistan	Asia	1957	30.332	9240934	820.8530296
+Afghanistan	Asia	1962	31.997	10267083	853.10071
+~~~~
+
+Can be read in using:
+
+~~~~
+read_tsv("data/commented_file.tsv", comment = "#")
+read_tsv("data/commented_file.tsv", skip = 2)
+~~~~
+{: .language-r}
+
+Both lines above produce the same output
+
+#### Providing column names
+
+By default, `readr` uses the first row of data as column names for the data frame. If this is not
+the case you can either specify them with a character vector, or have the column names generated 
+automatically
+
+Eg. 
+~~~~
+Afghanistan	Asia	1952	28.801	8425333	779.4453145
+Afghanistan	Asia	1957	30.332	9240934	820.8530296
+Afghanistan	Asia	1962	31.997	10267083	853.10071
+~~~~
+
+Can be read in using:
+
+~~~~
+read_tsv("data/no_names.tsv", col_names = F)
+~~~~
+{: .language-r}
+
+~~~~
+# A tibble: 3 x 6
+   X1          X2       X3    X4       X5    X6
+   <chr>       <chr> <dbl> <dbl>    <dbl> <dbl>
+ 1 Afghanistan Asia   1952  28.8  8425333  779.
+ 2 Afghanistan Asia   1957  30.3  9240934  821.
+ 3 Afghanistan Asia   1962  32.0 10267083  853.
+~~~~
+{:  .output}
+
+or
+
+~~~~
+read_tsv("data/no_names.tsv", col_names = c("country", "continent","year","lifeExp","pop","gdpPercap"))
+~~~~
+{: .language-r}
+
+~~~~
+# A tibble: 3 x 6
+  country     continent  year lifeExp      pop gdpPercap
+  <chr>       <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+1 Afghanistan Asia       1952    28.8  8425333      779.
+2 Afghanistan Asia       1957    30.3  9240934      821.
+3 Afghanistan Asia       1962    32.0 10267083      853.
+~~~~
+{:  .output}
+
+#### Dealing with missing data
+
+By default, blank columns or ones containing "NA" are considered missing. If your data uses a different
+value for missing data you will need to specify it.
+
+Eg. 
+~~~~
+country	continent	year	lifeExp	pop	gdpPercap
+Afghanistan	Asia	1952	28.801	8425333	779.4453145
+Afghanistan	Asia	1957	30.332	-	820.8530296
+Afghanistan	Asia	1962	31.997	10267083	853.10071
+~~~~
+
+~~~~
+read_tsv("data/missing.tsv")
+~~~~
+{: .language-r}
+
+~~~~
+# A tibble: 3 x 6
+  country     continent  year lifeExp pop      gdpPercap
+  <chr>       <chr>     <dbl>   <dbl> <chr>        <dbl>
+1 Afghanistan Asia       1952    28.8 8425333       779.
+2 Afghanistan Asia       1957    30.3 -             821.
+3 Afghanistan Asia       1962    32.0 10267083      853.
+~~~~
+{: .output}
+
+Using the default parameters, `pop` is incorrectly read in as a character column because 
+missing data is indicated by `-`
+
+~~~~
+read_tsv("data/missing.tsv", na = "-")
+~~~~
+{: .language-r}
+
+~~~~
+# A tibble: 3 x 6
+  country     continent  year lifeExp      pop gdpPercap
+  <chr>       <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+1 Afghanistan Asia       1952    28.8  8425333      779.
+2 Afghanistan Asia       1957    30.3       NA      821.
+3 Afghanistan Asia       1962    32.0 10267083      853.
+~~~~
+
+Now the `pop` data is correctly recognised as a number, and the missing data is correctly recorded
+as `NA`.
+
+#### Setting explicit column types
+
+Sometimes, the default column types might not be what you intend. In that case you can set them 
+explicitly by either providing a string representing the column types
+
+> From the `read_tsv` help file:
+> c = character, i = integer, n = number, d = double, l = logical, f = factor, D = date, 
+> T = date time, t = time, ? = guess, or _/- to skip the column
+{: .quotation}
+
+Eg. setting `country` to be a factor, `pop` as an integer, and not reading in the `lifeExp` column.
+The remaining columns are left as 'guess', in which case `readr` tries to determine their type automatically.
+```{r setting-col-types-1}
+read_tsv("data/gapminder.tsv", col_types = "f??-i?")
+```
+
+> ## Note:
+> If you choose to use a type string like this, you must provide a type for each colum in the data 
+> or R will throw a warning
+{: .callout}
+
+Or by providing a column specification, like how `read_csv` did to explain it's default parsing 
+when we [first ran it](#gapminder)
+
+Importing the same types as above in this format would look like this:
+```{r setting-col-types-2}
+# Default is col_guess()
+# So we just need to specify the 
+# columns that are different 
+gapminder_spec <- cols(
+  country = col_factor(), 
+  pop = col_integer(), 
+  gdpPercap = col_skip()
+)
+
+read_tsv("data/gapminder.tsv", col_types = gapminder_spec)
+```
+
+Knowing how these few parameters work will enable you to read most csv/tsv files you come across into R.
+
+  
+> ## Challenge 4
+>
+>  Read in the gapminder tsv again, but make the `continent` column a factor and the `year` column a
+>  date. (Hint: Use the `cols()` specification and "%Y" is the date format you will need) 
+>  
+>  Check whether the newly imported data is still the same as the csv data imported previously
+>
+> > ## Solution to Challenge 4
+> >
+> > ```r
+> > gapminder_tsv <- read_tsv("data/gapminder.tsv", col_types = cols(continent = col_factor(), year = col_date(format = "%Y")))
+> >
+> > all.equal(gapminder_csv, gapminder_tsv)
+> > ```
+> > ~~~~
+> > [1] "Incompatible type for column `country`: x character, y factor" "Incompatible type for column `year`: x numeric, y Date"
+> > ~~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
+  
+
+## Reading excel files
   
 > ## Base warning  
 >

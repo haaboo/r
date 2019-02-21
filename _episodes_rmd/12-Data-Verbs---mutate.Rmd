@@ -29,3 +29,4 @@ knitr_fig_path("12-")
   
 ## Arranging? 
   * Not quite sure on best location for this
+  
