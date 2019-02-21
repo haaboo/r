@@ -318,7 +318,9 @@ Knowing how these few parameters work will enable you to read most csv/tsv files
   
 
 ## Reading excel files
-  
+
+Reading excel files in is very similar to the plain text files we have been using above.
+
 > ## Base warning  
 >
 >  Raise the `stringsAsFactors` issue. Default behaviour of R not what is typically expected 
