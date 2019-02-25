@@ -1,17 +1,10 @@
-# FIXME Lesson title
+# Introduction to R 
 
-[![Create a Slack Account with us](https://img.shields.io/badge/Create_Slack_Account-The_Carpentries-071159.svg)](https://swc-slack-invite.herokuapp.com/)
-
-FIXME
+This lesson provides an overall introduction to R, with a particular emphasis on the [tidyverse](tidyverse.org). It is heavily based on a [Carpentries](https://carpentries.org/) introductory [lesson](https://github.com/swcarpentry/r-novice-gapminder), but the overall structure of the lesson has been changed to focus more directly on the tidyverse.
 
 ## Contributing
 
-We welcome all contributions to improve the lesson! Maintainers will do their best to help you if you have any
-questions, concerns, or experience any difficulties along the way.
-
-We'd like to ask you to familiarize yourself with our [Contribution Guide](CONTRIBUTING.md) and have a look at
-the [more detailed guidelines][lesson-example] on proper formatting, ways to render the lesson locally, and even
-how to write new episodes.
+This lesson is part of the CSIRO Data School. If you would like to contribute to it, you are very welcome to do so, however we may not incorporate all suggested changes. To make contributions, please read the [Contribution Guide](CONTRIBUTING.md).
 
 ## Maintainer(s)
 
@@ -24,5 +17,3 @@ A list of contributors to the lesson can be found in [AUTHORS](AUTHORS)
 ## Citation
 
 To cite this lesson, please consult with [CITATION](CITATION)
-
-[lesson-example]: https://carpentries.github.io/lesson-example
