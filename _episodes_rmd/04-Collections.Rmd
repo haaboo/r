@@ -15,7 +15,7 @@ knitr_fig_path("04-")
 
 ## Introduction
 Why do you need Collections?
-
+In a general sense, a collection can be regarded as a group of things, and when placed into a computing context, it can relate a number of data items which have some shared significance to a problem that is being solved. Examples included lists and sets.
 
 ## Vectors and Type Coercion
 
