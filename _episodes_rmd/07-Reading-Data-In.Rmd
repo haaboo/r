@@ -1,6 +1,6 @@
 ---
 title: Reading Data In
-teaching: 15
+teaching: 20
 exercises: 10
 questions: 
 objectives:
@@ -305,7 +305,12 @@ Knowing how these few parameters work will enable you to read most csv/tsv files
 > > ## Solution to Challenge 4
 > >
 > > ```r
-> > gapminder_tsv <- read_tsv("data/gapminder.tsv", col_types = cols(continent = col_factor(), year = col_date(format = "%Y")))
+> > spec <- cols(
+> >   continent = col_factor(),
+> >   year = col_date(format = "%Y")
+> > )
+> >
+> > gapminder_tsv <- read_tsv("data/gapminder.tsv", col_types = spec)
 > >
 > > all.equal(gapminder_csv, gapminder_tsv)
 > > ```
@@ -315,14 +320,55 @@ Knowing how these few parameters work will enable you to read most csv/tsv files
 > > {: .output}
 > {: .solution}
 {: .challenge}
-  
 
 ## Reading excel files
 
-Reading excel files in is very similar to the plain text files we have been using above.
+For reading in excel files, we will use the [`readxl`](https://readxl.tidyverse.org) package. This 
+package is part of the tidyverse, but is not loaded with `library(tidyverse)`, so we will have to do
+it ourselves.
 
-> ## Base warning  
+```{r load-readxl}
+library(readxl)
+```
+
+We can now use the `read_excel` function from `readxl` to read in our data.
+
+```{r read-excel}
+gapminder_excel <- read_excel("data/gapminder.xlsx")
+```
+
+Since `read_excel` uses most of the same options as `read_csv`/`read_tsv` covered above, you already
+know how to use it. Some excel specific options you may need to use include
+
+#### Specifying the worksheet to extract
+
+The gapminder data is all in the first sheet in the file (called 'gapminder'). This means that 
+
+~~~~
+read_excel("data/gapminder.xlsx")
+read_excel("data/gapminder.xlsx", sheet = 1)
+read_excel("data/gapminder.xlsx", sheet = "gapminder")
+~~~~
+{: .language-r}
+
+will all produce the same result.
+
+#### Extracting data from a specific range
+
+Perhaps you are only interested in data from a particular region of the worksheet. This can be
+imported using an excel range pattern.
+
+```{r excel-import-range}
+read_excel("data/gapminder.xlsx", range = "A1:E4")
+```
+
+> ## `read_csv` and `read.csv`
 >
->  Raise the `stringsAsFactors` issue. Default behaviour of R not what is typically expected 
->  Caution needed in using `read.XXX` functions (always check your data)
+> You may have noticed that there is also a `read.csv` function. This default behaviour of this 
+> function is that all strings are read in as factors, which can be a common source of mistakes for
+> newer R users. For this reason, we will stick with using the tidyverse equivalents where possible.
+> 
+> Regardless of the method chosen. After importing your data, it's always a good choice to check
+> it afterwards using the [data frame]({{ page.root }}{% link _episodes/06-Dataframes.md %}) 
+> exploration methods
 {: .callout}
