@@ -16,14 +16,12 @@ knitr_fig_path("01-")
 ## Why should you use R?
 
 
-What is R and what makes it different from the other software packages out there?
+[What is R and what makes it different from the other software packages out there?] (https://select-statistics.co.uk/blog/what-is-r-and-why-should-you-use-it/)
 Well, R is designed specifically for statistical computing and graphics.
 It is free and open source, the latter meaning that anyone can interrogate the code to see what’s going on –  there’s no black box involved.
 R provides a flexible analysis toolkit where all of the standard statistical techniques are built-in. 
 Not only that, but there is a large R community who regularly contribute new functionality through add-on ‘packages’.
 In fact, finding a particular statistical model or technique that is not already available through R is a tricky task indeed!
-(cite: https://select-statistics.co.uk/blog/what-is-r-and-why-should-you-use-it/)
-
 
 ## Tour of R Studio
 *Basic layout**
