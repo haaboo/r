@@ -1,5 +1,5 @@
 ---
-title: Data Verbs - `select` 
+title: Data Verbs - select 
 teaching: 
 exercises: 
 questions:
@@ -11,9 +11,32 @@ source: Rmd
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
 knitr_fig_path("09-")
+
+library(tidyverse)
 ```
 
-## `select` 
+The first task we will cover is extracting specific columns from a dataset to work with. This 
+may be needed if your data is very, very wide and you are only interested in a few columns. The 
+gapminder doesn't exactly meet that description, but we will continue using it to understand how the
+functions work.
+
+```{r load-gapminder, message=F}
+gapminder <- read_csv("data/gapminder.csv")
+```
+
+## `select()`
+
+You can specify columns to keep from a data frame using `select()`. At it's simplest, you provide 
+`select()` with a data frame and the column names you would like to keep.
+
+```{r select-1}
+select(gapminder, country, year, pop)
+```
+
+
+
+
+
   * to select specific columns from a dataframe 
     * by name
     * by position
