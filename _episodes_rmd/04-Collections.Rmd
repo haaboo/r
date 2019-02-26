@@ -15,7 +15,7 @@ knitr_fig_path("04-")
 
 ## Introduction
 Why do you need Collections?
-In a general sense, a collection can be regarded as a group of things, and when placed into a computing context, it can relate a number of data items which have some shared significance to a problem that is being solved. Examples included lists and sets.
+In a general sense, a collection can be regarded as a group of things, and when placed into a computing context, it can relate a number of data items which can have some shared significance to a problem that is being solved. Examples of collections included lists and sets.
 
 ## Vectors and Type Coercion
 
@@ -45,7 +45,7 @@ str(another_vector)
 ```
 
 The somewhat cryptic output from this command indicates the basic data type
-found in this vector - in this case `chr`, character; an indication of the
+found in this vector - in this case `chr`, that is, character; an indication of the
 number of things in the vector - actually, the indexes of the vector, in this
 case `[1:3]`; and a few examples of what's actually in the vector - in this case
 empty character strings. If we similarly do
@@ -89,7 +89,7 @@ quiz_vector <- c(2,6,'3')
 
 This is something called *type coercion*, and it is the source of many surprises
 and the reason why we need to be aware of the basic data types and how R will
-interpret them. When R encounters a mix of types (here numeric and character) to
+interpret them. When R encounters a mix of types (in this case, numeric and character) to
 be combined into a single vector, it will force them all to be the same
 type. Consider:
 
