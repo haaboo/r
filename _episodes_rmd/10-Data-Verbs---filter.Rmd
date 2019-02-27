@@ -1,7 +1,7 @@
 ---
-title: Data Verbs - `filter`
-teaching: 
-exercises: 
+title: Data Verbs - filter
+teaching: 15
+exercises: 10
 questions:
 objectives:
 keypoints:
@@ -11,17 +11,88 @@ source: Rmd
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
 knitr_fig_path("10-")
+
+library(tidyverse)
+gapminder <- read_csv("data/gapminder.csv")
 ```
 
-`filter` to select rows of a dataframe
+If we are looking to subset the rows of our data (rather than the columns using `select()`) we can 
+use `filter()`. This function takes a data frame as it's first argument, then a set of conditions to
+check. Any row of the data frame that meets all the conditions is kept and any that fail are discarded.
 
-## Using logical operators on dataframe columns
+For example, to get just the Australian data from the gapminder set:
 
-## Using a logical vector
-  * ie. Logical operators produce a logical vector used for subsetting
+```{r filter-intro}
+filter(gapminder, country == "Australia")
+```
 
-## First exposure to `group_by`
-  * Filtering on group characteristics (eg. `> mean(value)`)
-  
+or to get only data from 1997 or later:
+
+```{r filter-gt}
+filter(gapminder, year >= 1997)
+```
+
+## Filter operators
+Any of the standard (comparison operators)({{ page.root }}{% link _episodes/02-Using-R.md %}#comparing-things)
+can be used in a filter
+
+  * `==` equal to
+  * `!=` not equal to
+  * `<`/`>` less/greater than
+  * `<=`/`>=` less/greater than or equal to
+
+If you provide multiple filter conditions (separated by a comma) then only rows matching **all** of
+the conditions will be kept.
+
+> ## Challenge 1
+> How would you extract just the Australian data from 1997 or later?
+> > ## Solution to Challenge 1
+> > ``` {r filter-sol-1}
+> > filter(gapminder, country == "Australia", year > 1997)
+> > ```
+> {: .solution}
+{: .challenge}
+
+If you need to keep all rows that meet one or the other condition, use the logical OR operator (`|`)
+
+```{r filter-or}
+# Tries to find data from Australia AND New Zealand (and returns an empty table)
+filter(gapminder, country == "Australia", country == "New Zealand")
+
+# Use | to look for data from Australia OR New Zealand
+filter(gapminder, country == "Australia" | country == "New Zealand")
+```
+
+> ## Challenge 2
+> Modify your answer to Challenge 1 so that you extract all data from Australia, or from 1997 and 
+> later.
+> > ## Solution to Challenge 2
+> > ``` {r filter-sol-2}
+> > filter(gapminder, country == "Australia" | year > 1997)
+> > ```
+> {: .solution}
+{: .challenge}
+
+It might seem natural to write `country == "Australia" | "New Zealand"` but try it and you will see
+that you get an error. Each side of the `|` operator must result in a `TRUE` or `FALSE`, and "New
+Zealand" is neither.
+
+When you have many possible matches from a row that you want to keep, writing a long expression with 
+many `|` can be time consuming and error prone. Instead, the `%in%` operator can be used to simplify
+things. `%in%` returns `TRUE` if the left hand side is found somewhere in the right hand side and
+`FALSE` otherwise.
+
+```{r filter-in}
+filter(gapminder, country %in% c("Australia", "New Zealand"))
+```
+
+> ## Challenge 3
+> Extract the rows from all countries in Africa, Asia, or Europe
+> > ## Solution to Challenge 3
+> > ``` {r filter-sol-3}
+> > filter(gapminder, continent %in% c("Africa","Asia", "Europe"))
+> > ```
+> {: .solution}
+{: .challenge}
 
 
