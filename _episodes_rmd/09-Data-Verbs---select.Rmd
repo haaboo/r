@@ -1,7 +1,7 @@
 ---
 title: Data Verbs - select 
-teaching: 
-exercises: 
+teaching: 15
+exercises: 15
 questions:
 objectives:
 keypoints:
@@ -29,23 +29,141 @@ gapminder <- read_csv("data/gapminder.csv")
 You can specify columns to keep from a data frame using `select()`. At it's simplest, you provide 
 `select()` with a data frame and the column names you would like to keep.
 
-```{r select-1}
-select(gapminder, country, year, pop)
+```{r select-by-name}
+#Select the year, country and pop columns
+select(gapminder, year, country, pop)
 ```
 
+Here you can see that the `select()` produces a new data frame with just the columns you provided. 
+It also keeps them in the order you specified.
+
+You can also select columns by index position:
+
+```{r select-by-pos}
+#Select the first, third and fourth columns
+select(gapminder, 1,3,4)
+```
+
+or you can select columns to *exclude* by using negation:
+
+```{r select-by-negation}
+#Remove lifeExp and pop columns
+select(gapminder, -lifeExp, -pop)
+```
+
+If the columns you want are all together in the original data frame, you can select them as a range
+
+```{r select-range}
+#Select all columns between year and lifeExp
+select(gapminder, year:lifeExp)
+
+#Exclude all columns between year and lifeExp
+select(gapminder, -(year:lifeExp))
+```
+
+> ## Save your output
+> In the examples above, the output of the `select()` function is being printed to the screen to 
+> demonstrate how it works. Normally, you will want to actually *use* the selected data later on, so
+> don't forget to save the output as a variable.
+> ```{r select-save-variable}
+> # Just prints to screen, can't use data
+> select(gapminder, year, country, pop)
+> 
+> # Saves output to variable; can be accessed later
+> just_population <- select(gapminder, year, country, pop)
+> 
+> just_population
+> ```
+{: .callout}
 
 
+> ## Challenge 1
+> Use three different methods to select just the `country`, `year`, `pop`, and `gdpPercap` columns 
+> from the `gapminder` dataframe.
+> > ## Solution to Challenge 1
+> > ```{r select-sol-1}
+> > #By name
+> > select(gapminder, country, year, pop, gdpPercap)
+> >
+> > #By position
+> > select(gapminder, 1, 3, 5, 6)
+> > 
+> > #By exclusion
+> > select(gapminder, -continent, -lifeExp)
+> > ```
+> {: .solution}
+{: .challenge}
 
+## Select helper functions
 
-  * to select specific columns from a dataframe 
-    * by name
-    * by position
-    * by negation
-    * functions (eg. `everything()`?)
+There are a number of helper functions that can be used to select the correct columns. Some commonly
+used ones include `starts_with()`, `ends_with()` and `contains()`, but you can see a full list by 
+looking at the help file (`?tidyselect::select_helpers`).
 
-## `rename` 
-  * to rename columns
-  * link back in to discussion of naming requirements/conventions in episode 2
-  
+These helpers do exactly what you would expect from their names, but to see them in action:
 
+```{r select-helpers}
+#All columns that start with "co"
+select(gapminder, starts_with("co"))
 
+#All columns that contain the letter "e"
+select(gapminder, contains("e"))
+```
+
+> ## Challenge 2
+> Select all columns from `gapminder` that end with the letter "p"
+>
+> > ## Solution to Challenge 2
+> > ```{r select-sol-2}
+> > select(gapminder, ends_with("p"))
+> > ```
+> {: .solution}
+{: .challenge}
+
+> ## Challenge 3
+> Run the following code:
+> ~~~~
+> select(gapminder, contains("P"))
+> ~~~~
+> {: .language-r}
+>
+> Does it behave the way you expected? What additional argument do you need to provide to `contains()`
+> to make it return only the `gdpPercap` column?
+> > ## Solution to Challenge 3
+> > ```{r select-sol-3}
+> > select(gapminder, contains("P"))
+> >
+> > select(gapminder, contains("P", ignore.case = F))
+> > ```
+> {: .solution}
+{: .challenge}
+
+## `rename()`
+
+`select()` *can* be used to rename columns while you are selecting them using the form 
+`new_name = old_name`:
+
+```{r select-rename}
+select(gapminder,country_name = country, population = pop)
+```
+
+but since it drops all the other columns, it is probably not the outcome you were looking for. 
+Instead, `rename()` can rename columns while retaining the rest of the data frame.
+
+```{r rename-example}
+rename(gapminder, country_name = country, population = pop)
+```
+
+This will often be useful to convert column names from your imported data into the 
+[consistent naming format]({{ page.root }}{% link _episodes/02-Using-R.md %}#naming-conventions) you
+have decided on.
+
+> ## Challenge 4
+> Rename the `lifeExp` and `gdpPercap` columns to the `snake_case` format
+>
+> > ## Solution to Challenge 4
+> > ```{r select-sol-4}
+> > rename(gapminder, life_exp = lifeExp, gdp_per_cap = gdpPercap)
+> > ```
+> {: .solution}
+{: .challenge}
