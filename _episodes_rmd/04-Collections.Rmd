@@ -10,6 +10,7 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
+#cats <- readr::read_csv("data/feline-data.csv")
 knitr_fig_path("04-")
 ```
 
