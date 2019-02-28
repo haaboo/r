@@ -48,7 +48,7 @@ the conditions will be kept.
 > How would you extract just the Australian data from 1997 or later?
 > > ## Solution to Challenge 1
 > > ``` {r filter-sol-1}
-> > filter(gapminder, country == "Australia", year > 1997)
+> > filter(gapminder, country == "Australia", year >= 1997)
 > > ```
 > {: .solution}
 {: .challenge}
@@ -68,7 +68,7 @@ filter(gapminder, country == "Australia" | country == "New Zealand")
 > later.
 > > ## Solution to Challenge 2
 > > ``` {r filter-sol-2}
-> > filter(gapminder, country == "Australia" | year > 1997)
+> > filter(gapminder, country == "Australia" | year >= 1997)
 > > ```
 > {: .solution}
 {: .challenge}
