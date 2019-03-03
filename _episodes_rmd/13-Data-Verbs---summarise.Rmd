@@ -11,12 +11,133 @@ source: Rmd
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
 knitr_fig_path("13-")
+
+library(tidyverse)
+gapminder <- read_csv("data/gapminder.csv")
 ```
 
-## Summarise
+The `summarise()` function lets us create new variables by collapsing a data frame into a single 
+summary statistic. You can use `summarise()` with any function that takes a vector as input and 
+returns a single value as output. For example, what is the average life expectance in the gapminder 
+data?
 
-## GroupBy
+```{r summarise-intro}
+gapminder %>% 
+  summarise(mean_life_exp = mean(lifeExp))
+```
 
+On it's own, this may not seem that exciting. You could just as easily get the same result by using
+`mean(gapminder$lifeExp)`. Where is becomes more useful however, is that you can use multiple 
+summary functions at the same time
+```{r summarise-many-funcs}
+gapminder %>% 
+  summarise(
+    mean_life_exp = mean(lifeExp),
+    sd_life_exp = sd(lifeExp),
+    mean_gdp_per_cap = mean(gdpPercap),
+    max_gdp_per_cap = max(gdpPercap)
+    )
+```
 
+and you can get summaries for different groups in conjunction with `group_by()`
 
+```{r summarise-groups}
+gapminder %>% 
+  group_by(country) %>% 
+  summarise(mean_life_exp = mean(lifeExp))
+```
+> ## Challenge 1
+> Calculate the mean and median population for each continent. What does comparing these two numbers
+> suggest about the data?
+> > ## Solution to Challenge 1
+> > ``` {r summarise-sol-1}
+> > gapminder %>% 
+> >   group_by(continent) %>% 
+> >   summarise(mean_pop = mean(pop), median_pop = median(pop))
+> > ```
+> > There is a big difference between the mean and median value for each continent. This suggests 
+> > that the population data is highly skewed.
+> {: .solution}
+{: .challenge}
 
+> ## Challenge 2
+> The reason for your result in Challenge 1 is easy to see if you look at the population data.
+> ``` {r summarise-histo, echo = F, fig.height = 4, fig.width = 7, fig.cap = "Histogram of population data"}
+> hist(gapminder$pop, breaks = 50)
+> ```
+> Try transforming the population data using `mutate()` before repeating your summary. What is the 
+> difference?
+> > ## Solution to Challenge 2
+> > ``` {r summarise-sol-2}
+> > gapminder %>% 
+> >   mutate(log_pop = log10(pop)) %>% 
+> >   group_by(continent) %>% 
+> >   summarise(
+> >     mean_log_pop = mean(log_pop), 
+> >     median_log_pop = median(log_pop)
+> >   )
+> > ```
+> {: .solution}
+{: .challenge}
+
+## Sorting your results
+If you are wanting to sort your resulting data frame by a particular variable, use `arrange()`
+
+```{r summarise-arrange}
+gapminder %>% 
+  arrange(gdpPercap)
+
+# Use desc() to sort from highest to lowest
+gapminder %>% 
+  arrange(desc(gdpPercap))
+```
+
+> ## Challenge 3
+> Calculate the average life expectancy per country. Which has the shortest average life expectancy 
+> and which has the longest average life expectancy?
+> > ## Solution to Challenge 3
+> > ``` {r summarise-sol-3}
+> > summarised_life_exp <- gapminder %>%
+> >   group_by(country) %>%
+> >   summarise(mean_life_exp = mean(lifeExp))
+> >
+> > summarised_life_exp %>% 
+> >   arrange(mean_life_exp)
+> >
+> > summarised_life_exp %>% 
+> >   arrange(desc(mean_life_exp))
+> > ```
+> {: .solution}
+{: .challenge}
+
+If you provide multiple variables to sort by, `arrange()` will initially sort by the first variable,
+with any ties broken by the next variable and so on.
+
+> ## Challenge 4
+> Calculate the `mean_gdp_per_cap` per continent for each year. Remember that `group_by()` can 
+> be given multiple grouping variables.
+>
+> Try piping your answer into each of the following two lines. What are the differences and 
+> when might you use one over the other?
+> ~~~~
+> arrange(desc(year), desc(mean_gdp_per_cap))
+> ~~~~
+> {: .language-r}
+> ~~~~
+> arrange(desc(mean_gdp_per_cap), desc(year))
+> ~~~~
+> {: .language-r}
+> > ## Solution to Challenge 4
+> > ``` {r summarise-sol-4}
+> > summarised_gdp <- gapminder %>%
+> >   group_by(continent, year) %>%
+> >   summarise(mean_gdp_per_cap = mean(gdpPercap))
+> >
+> > summarised_gdp %>% 
+> >   arrange(desc(year), desc(mean_gdp_per_cap))
+> >
+> > summarised_life_exp %>% 
+> >   arrange(desc(mean_gdp_per_cap), desc(year))
+> > ```
+> {: .solution}
+{: .challenge}
