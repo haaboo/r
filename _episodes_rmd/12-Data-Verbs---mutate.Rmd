@@ -102,7 +102,7 @@ mutate(gapminder, cumulative_life_exp = cumsum(lifeExp))
 ```
 
 > ## Challenge 2
-> Create a column showing the **change** in life expectancy between each sample period. Do any 
+> Using an offset function, create a column showing the **change** in life expectancy between each sample period. Do any 
 > countries have no change in life expectancy for a period?
 > > ## Solution to Challenge 2
 > > ``` {r mutate-sol-2}
@@ -120,7 +120,7 @@ mutate(gapminder, cumulative_life_exp = cumsum(lifeExp))
 > > What is going on between rows 11 and 14?
 > {: .solution}
 > > ## Solution to Challenge 3
-> > ``` {r mutate-sol-2}
+> > ``` {r mutate-sol-3}
 > > mutated_data <- gapminder %>% 
 > >   mutate(life_exp_change = lifeExp - lag(lifeExp))
 > >

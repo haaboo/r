@@ -87,7 +87,8 @@ filter(gapminder, country %in% c("Australia", "New Zealand"))
 ```
 
 > ## Challenge 3
-> Extract the rows from all countries in Africa, Asia, or Europe
+> Extract the rows from all countries in Africa, Asia, or Europe. How many rows does your dataframe 
+> have and why?
 > > ## Solution to Challenge 3
 > > ``` {r filter-sol-3}
 > > filter(gapminder, continent %in% c("Africa","Asia", "Europe"))
