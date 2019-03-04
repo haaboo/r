@@ -12,16 +12,457 @@ source: Rmd
 
 
 
-## Introduction
-What will make this dataset tidy?
+Having had some exposure to working with tidyverse functions, you might now understand
+why it is beneficial to work with [tidy data]({{ page.root }}{% link _episodes/05-Tidy-Data.md %}).
+These data manipulation functions are all designed to work easily with tidy data, leaving you with
+more time to actually try to answer questions with the data.
 
-Why tidy data matters? (practial examples)
+Unfortunately, real data sets can come in all shapes and sizes and may not be structured for you to
+efficiently analyse it. To help tidy our data up in preparation for analysis, we will turn to the 
+`tidyr` package from the tidyverse.
 
-## Gather
-
-## Spread
-
-## Gather & Spread combined
-
+## Tidy data review
+Before getting into a real example, we'll have a look at a toy dataset. The following dataframe has 
+two weight measurements for three different cows. Have a look at the way the data is structured. 
+Is it tidy?
 
 
+~~~
+cows <- data_frame(id = c(1, 2, 3),
+                   weight1 = c(203, 227, 193),
+                   weight2 = c(365, 344, 329))
+cows
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 3 x 3
+     id weight1 weight2
+  <dbl>   <dbl>   <dbl>
+1     1     203     365
+2     2     227     344
+3     3     193     329
+~~~
+{: .output}
+What might make this dataset tidy?
+
+## Table massaging with `gather()` and `spread()`
+
+To make this dataframe tidy, we may need to have only one weight variable, and another variable 
+describing whether it is measurement 1 or 2. The `gather()` function from `tidyr` can do this 
+conversion for us. You can think of `gather()` as scooping all the data up into one big tall pile.
+
+
+~~~
+cows_long <- cows %>% 
+  gather(measurement, weight, weight1, weight2)
+
+cows_long
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 6 x 3
+     id measurement weight
+  <dbl> <chr>        <dbl>
+1     1 weight1        203
+2     2 weight1        227
+3     3 weight1        193
+4     1 weight2        365
+5     2 weight2        344
+6     3 weight2        329
+~~~
+{: .output}
+
+`gather()` works by converting the data into a set of key-value pairs, in which the 
+*key* describes what the data is, and the *value* records the actual data. For example, `weight1`-`203`
+is the key-value pair for the first row of the gathered table.
+
+The call to `gather()` therefore works in two parts. First we specify the names of the new key-value pair 
+columns (`measurement` and `weight` in this case). Then we tell it which columns should be gathered
+(`weight1` and `weight2` here). `gather()` then takes the contents of those columns and places them 
+into the new *value* column, and labels them with their column name as the *key*.
+
+This transformation may be easier to see in action, so let's have a look at the way `gather()` has 
+worked on the original data.
+
+![]({{ page.root }}{% link fig/15-tidyr-gather.gif %})
+
+As well as going from wide to long, we can go back the other way. Instead of `gather()`, we need to 
+`spread()` the data.
+
+
+~~~
+cows_long %>% 
+  spread(measurement, weight)
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 3 x 3
+     id weight1 weight2
+  <dbl>   <dbl>   <dbl>
+1     1     203     365
+2     2     227     344
+3     3     193     329
+~~~
+{: .output}
+
+This works in reverse, taking the names of out key-value columns and spreading them out. Each unique
+value in the key column is given a separate column of it's own. And the content of that column is 
+taken from the specified value column.
+
+## Realistic data
+
+Until now, we've been using the original gapminder dataset which comes pre-tidied, but
+'real' data (i.e. our own research data) will never be so well organised. Here
+let's start with the wide format version of the gapminder dataset.
+
+> Download the wide version of the gapminder data from [here]({{ page.root }}{% link data/gapminder_wide.csv %}) and save it in your project's `data` directory.
+
+Read in the wide gapminder and have a look at it.
+
+
+~~~
+gap_wide <- read_csv("data/gapminder_wide.csv")
+
+gap_wide
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 142 x 38
+   continent country gdpPercap_1952 gdpPercap_1957 gdpPercap_1962
+   <chr>     <chr>            <dbl>          <dbl>          <dbl>
+ 1 Africa    Algeria          2449.          3014.          2551.
+ 2 Africa    Angola           3521.          3828.          4269.
+ 3 Africa    Benin            1063.           960.           949.
+ 4 Africa    Botswa…           851.           918.           984.
+ 5 Africa    Burkin…           543.           617.           723.
+ 6 Africa    Burundi           339.           380.           355.
+ 7 Africa    Camero…          1173.          1313.          1400.
+ 8 Africa    Centra…          1071.          1191.          1193.
+ 9 Africa    Chad             1179.          1308.          1390.
+10 Africa    Comoros          1103.          1211.          1407.
+# … with 132 more rows, and 33 more variables: gdpPercap_1967 <dbl>,
+#   gdpPercap_1972 <dbl>, gdpPercap_1977 <dbl>, gdpPercap_1982 <dbl>,
+#   gdpPercap_1987 <dbl>, gdpPercap_1992 <dbl>, gdpPercap_1997 <dbl>,
+#   gdpPercap_2002 <dbl>, gdpPercap_2007 <dbl>, lifeExp_1952 <dbl>,
+#   lifeExp_1957 <dbl>, lifeExp_1962 <dbl>, lifeExp_1967 <dbl>,
+#   lifeExp_1972 <dbl>, lifeExp_1977 <dbl>, lifeExp_1982 <dbl>,
+#   lifeExp_1987 <dbl>, lifeExp_1992 <dbl>, lifeExp_1997 <dbl>,
+#   lifeExp_2002 <dbl>, lifeExp_2007 <dbl>, pop_1952 <dbl>,
+#   pop_1957 <dbl>, pop_1962 <dbl>, pop_1967 <dbl>, pop_1972 <dbl>,
+#   pop_1977 <dbl>, pop_1982 <dbl>, pop_1987 <dbl>, pop_1992 <dbl>,
+#   pop_1997 <dbl>, pop_2002 <dbl>, pop_2007 <dbl>
+~~~
+{: .output}
+
+You can see that wide format has many more columns than our original gapminder data because each 
+metric has a separate column for each year of measurement. 
+
+![]({{ page.root }}{% link fig/15-tidyr-fig2.png %})
+
+## From wide to long
+
+The first step towards recreating the nice and tidy gapminder format is to
+convert this data from a wide to a long format. The `tidyr` function `gather()` will
+'gather' your observation variables into a single variable.
+
+![]({{ page.root }}{% link fig/15-tidyr-fig3.png %})
+
+
+~~~
+gap_long <- gap_wide %>%
+    gather(obstype_year, obs_values, starts_with('pop'),
+           starts_with('lifeExp'), starts_with('gdpPercap'))
+gap_long
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 5,112 x 4
+   continent country                  obstype_year obs_values
+   <chr>     <chr>                    <chr>             <dbl>
+ 1 Africa    Algeria                  pop_1952        9279525
+ 2 Africa    Angola                   pop_1952        4232095
+ 3 Africa    Benin                    pop_1952        1738315
+ 4 Africa    Botswana                 pop_1952         442308
+ 5 Africa    Burkina Faso             pop_1952        4469979
+ 6 Africa    Burundi                  pop_1952        2445618
+ 7 Africa    Cameroon                 pop_1952        5009067
+ 8 Africa    Central African Republic pop_1952        1291695
+ 9 Africa    Chad                     pop_1952        2682462
+10 Africa    Comoros                  pop_1952         153936
+# … with 5,102 more rows
+~~~
+{: .output}
+
+![]({{ page.root }}{% link fig/15-tidyr-fig4.png %})
+
+Inside `gather()` we first name the new column for the new ID variable (`obstype_year`), the name 
+for the new amalgamated observation variable (`obs_value`), then the names of the old observation 
+variable. We could have typed out all the observation variables, but since `gather()` can use all the same
+[helper functions]({{ page.root }}{% link _episodes/09-Data-Verbs---select.md %}#select-helper-functions)
+as the `select()` function can, we can use the `starts_with()` argument to select all variables
+that starts with the desired character string. Gather also allows the alternative
+syntax of using the `-` symbol to identify which variables are not to be
+gathered (i.e. ID variables) so that 
+~~~~
+gap_long <- gap_wide %>% 
+  gather(obstype_year, obs_values, -continent, -country)
+~~~~
+{: .language-r}
+
+is an alternative way of specifying the columns to gather in the wide data set. The best method for 
+any particular data set will depend on how many columns you need to gather and how they are named.
+
+## Separating column data
+
+Now, the `obstype_year` column actually contains two pieces of information, the observation
+type (`pop`,`lifeExp`, or `gdpPercap`) and the `year`. We can use the `separate()` function to split
+the character strings into multiple variables. 
+
+
+~~~
+gap_split <- gap_long %>% 
+  separate(obstype_year, into = c('obs_type', 'year'), sep = "_")
+
+gap_split
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 5,112 x 5
+   continent country                  obs_type year  obs_values
+   <chr>     <chr>                    <chr>    <chr>      <dbl>
+ 1 Africa    Algeria                  pop      1952     9279525
+ 2 Africa    Angola                   pop      1952     4232095
+ 3 Africa    Benin                    pop      1952     1738315
+ 4 Africa    Botswana                 pop      1952      442308
+ 5 Africa    Burkina Faso             pop      1952     4469979
+ 6 Africa    Burundi                  pop      1952     2445618
+ 7 Africa    Cameroon                 pop      1952     5009067
+ 8 Africa    Central African Republic pop      1952     1291695
+ 9 Africa    Chad                     pop      1952     2682462
+10 Africa    Comoros                  pop      1952      153936
+# … with 5,102 more rows
+~~~
+{: .output}
+
+You provide `separate()` with a column name containing the values to split, the names of the columns
+you would like to separate them into, and where to split the values (by default it splits on any non
+alphanumeric character). 
+
+> ## Challenge 1
+> If you look at the table above, you will see that `separate()` creates character columns out of 
+> both the `obs_type` and `year` columns, but our original gapminder has year as a numeric. How would
+> you fix this discrepancy?
+>
+> **Hint:** Read through the arguments for `separate` with `?separate`
+> > ## Solution to Challenge 1
+> > The `convert` argument will try to convert character strings to other data types when set to `TRUE`
+> > 
+> > ~~~
+> > gap_split <- gap_long %>% 
+> >   separate(obstype_year, into = c('obs_type', 'year'), sep = "_", convert = TRUE)
+> > 
+> > gap_split
+> > ~~~
+> > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > # A tibble: 5,112 x 5
+> >    continent country                  obs_type  year obs_values
+> >    <chr>     <chr>                    <chr>    <int>      <dbl>
+> >  1 Africa    Algeria                  pop       1952    9279525
+> >  2 Africa    Angola                   pop       1952    4232095
+> >  3 Africa    Benin                    pop       1952    1738315
+> >  4 Africa    Botswana                 pop       1952     442308
+> >  5 Africa    Burkina Faso             pop       1952    4469979
+> >  6 Africa    Burundi                  pop       1952    2445618
+> >  7 Africa    Cameroon                 pop       1952    5009067
+> >  8 Africa    Central African Republic pop       1952    1291695
+> >  9 Africa    Chad                     pop       1952    2682462
+> > 10 Africa    Comoros                  pop       1952     153936
+> > # … with 5,102 more rows
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+The opposite to `separate()` is `unite()`. Use this when you are wanting to *combine* columns into 
+one long string. You provide `unite()` with the name to give the newly combined column, and the 
+names of the columns to combine.
+
+
+~~~
+gap_split %>% 
+  unite(obstype_year, obs_type, year)
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 5,112 x 4
+   continent country                  obstype_year obs_values
+   <chr>     <chr>                    <chr>             <dbl>
+ 1 Africa    Algeria                  pop_1952        9279525
+ 2 Africa    Angola                   pop_1952        4232095
+ 3 Africa    Benin                    pop_1952        1738315
+ 4 Africa    Botswana                 pop_1952         442308
+ 5 Africa    Burkina Faso             pop_1952        4469979
+ 6 Africa    Burundi                  pop_1952        2445618
+ 7 Africa    Cameroon                 pop_1952        5009067
+ 8 Africa    Central African Republic pop_1952        1291695
+ 9 Africa    Chad                     pop_1952        2682462
+10 Africa    Comoros                  pop_1952         153936
+# … with 5,102 more rows
+~~~
+{: .output}
+
+## From long to tidy
+
+The final step in recreating the gapminder data structure is to spread our observation variables out
+from the long format we have created.
+
+> ## Challenge 2
+> Spread the `gap_split` data above to create a new data frame that has the same dimensions as the 
+> original `gapminder` data.
+> > ## Solution to Challenge 2
+> > 
+> > ~~~
+> > gap_orig <- gap_split %>% 
+> >   spread(obs_type, obs_values)
+> > 
+> > gap_orig
+> > ~~~
+> > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > # A tibble: 1,704 x 6
+> >    continent country  year gdpPercap lifeExp      pop
+> >    <chr>     <chr>   <int>     <dbl>   <dbl>    <dbl>
+> >  1 Africa    Algeria  1952     2449.    43.1  9279525
+> >  2 Africa    Algeria  1957     3014.    45.7 10270856
+> >  3 Africa    Algeria  1962     2551.    48.3 11000948
+> >  4 Africa    Algeria  1967     3247.    51.4 12760499
+> >  5 Africa    Algeria  1972     4183.    54.5 14760787
+> >  6 Africa    Algeria  1977     4910.    58.0 17152804
+> >  7 Africa    Algeria  1982     5745.    61.4 20033753
+> >  8 Africa    Algeria  1987     5681.    65.8 23254956
+> >  9 Africa    Algeria  1992     5023.    67.7 26298373
+> > 10 Africa    Algeria  1997     4797.    69.2 29072015
+> > # … with 1,694 more rows
+> > ~~~
+> > {: .output}
+> > 
+> > 
+> > 
+> > ~~~
+> > dim(gap_orig)
+> > ~~~
+> > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > [1] 1704    6
+> > ~~~
+> > {: .output}
+> > 
+> > 
+> > 
+> > ~~~
+> > dim(gapminder)
+> > ~~~
+> > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > [1] 1704    6
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+We're almost there, the original was sorted by `country`, `continent`, then `year`. So finish 
+everything off with an `arrange()` and then a `select()` to get the columns in the right order.
+
+
+~~~
+gap_orig <- gap_orig %>% 
+  arrange(country, continent, year) %>% 
+  select(country, continent, year, lifeExp, pop, gdpPercap)
+
+gap_orig
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 1,704 x 6
+   country     continent  year lifeExp      pop gdpPercap
+   <chr>       <chr>     <int>   <dbl>    <dbl>     <dbl>
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+~~~
+{: .output}
+
+
+
+~~~
+gapminder
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 1,704 x 6
+   country     continent  year lifeExp      pop gdpPercap
+   <chr>       <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
+~~~
+{: .output}
+
+Great work! We've taken a messy data set and tidied it into a form that works well with all the 
+tidyverse functions you have been using up until now.
