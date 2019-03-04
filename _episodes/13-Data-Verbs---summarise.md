@@ -342,3 +342,90 @@ with any ties broken by the next variable and so on.
 > > {: .error}
 > {: .solution}
 {: .challenge}
+
+## Counting things
+A very common operation is to count the number of observations for each group. There are two 
+functions that help simplify this, `count()` and `n()`.
+
+If we need to use the number of observations in calculations, the `n()` function is useful. 
+For instance, if we wanted to get the standard error of the population per continent:
+
+
+~~~
+#standard error = standard deviation / square root of the number of samples
+gapminder %>%
+    group_by(continent) %>%
+    summarise(se_pop = sd(pop) / sqrt(n()) )
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 5 x 2
+  continent    se_pop
+  <chr>         <dbl>
+1 Africa      620133.
+2 Americas   2943299.
+3 Asia      10396373.
+4 Europe     1081469.
+5 Oceania    1328102.
+~~~
+{: .output}
+
+If we wanted to check the number of countries included in the dataset for the year 2002, we can use 
+the `count()` function. It takes the name of one or more columns that contain the groups we are 
+interested in, and we can optionally sort the results in descending order by adding `sort=TRUE`:
+
+
+~~~
+gapminder %>%
+    filter(year == 2002) %>%
+    count(continent, sort = TRUE)
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 5 x 2
+  continent     n
+  <chr>     <int>
+1 Africa       52
+2 Asia         33
+3 Europe       30
+4 Americas     25
+5 Oceania       2
+~~~
+{: .output}
+
+> ## Challenge 5
+> `count()` is a very useful shorthand, but can already create the same effect using other functions 
+> you have learned. Can you replicate the above result using `arrange()`, `desc()`, `summarise()`, 
+> `n()`, and `group_by()`
+> > ## Solution to Challenge 5
+> > 
+> > ~~~
+> > gapminder %>% 
+> >   filter(year == 2002) %>% 
+> >   group_by(continent) %>% 
+> >   summarise(n = n()) %>% 
+> >   arrange(desc(n))
+> > ~~~
+> > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > # A tibble: 5 x 2
+> >   continent     n
+> >   <chr>     <int>
+> > 1 Africa       52
+> > 2 Asia         33
+> > 3 Europe       30
+> > 4 Americas     25
+> > 5 Oceania       2
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
