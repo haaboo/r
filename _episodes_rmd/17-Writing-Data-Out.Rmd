@@ -1,7 +1,7 @@
 ---
 title: Writing data
 teaching: 15
-exercises: 10
+exercises: 5
 questions:
   - How do I write data to disk after working in R?
 objectives:
@@ -13,30 +13,51 @@ keypoints:
 source: Rmd
 ---
 
-```{r, include=FALSE}
+```{r include=FALSE}
 source("../bin/chunk-options.R")
 knitr_fig_path("17-")
+
+library(tidyverse)
+
+gapminder <- read_csv("data/gapminder.csv")
 ```
 
-## When (not) to write data
-- Intermediate files do not need to be written
+At some point, you will probably want to write some data out from R when you have finished your
+analysis. Just as with the `read_XXX` functions we covered in the 
+[data import]({{ page.root }}{% link _episodes/07-Reading-Data-In.md %}) lesson, there are various
+`write_XXX` functions to write data frames out in different formats. It is usually best to write 
+your data into a plain text format, particularly if you may need to use it again in later analysis.
 
-## Where (not) to write data
-- Write to a relative path if it should be stored in the repository/project
-- Only for moderately sized data that should travel with the project
-- Absolute paths may be appropriate for fixed storage locations (would be better set as a variable...)
+## What to write
 
-## Data writing formats
-- Similar considerations for reading - where will it be going?
-- Plain text is usually best, especially for dataframes
+Not all data needs to be written to a file when you have finished an analysis. Any data from
+intermediate steps in your analysis can always be recreated by running your code again, so does not
+need to be saved. Only keep the final results of your analysis, ie. the figures or tables you would 
+show to other people to explain what you have found.
 
-## How to write
-- `write_` family of functions, especially `write_csv`
+## Where to keep it
+
+Where your data should be stored will depend on how large it is. For small to moderately sized data, 
+use a relative path to save it within your project's structure. This allows your entire project - data,
+results, and the code to create the results - to be shared easily if needed. It's a good practice to
+keep your raw data and your modified data distinct, so make sure you set up a new folder to store 
+your results.
+
+For large data, you will likely have a fixed location for storage. This could be a hard drive or a 
+cloud storage server. Use an absolute path to make sure your results are being written to the correct
+location. But consider if saving the storage path as a variable is of benefit should you need to
+change the storage location in the future.
 
 > ## Challenge 1
->
-> Write out [dataset] to disk.
->
-> Commit the script and the dataset to git
->
+> Create a new folder called `processed_data` in your project folder. Write just the Australian
+> gapminder data to a csv file in this folder. Open the created file in a text editor to confirm
+> that it has written correctly.
+> > ## Solution to Challenge 2
+> > ```{r write-sol-1, eval=F}
+> > aust_data <- gapminder %>% 
+> >   filter(country == "Australia")
+> >
+> > write_csv(aust_data, path = "processed_data/aust_gapminder.csv")
+> > ```
+> {: .solution}
 {: .challenge}
