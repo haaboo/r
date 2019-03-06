@@ -1,10 +1,15 @@
 ---
 title: Reading Data In
-teaching: 20
+teaching: 15
 exercises: 10
 questions: 
+  - "How can I get data into R?"
 objectives:
+  - "Read data in from plain text and Excel files"
+  - "Control import parameters to cope with unusual data formats"
 keypoints:
+  - "Use `read_csv()` or `read_tsv()` to read in plain text data"
+  - "Use `read_excel()` from the `readxl` package to read in Excel files"
 source: Rmd
 ---
 
@@ -29,7 +34,8 @@ Two of the most common ways you might find data like this are:
 
 #### Plain text files
 
-These are text files where the columns of data are separated by some delimiting character. Examples of these might include
+These are text files where the columns of data are separated by some delimiting character. Examples 
+of these might include
 
 * CSV (**c**omma **s**eparated **v**alue) files that use a comma to delimit the columns
 
@@ -122,12 +128,6 @@ Similarly, for the tsv file there is a `read_tsv` function
 {: .challenge}
 
 ## Control of import parameters
-
-> ## QUESTION FOR INSTRUCTORS
-> **How should we deal with examples that we don't intend to provide example files for 
-> (such as this section)? For now I am just going to show what an example file would look like and 
-> then refer to it with a descriptive name in the example code**
-{: .discussion}
 
 Both `read_csv` and `read_tsv` have a number of parameters that may be needed to help import a file.
 You can read more about these in the help file for the functions, but some more commonly encountered

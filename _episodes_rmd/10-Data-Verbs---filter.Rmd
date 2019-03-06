@@ -1,10 +1,15 @@
 ---
-title: Data Verbs - filter
+title: Selecting rows
 teaching: 15
 exercises: 10
 questions:
+  - "How can I select rows from a data frame based on their values?"
 objectives:
+  - "Filter data frames using logical operators"
+  - "Combine logical expressions in a filter"
 keypoints:
+  - "Use `filter()` to choose data based on values."
+  - "The logical operator `%in%` can filter data from a list of possible values"
 source: Rmd
 ---
 

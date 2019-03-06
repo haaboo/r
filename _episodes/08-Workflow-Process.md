@@ -3,10 +3,12 @@
 # Instead, please edit 08-Workflow-Process.md in _episodes_rmd/
 title: Workflow Process
 teaching: 10
-exercises: 10
+exercises: 15
 questions:
+  - "How should I plan my data analysis?"
 objectives:
-keypoints:
+  - "Break down an analysis into several small steps"
+keypoints: null
 source: Rmd
 ---
 
@@ -47,13 +49,6 @@ So this very basic analysis has a number of steps to complete:
 > lists for both 1987 and 2007? Or, what was the population increase for Australia between 2002 and
 > 2007, and how does that compare to another country of your choice?
 {: .challenge}  
-    
-  
-## A clean environment
-**(Not really relevant here anymore?)**
-  * Why it's important for this understanding of an analysis as a whole workflow
-  * What can go wrong
-  * How to keep it clean
   
 ## From design to implementation
   

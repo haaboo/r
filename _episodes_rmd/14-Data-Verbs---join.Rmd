@@ -1,5 +1,5 @@
 ---
-title: Adding and combining datasets
+title: Adding and Combining Datasets
 teaching: 
 exercises: 
 questions:

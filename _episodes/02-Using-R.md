@@ -1,10 +1,23 @@
 ---
 title: Using R
-teaching: 
-exercises: 
+teaching: 25
+exercises: 10
 questions:
+- "What can R do?"
+- "How can I install new packages?"
 objectives:
+- "Define a variable"
+- "Assign data to a variable"
+- "Manage a workspace in an interactive R session"
+- "Use mathematical and comparison operators"
+- "Call functions"
+- "Manage packages"
 keypoints:
+- "R has the usual arithmetic operators and mathematical functions."
+- "Use `<-` to assign values to variables."
+- "Use `ls()` to list the variables in a program."
+- "Use `rm()` to delete objects in a program."
+- "Use `install.packages()` to install packages (libraries)."
 source: Rmd
 ---
 
@@ -529,7 +542,7 @@ function (name, pos = -1L, envir = as.environment(pos), all.names = FALSE,
     }
     else all.names
 }
-<bytecode: 0x7fbf2bcb9ca8>
+<bytecode: 0x7fd50c39ff88>
 <environment: namespace:base>
 ~~~
 {: .output}

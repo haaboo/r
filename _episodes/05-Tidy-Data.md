@@ -3,19 +3,19 @@
 # Instead, please edit 05-Tidy-Data.md in _episodes_rmd/
 title: "Tidy Data"
 keypoints:
-- For data to be tidy, each variable must be in its own column
-- For data to be tidy, each case must be in its own row
-- For data to be tidy, each value must be in its own cell
+- "For data to be tidy, each variable must be in its own column"
+- "For data to be tidy, each case must be in its own row"
+- "For data to be tidy, each value must be in its own cell"
 objectives:
-- To recognise tidy vs messy data
-- To know where to find more information about the tidyverse
+- "To recognise tidy or messy data."
+- "To know where to find more information about the tidyverse."
 output:
   html_document:
     df_print: paged
-questions: How can I use a consistent underlying data structure?
+questions: "How can I use a consistent underlying data structure?"
 source: Rmd
-teaching: null
-exercises: null
+teaching: 20
+exercises: 10
 ---
 
 

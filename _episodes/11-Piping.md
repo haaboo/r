@@ -5,8 +5,13 @@ title: Piping
 teaching: 15
 exercises: 10
 questions:
+  - "How can I use multiple data verbs together?"
 objectives:
+  - "Understand approaches to linking analysis steps together."
+  - "Use the pipe (`%>%`) to chain together multiple functions in a readable format."
 keypoints:
+  - "Pipes pass their left hand side through as the first argument of the right hand side."
+  - "Pipes make your code more readable, but be careful of going overboard."
 source: Rmd
 ---
 

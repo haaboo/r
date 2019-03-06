@@ -1,10 +1,17 @@
 ---
-title: Data Verbs - mutate
+title: Creating New Variables
 teaching: 20
 exercises: 15
 questions:
+  - "How can I create new variables in my data frame?"
+  - "How do I deal with a data frame made up of different groups?"
 objectives:
+  - "Create new columns by performing calculations on old variables."
+  - "Use functions to create new variables."
 keypoints:
+  - "Use `mutate()` to create new variables from old ones."
+  - "You can create new variables using any function that returns a vector of the same length as the data frame."
+  - "Use `group_by()` to group your data based on a variable."
 source: Rmd
 ---
 

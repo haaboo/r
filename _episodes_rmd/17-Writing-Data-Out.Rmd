@@ -1,5 +1,5 @@
 ---
-title: Writing data
+title: Writing Data
 teaching: 15
 exercises: 5
 questions:

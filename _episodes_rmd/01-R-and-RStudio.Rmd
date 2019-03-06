@@ -1,10 +1,18 @@
 ---
 title:   Introduction to R and R Studio 
-teaching: 45
+teaching: 20
 exercises: 10
 questions:
+- "How do you find your way around RStudio?"
+- "How do you interact with R?"
 objectives:
+- "Describe the purpose and use of each pane in the RStudio IDE"
+- "Locate buttons and options in the RStudio IDE"
+- "Manage a workspace in an interactive R session"
+- "Manage packages"
 keypoints:
+- "Use RStudio to write and run R programs."
+- "Set up an RStudio project for each analysis you are performing."
 source: Rmd
 ---
 

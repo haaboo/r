@@ -1,16 +1,27 @@
 ---
 title: Dataframes
-teaching: 
-exercises: 
+teaching: 25
+exercises: 15
 questions:
+  - "What is a data frame?"
+  - "Why use a data frame as a tidy data structure?"
 objectives:
+  - "To learn how to create a data frame."
+  - "To understand how to find basic information about a data frame"
+  - "To know how to inspect the data in a data frame"
 keypoints:
+  - "Data frames (or tibbles in the tidyverse) are lists where each element is a vector of the same length"
+  - "Create them with `tibble()`"
+  - "Use `nrow()`, `ncol()`, `dim()`, `colnames()`, or `rownames()` to find information about a data frame"
+  - "Use `head()`, `tail()`, `summary()`, or `glimpse()` to inspect a data frame's content"
 source: Rmd
 ---
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
 knitr_fig_path("06-")
+
+library(tidyverse)
 ```
 
 ## Dataframes
