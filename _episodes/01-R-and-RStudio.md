@@ -30,8 +30,22 @@ R provides a flexible analysis toolkit where all of the standard statistical tec
 Not only that, but there is a large R community who regularly contribute new functionality through add-on ‘packages’.
 In fact, finding a particular statistical model or technique that is not already available through R is a tricky task indeed!
 
-## Tour of R Studio
-*Basic layout**
+## Introduction to RStudio
+
+Welcome to the R portion of the Software Carpentry workshop.
+
+Throughout this lesson, we're going to teach you some of the fundamentals of
+the R language as well as some best practices for organizing code for
+scientific projects that will make your life easier.
+
+We'll be using RStudio: a free, open source R integrated development
+environment. It provides a built in editor, works on all platforms (including
+on servers) and provides many advantages such as integration with version
+control and project management.
+
+
+
+**Basic layout**
 
 When you first open RStudio, you will be greeted by three panels:
 
@@ -39,59 +53,14 @@ When you first open RStudio, you will be greeted by three panels:
   * Environment/History (tabbed in upper right)
   * Files/Plots/Packages/Help/Viewer (tabbed in lower right)
 
-<!--![RStudio layout](../fig/01-rstudio.png) -->
+![RStudio layout](../fig/01-rstudio-layout.png)
 
 Once you open files, such as R scripts, an editor panel will also open
 in the top left.
 
-<!--![RStudio layout with .R file open](../fig/01-rstudio-script.png) -->
+![RStudio layout with .R file open](../fig/01-rstudio-layout-script.png)
 
 You can move the panels around in RStudio so that their arrangement suits you.
-
-Your time in R will be split between the R interactive
-console working in scripts. The console is where you will run all of your code, and can be a useful environment to try out ideas before adding them to an R script
-file. This console in RStudio is the same as the one you would get if
-you typed in `R` in your command-line environment.
-
-
-## Show code in R
-
-The simplest thing you could do with R is do arithmetic:
-
-
-~~~
-1 + 100
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] 101
-~~~
-{: .output}
-And R will print out the answer, with a preceding “[1]”. Don’t worry about this for now, we’ll explain that later. For now think of it as indicating output.
-
-## Show code in R Studio
-
-Now you will enter some calculations into your script file, and either copy this to the 
-console window or highlight the code and Control Enter to run the code.  Notice that
-the output is show in the console window.
-
-~~~
-(3 + 5) * 2
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] 16
-~~~
-{: .output}
-
-
-
 
 ## Work flow within RStudio
 There are two main ways one can work within RStudio.
@@ -123,6 +92,22 @@ interactive R console.
 > including the modifications you have made.
 {: .callout}
 
+## Introduction to R
+
+Your time in R will be split between the R interactive
+console working in scripts. The console is where you will run all of your code, and can be a useful environment to try out ideas before adding them to an R script
+file. This console in RStudio is the same as the one you would get if
+you typed in `R` in your command-line environment.
+
+*Anything that you want to keep needs to go in a script.*
+
+The first thing you will see in the R interactive session is a bunch
+of information, followed by a ">" and a blinking cursor. In many ways
+this is similar to the shell environment you learned about during the
+shell lessons: it operates on the same idea of a "Read, evaluate,
+print loop": you type in commands, R tries to execute them, and then
+returns a result.
+
 
 # Projects
 
@@ -145,9 +130,8 @@ A good project layout will ultimately make your life easier:
 > 1. Click the "File" menu button, then "New Project".
 > 2. Click "New Directory".
 > 3. Click "Empty Project".
-> 4. Type in the name of the directory to store your project, e.g. "my_project".
-> 5. If available, select the checkbox for "Create a git repository."
-> 6. Click the "Create Project" button.
+> 4. Type in the name of the directory to store your project, e.g. "intro-to-r".
+> 5. Click the "Create Project" button.
 {: .challenge}
 
 Now when we start R in this project directory, or open this project with RStudio,
@@ -158,32 +142,24 @@ all of our work on this project will be entirely self-contained in this director
 Although there is no "best" way to lay out a project, there are some general
 principles to adhere to that will make project management easier:
 
-### Treat data as read only
+### Treat raw data as read only
 
 This is probably the most important goal of setting up a project. Data is
 typically time consuming and/or expensive to collect. Working with them
 interactively (e.g., in Excel) where they can be modified means you are never
 sure of where the data came from, or how it has been modified since collection.
-It is therefore a good idea to treat your data as "read-only".
+It is therefore a good idea to treat your raw data as "read-only".
 
 ### Data Cleaning
 
-In many cases your data will be "dirty": it will need significant preprocessing
-to get into a format R (or any other programming language) will find useful. This
-task is sometimes called "data munging". I find it useful to store these scripts
-in a separate folder, and create a second "read-only" data folder to hold the
-"cleaned" data sets.
+In many cases your data will be "dirty": it will need significant processing
+to get into a useful format. This task is sometimes called "data munging". It is a good idea to have particular scripts just for the munging process.
 
 ### Treat generated output as disposable
 
 Anything generated by your scripts should be treated as disposable: it should
 all be able to be regenerated from your scripts.
 
-There are lots of different ways to manage this output. I find it useful to
-have an output folder with different sub-directories for each separate
-analysis. This makes it easier later, as many of my analyses are exploratory
-and don't end up being used in the final project, and some of the analyses
-get shared between projects.
 
 > ## Tip: Good Enough Practices for Scientific Computing
 >
@@ -219,36 +195,16 @@ get shared between projects.
 > For more information on ProjectTemplate and its functionality visit the
 > home page [ProjectTemplate](http://projecttemplate.net/index.html)
 {: .callout}
-### Separate function definition and application
 
-One of the more effective ways to work with R is to start by writing the code you want to run directly in an .R script, and then running the selected lines (either using the keyboard shortcuts in RStudio or clicking the "Run" button) in the interactive R console.
-
-When your project is in its early stages, the initial .R script file usually contains many lines
-of directly executed code. As it matures, reusable chunks get pulled into their
-own functions. It's a good idea to separate these functions into two separate folders; one
-to store useful functions that you'll reuse across analyses and projects, and
-one to store the analysis scripts.
-
-> ## Tip: avoiding duplication
->
-> You may find yourself using data or analysis scripts across several projects.
-> Typically you want to avoid duplication to save space and avoid having to
-> make updates to code in multiple places.
->
-> In this case I find it useful to make "symbolic links", which are essentially
-> shortcuts to files somewhere else on a filesystem. On Linux and OS X you can
-> use the `ln -s` command, and on Windows you can either create a shortcut or
-> use the `mklink` command from the windows terminal.
-{: .callout}
 ### Save the data in the data directory
 
 Now we have a good directory structure we will now place/save the data file in the `data/` directory.
 
 > ## Challenge 1
-> Download the gapminder data from [here]({{ page.root }}/data/gapminder-FiveYearData.csv).
+> Download the gapminder data from [here]({{ page.root }}/data/gapminder.csv).
 >
 > 1. Download the file (right mouse click -> "Save as")
-> 2. Make sure it's saved under the name `gapminder-FiveYearData.csv`
+> 2. Make sure it's saved under the name `gapminder.csv`
 > 3. Save the file in the `data/` folder within your project.
 >
 > We will load and inspect these data later.
@@ -267,7 +223,7 @@ Now we have a good directory structure we will now place/save the data file in t
 > > By running these commands in the shell:
 > > 
 > > ~~~
-> > ls -lh data/gapminder-FiveYearData.csv
+> > ls -lh data/gapminder.csv
 > > ~~~
 > > {: .language-r}
 > > 
@@ -275,13 +231,13 @@ Now we have a good directory structure we will now place/save the data file in t
 > > 
 > > 
 > > ~~~
-> > -rw-r--r--  1 pea25i  348785    80K 27 Feb 09:23 data/gapminder-FiveYearData.csv
+> > -rwxrwxrwx 1 alex alex 81K Feb 25 13:13 data/gapminder.csv
 > > ~~~
 > > {: .output}
 > > The file size is 80K.
 > > 
 > > ~~~
-> > wc -l data/gapminder-FiveYearData.csv
+> > wc -l data/gapminder.csv
 > > ~~~
 > > {: .language-r}
 > > 
@@ -289,13 +245,13 @@ Now we have a good directory structure we will now place/save the data file in t
 > > 
 > > 
 > > ~~~
-> >     1705 data/gapminder-FiveYearData.csv
+> > 1705 data/gapminder.csv
 > > ~~~
 > > {: .output}
 > > There are 1705 lines. The data looks like:
 > > 
 > > ~~~
-> > head data/gapminder-FiveYearData.csv
+> > head data/gapminder.csv
 > > ~~~
 > > {: .language-r}
 > > 
@@ -303,16 +259,16 @@ Now we have a good directory structure we will now place/save the data file in t
 > > 
 > > 
 > > ~~~
-> > country,year,pop,continent,lifeExp,gdpPercap
-> > Afghanistan,1952,8425333,Asia,28.801,779.4453145
-> > Afghanistan,1957,9240934,Asia,30.332,820.8530296
-> > Afghanistan,1962,10267083,Asia,31.997,853.10071
-> > Afghanistan,1967,11537966,Asia,34.02,836.1971382
-> > Afghanistan,1972,13079460,Asia,36.088,739.9811058
-> > Afghanistan,1977,14880372,Asia,38.438,786.11336
-> > Afghanistan,1982,12881816,Asia,39.854,978.0114388
-> > Afghanistan,1987,13867957,Asia,40.822,852.3959448
-> > Afghanistan,1992,16317921,Asia,41.674,649.3413952
+> > country,continent,year,lifeExp,pop,gdpPercap
+> > Afghanistan,Asia,1952,28.801,8425333,779.4453145
+> > Afghanistan,Asia,1957,30.332,9240934,820.8530296
+> > Afghanistan,Asia,1962,31.997,10267083,853.10071
+> > Afghanistan,Asia,1967,34.02,11537966,836.1971382
+> > Afghanistan,Asia,1972,36.088,13079460,739.9811058
+> > Afghanistan,Asia,1977,38.438,14880372,786.11336
+> > Afghanistan,Asia,1982,39.854,12881816,978.0114388
+> > Afghanistan,Asia,1987,40.822,13867957,852.3959448
+> > Afghanistan,Asia,1992,41.674,16317921,649.3413952
 > > ~~~
 > > {: .output}
 > {: .solution}
