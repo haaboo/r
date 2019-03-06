@@ -20,20 +20,6 @@ exercises: 10
 
 
 
-## Tidy Data Concepts
-* What is it?
-* Why do you want it?
-
-## TidyVerse
-* What is it?
-* Loading
-
-## What makes a dataset tidy?
-
-NOTE:  Long vs Wide (with stats in mind)
-
-
-
 
 > Happy families are all alike; every unhappy family is unhappy in its own way
 >
@@ -141,13 +127,14 @@ In the above the same variable (a measurement value) was stored in two different
 
 > ## Challenge 3
 >
-> Open the file `plates.xlsx` (download [here]({{ page.root }}/data/gapminder_sex_ratios.csv)). This is a very common format to store data
+> Open the file `plates.xlsx` (download [here]({{ page.root }}/data/plates.xlsx)). This is a very common format to store data
 > from 96-well plates. What would this look like if it was tidy? Discuss the steps you would need to go through to convert it to a tidy format.
 {: .challenge}
 
-As well as consistency of the underlying data structure, packages in the tidyverse are also all compatible with the `%>%` operator.
 
-There is a tidyverse package, which doesn't have any functionality, except to import core packages of the tidyverse. 
+There is a tidyverse package, which doesn't have any functionality, except to attach core packages of the tidyverse. 
+
+
 
 ~~~
 library(tidyverse)
@@ -164,48 +151,19 @@ library(tidyverse)
 
 
 ~~~
-✔ ggplot2 3.1.0       ✔ purrr   0.3.0  
-✔ tibble  2.0.1       ✔ dplyr   0.8.0.1
-✔ readr   1.3.1       ✔ stringr 1.4.0  
-✔ ggplot2 3.1.0       ✔ forcats 0.3.0  
+✔ ggplot2 3.1.0     ✔ purrr   0.3.0
+✔ tibble  2.0.1     ✔ dplyr   0.7.8
+✔ readr   1.3.1     ✔ stringr 1.4.0
+✔ ggplot2 3.1.0     ✔ forcats 0.3.0
 ~~~
 {: .output}
 
 
 
 ~~~
-Warning: package 'tibble' was built under R version 3.5.2
-~~~
-{: .error}
-
-
-
-~~~
-Warning: package 'purrr' was built under R version 3.5.2
-~~~
-{: .error}
-
-
-
-~~~
-Warning: package 'dplyr' was built under R version 3.5.2
-~~~
-{: .error}
-
-
-
-~~~
-Warning: package 'stringr' was built under R version 3.5.2
-~~~
-{: .error}
-
-
-
-~~~
 ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter()     masks stats::filter()
-✖ dplyr::group_rows() masks kableExtra::group_rows()
-✖ dplyr::lag()        masks stats::lag()
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
 ~~~
 {: .output}
 
@@ -224,6 +182,7 @@ library(forcats)
 ~~~
 {: .language-r}
 
+The power of maintaining a consistent approach to data structures will become more clear as we work with data in R. You will see that by transforming data to make it tidy, all subsequent work will be easier to understand, and will make your code more clear as well.
 
 ## Other great resources
 

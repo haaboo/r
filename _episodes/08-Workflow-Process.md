@@ -8,7 +8,9 @@ questions:
   - "How should I plan my data analysis?"
 objectives:
   - "Break down an analysis into several small steps"
-keypoints: null
+keypoints:
+  - "Data analyses can be broken down into discrete stages"
+  - "Most data analysis stages fit into a small number of types"
 source: Rmd
 ---
 
@@ -63,7 +65,7 @@ add in some tidyverse verbs without losing the descriptiveness.
   * `filter` only the data from 1972 
   * `arrange` this data by population size
   * `filter` the sixth highest population size
-  * `select` at the country with that population
+  * `select` the country variable with that population
   
 Don't worry right now about exactly what these functions do. We will be looking at them in more 
 detail shortly.

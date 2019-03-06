@@ -105,6 +105,41 @@ No matter how complicated our analyses become, all values in R is
 interpreted as one of these basic data types. This strictness has some 
 really important consequences, and can be the cause of some confusing errors.
 
+## Missing data
+
+In all data types, it is possible to have missing values. In R, missing values are represented as `NA`. It is very important to understand this is different to `0`, or `""`, which are each values in themselves. `NA` means **missing** (or not available). 
+
+If you want to check whether the variable `x` is `NA` it would be natural to use the equality operator (`==`):
+
+
+~~~
+x <- NA
+x == NA
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] NA
+~~~
+{: .output}
+
+Using `==` with `NA` returns `NA`, because making a comparison to a missing value doesn't make sense. Instead we need to check for the "state of missingness" rather than a value. We can do this with the `is.na()` function:
+
+
+~~~
+x <- NA
+is.na(x)
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] TRUE
+~~~
+{: .output}
 
 ## Dates
 
@@ -136,7 +171,7 @@ now()
 
 
 ~~~
-[1] "2019-03-06 12:20:11 Australia"
+[1] "2019-03-06 13:21:19 Australia"
 ~~~
 {: .output}
 
