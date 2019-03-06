@@ -47,7 +47,7 @@ You can also select columns by index position:
 
 ```{r select-by-pos}
 #Select the first, third and fourth columns
-select(gapminder, 1,3,4)
+select(gapminder, 1, 3, 4)
 ```
 
 or you can select columns to *exclude* by using negation:
@@ -150,10 +150,10 @@ select(gapminder, contains("e"))
 `new_name = old_name`:
 
 ```{r select-rename}
-select(gapminder,country_name = country, population = pop)
+select(gapminder, country_name = country, population = pop)
 ```
 
-but since it drops all the other columns, it is probably not the outcome you were looking for. 
+but since it drops all the other columns, it is might not be the outcome you were looking for. 
 Instead, `rename()` can rename columns while retaining the rest of the data frame.
 
 ```{r rename-example}

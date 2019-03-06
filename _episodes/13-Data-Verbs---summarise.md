@@ -5,8 +5,14 @@ title: Summarise and Grouping
 teaching: 20
 exercises: 20
 questions:
+  - "How can I make summaries of groups of data?"
+  - "How can I count the elements of groups in a dataset?"
 objectives:
+  - "Identify when grouping is necessary to make summaries"
+  - "Be able to to usefully summarise variables in a dataframe"
 keypoints:
+  - "`summarise()` creates a new variable that provides a one row summary per group"
+  - "`count()` is useful to count rows per group"
 source: Rmd
 ---
 
@@ -153,7 +159,7 @@ gapminder %>%
 {: .challenge}
 
 ## Sorting your results
-If you are wanting to sort your resulting data frame by a particular variable, use `arrange()`
+If you need to sort your resulting data frame by a particular variable, use `arrange()`
 
 
 ~~~
@@ -337,7 +343,7 @@ with any ties broken by the next variable and so on.
 > > 
 > > 
 > > ~~~
-> > Error: object 'mean_gdp_per_cap' not found
+> > Error in arrange_impl(.data, dots): Evaluation error: object 'mean_gdp_per_cap' not found.
 > > ~~~
 > > {: .error}
 > {: .solution}

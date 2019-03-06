@@ -231,7 +231,7 @@ Now we have a good directory structure we will now place/save the data file in t
 > > 
 > > 
 > > ~~~
-> > -rwxrwxrwx 1 alex alex 81K Feb 25 13:13 data/gapminder.csv
+> > -rwxrwxrwx 1 alex alex 81K Feb 25 02:13 data/gapminder.csv
 > > ~~~
 > > {: .output}
 > > The file size is 80K.

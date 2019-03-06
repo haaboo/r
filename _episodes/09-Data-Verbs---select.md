@@ -69,7 +69,7 @@ You can also select columns by index position:
 
 ~~~
 #Select the first, third and fourth columns
-select(gapminder, 1,3,4)
+select(gapminder, 1, 3, 4)
 ~~~
 {: .language-r}
 
@@ -498,7 +498,7 @@ select(gapminder, contains("e"))
 
 
 ~~~
-select(gapminder,country_name = country, population = pop)
+select(gapminder, country_name = country, population = pop)
 ~~~
 {: .language-r}
 
@@ -522,7 +522,7 @@ select(gapminder,country_name = country, population = pop)
 ~~~
 {: .output}
 
-but since it drops all the other columns, it is probably not the outcome you were looking for. 
+but since it drops all the other columns, it is might not be the outcome you were looking for. 
 Instead, `rename()` can rename columns while retaining the rest of the data frame.
 
 

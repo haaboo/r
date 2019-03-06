@@ -144,7 +144,7 @@ write.
 {: .challenge}   
   
 ## Common pitfalls
-When using pipes to construct a sequential analysis, there are a few problems that can trip people up
+When using pipes to construct a sequential analysis, there are a few problems that can trip people up.
 
 #### Forgetting to assign the output
 This has been covered before, but is something that often gets forgotten again once you start using

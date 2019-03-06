@@ -39,9 +39,11 @@ show to other people to explain what you have found.
 
 Where your data should be stored will depend on how large it is. For small to moderately sized data, 
 use a relative path to save it within your project's structure. This allows your entire project - data,
-results, and the code to create the results - to be shared easily if needed. It's a good practice to
+results, and the code to create the results - to be portable and shared easily if needed. It's a good practice to
 keep your raw data and your modified data distinct, so make sure you set up a new folder to store 
 your results.
+
+**Never overwrite your raw data with modified data**
 
 For large data, you will likely have a fixed location for storage. This could be a hard drive or a 
 cloud storage server. Use an absolute path to make sure your results are being written to the correct

@@ -1,10 +1,16 @@
 ---
 title: Adding and Combining Datasets
-teaching: 
-exercises: 
+teaching: 30
+exercises: 30
 questions:
+  - "How can I combine multiple datasets?"
+  - "How can I merge datasets that have a common variable?"
 objectives:
+  - "Be able to combine different datasets by row, column or common variable"
 keypoints:
+  - "`bind_rows` combines datasets that share the same variables"
+  - "`bind_cols` combines datasets that share the same rows"
+  - "The `join` family of functions provide a complete range of methods to merge datasets that share common variables"
 source: Rmd
 ---
 
@@ -29,10 +35,10 @@ If you have new data that has the same structure as your old data, it can be add
 your data frame with `bind_rows()`
 
 ```{r bind}
-data = data_frame(numbers = c(1, 2, 3, 4), letters = c("a", "b", "c", "d"))
+data = tibble(numbers = c(1, 2, 3, 4), letters = c("a", "b", "c", "d"))
 data
 
-new_data <- data_frame(numbers = c(24, 25, 26), letters = c("x", "y", "z"))
+new_data <- tibble(numbers = c(24, 25, 26), letters = c("x", "y", "z"))
 
 bind_rows(data, new_data)
 ```
@@ -42,7 +48,7 @@ consistently. If the names do not match, the data frames will still be bound tog
 data will be replaced with `NA`s
 
 ```{r bind-2}
-new_data <- data_frame(numbers = c(24, 25, 26), more_letters = c("x", "y", "z"))
+new_data <- tibble(numbers = c(24, 25, 26), more_letters = c("x", "y", "z"))
 
 bind_rows(data, new_data)
 ```
@@ -50,7 +56,7 @@ bind_rows(data, new_data)
 To add more columns to your data frame, use `bind_cols()`
 
 ```{r bind-col}
-new_data <- data_frame(direction = c("N", "S", "E", "W"))
+new_data <- tibble(direction = c("N", "S", "E", "W"))
 
 bind_cols(data, new_data)
 ```
@@ -69,8 +75,8 @@ will have a shared column with a sample ID, and an observed measurement which is
 data frame.
 
 ```{r join-data}
-df1 <- data_frame(sample = c(1, 2, 3), measure1 = c(4.2, 5.3, 6.1))
-df2 <- data_frame(sample = c(1, 3, 4), measure2 = c(7.8, 6.4, 9.0))
+df1 <- tibble(sample = c(1, 2, 3), measure1 = c(4.2, 5.3, 6.1))
+df2 <- tibble(sample = c(1, 3, 4), measure2 = c(7.8, 6.4, 9.0))
 
 df1
 df2

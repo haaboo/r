@@ -1,6 +1,6 @@
 ---
 title: Creating New Variables
-teaching: 20
+teaching: 30
 exercises: 15
 questions:
   - "How can I create new variables in my data frame?"
@@ -100,7 +100,7 @@ mutate(gapminder, life_exp_prev = lag(lifeExp), life_exp_next = lead(lifeExp))
 ```
 
 #### Cumulative computations
-Cumulative sums (`cumsum()`), products(`cumprod()`) and means (`cummean()`) are all available to 
+Cumulative sums (`cumsum()`), products (`cumprod()`) and means (`cummean()`) are all available to 
 provide running computation of a variable. While not particularly useful for the gapminder data,
 you can get an idea of how they function:
 
