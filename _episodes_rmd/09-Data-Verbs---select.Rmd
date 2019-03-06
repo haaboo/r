@@ -161,7 +161,7 @@ rename(gapminder, country_name = country, population = pop)
 ```
 
 This will often be useful to convert column names from your imported data into the 
-[consistent naming format]({{ page.root }}{% link _episodes/02-Using-R.md %}#naming-conventions) you
+[consistent naming format]({{ page.root }}{% link _episodes/02-Using-R.md %}#naming-things) you
 have decided on.
 
 > ## Challenge 4
