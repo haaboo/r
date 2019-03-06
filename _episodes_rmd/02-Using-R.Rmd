@@ -17,7 +17,7 @@ keypoints:
 - "Use `<-` to assign values to variables."
 - "Use `ls()` to list the variables in a program."
 - "Use `rm()` to delete objects in a program."
-- "Use `install.packages()` to install packages (libraries)."
+- "Use `install.packages()` to install packages."
 source: Rmd
 ---
 
@@ -213,7 +213,7 @@ y <- x * 2
 The right hand side of the assignment can be any valid R expression.
 The right hand side is *fully evaluated* before the assignment occurs.
 
-**Naming things**
+### Naming things
 
 Object names can contain letters, numbers, underscores and periods. They
 cannot start with a number nor contain spaces at all. Different people use
@@ -278,11 +278,68 @@ symbol used in the community. So the recommendation is to use `<-`.
 > {: .solution}
 {: .challenge}
 
+> ## Challenge 2
+>
+> What will be the value of each  variable  after each
+> statement in the following program?
+>
+> ```{r, eval=FALSE}
+> mass <- 47.5
+> age <- 122
+> mass <- mass * 2.3
+> age <- age - 20
+> ```
+>
+> > ## Solution to challenge 2
+> >
+> > ```{r ch2pt1-sol}
+> > mass <- 47.5
+> > ```
+> > This will give a value of `r mass` for the variable mass
+> >
+> > ```{r ch2pt2-sol}
+> > age <- 122
+> > ```
+> > This will give a value of `r age` for the variable age
+> >
+> > ```{r ch2pt3-sol}
+> > mass <- mass * 2.3
+> > ```
+> > This will multiply the existing value of `r mass/2.3` by 2.3 to give a new value of
+> > `r mass` to the variable mass.
+> >
+> > ```{r ch2pt4-sol}
+> > age <- age - 20
+> > ```
+> > This will subtract 20 from the existing value of `r age + 20 ` to give a new value
+> > of `r age` to the variable age.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge 3
+>
+> Run the code from the previous challenge, and write a command to
+> compare mass to age. Is mass larger than age?
+>
+> > ## Solution to challenge 3
+> >
+> > One way of answering this question in R is to use the `>` to set up the following:
+> > ```{r ch3-sol}
+> > mass > age
+> >```
+> > This should yield a boolean value of TRUE since `r mass` is greater than `r age`.
+> {: .solution}
+{: .challenge}
+
+
 ## Commenting
 
 Comments are 'notes' that are added to your script to provide further details for a human to read. 
 They are ignored by R when the code is run.  To add comments to your code,
 just type a `#` before your note text.
+
+It's a good habit to get into writing comments about what the code you're writing is for - think of them as notes to help a future user (probably you!) understand why the code is there.
 
 ```{r comments, error=TRUE}
 # this is a comment line
@@ -300,19 +357,15 @@ Many functions take *arguments*, which are a list of parameters that can be give
 
 Some functions have some arguments that must be defined, and others that are optional. 
 
-> ## Tip:  Remembering/finding function names
+> ## Tip:  Remembering/finding function names and arguments
 >
 > To use a function, for example `seq()`, which makes regular 
 > sequences of numbers, type `se` and hit TAB.  RStudio will provide a popup which will show
 > possible completions.  Specify seq() by typing the next letter
-> "q", or by using Up/Down arrows to select.  A floating tooltip 
-> will be displayed, giving information about the functions's 
-> arguments and purpose.  To display the details in the Help tab 
+> "q", or by using Up/Down arrows to select.  
+> Inside the parentheses, RStudio will show a list of the arguments that the function expects.  To display the details in the Help tab 
 > in the lower right pane, press F1.
 >
-> When you have selected the function you want, press TAB once 
-> more, and RStudio will add matching opening and closing 
-> parenthese for you.  
 {: .callout}
 
 
@@ -429,10 +482,8 @@ rm(list <- ls())
 
 
 ## Packages
-## R Packages
 
-It is possible to add functions to R by writing a package, or by
-obtaining a package written by someone else. As of this writing, there
+In R, a package is a collection of functions and documentation that are bundled together to provide some functionality. They are a convenient and standardised way for the community to share code with each other. As of this writing, there
 are over 10,000 packages available on CRAN (the comprehensive R archive
 network). R and RStudio have functionality for managing packages:
 
@@ -444,59 +495,6 @@ network). R and RStudio have functionality for managing packages:
 * You can remove a package with `remove.packages("packagename")`
 * You can make a package available for use with `library(packagename)`
 
-> ## Challenge 2
->
-> What will be the value of each  variable  after each
-> statement in the following program?
->
-> ```{r, eval=FALSE}
-> mass <- 47.5
-> age <- 122
-> mass <- mass * 2.3
-> age <- age - 20
-> ```
->
-> > ## Solution to challenge 2
-> >
-> > ```{r ch2pt1-sol}
-> > mass <- 47.5
-> > ```
-> > This will give a value of `r mass` for the variable mass
-> >
-> > ```{r ch2pt2-sol}
-> > age <- 122
-> > ```
-> > This will give a value of `r age` for the variable age
-> >
-> > ```{r ch2pt3-sol}
-> > mass <- mass * 2.3
-> > ```
-> > This will multiply the existing value of `r mass/2.3` by 2.3 to give a new value of
-> > `r mass` to the variable mass.
-> >
-> > ```{r ch2pt4-sol}
-> > age <- age - 20
-> > ```
-> > This will subtract 20 from the existing value of `r age + 20 ` to give a new value
-> > of `r age` to the variable age.
-> {: .solution}
-{: .challenge}
-
-
-> ## Challenge 3
->
-> Run the code from the previous challenge, and write a command to
-> compare mass to age. Is mass larger than age?
->
-> > ## Solution to challenge 3
-> >
-> > One way of answering this question in R is to use the `>` to set up the following:
-> > ```{r ch3-sol}
-> > mass > age
-> >```
-> > This should yield a boolean value of TRUE since `r mass` is greater than `r age`.
-> {: .solution}
-{: .challenge}
 
 
 > ## Challenge 4

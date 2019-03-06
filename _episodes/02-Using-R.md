@@ -1,7 +1,7 @@
 ---
 title: Using R
-teaching: 25
-exercises: 10
+teaching: 50
+exercises: 15
 questions:
 - "What can R do?"
 - "How can I install new packages?"
@@ -17,118 +17,156 @@ keypoints:
 - "Use `<-` to assign values to variables."
 - "Use `ls()` to list the variables in a program."
 - "Use `rm()` to delete objects in a program."
-- "Use `install.packages()` to install packages (libraries)."
+- "Use `install.packages()` to install packages."
 source: Rmd
 ---
 
 
 
-## Interactions
-Sending code from script to console and repeating the previous lines from script
+## Interacting with R
+Remember that in RStudio, R itself is accessed through the console pane. This can by done by typing commands directly in the pane, or sending them from a script file with <kbd>Ctrl</kbd>+<kbd>Return</kbd> (in Windows and Linux) or <kbd>&#8984;</kbd>+<kbd>Return</kbd> on OS X.
 
-## Functions
-R has many built in mathematical functions. To call a function,
-we simply type its name, followed by  open and closing parentheses.
-Anything we type inside the parentheses is called the function's
-arguments:
+## Using R as a calculator
+
+The simplest thing you could do with R is do arithmetic:
 
 
 ~~~
-function_name(args1 = val1, arg2 = val2, ...)  # functions  
+1 + 100
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Error in function_name(args1 = val1, arg2 = val2, ...): could not find function "function_name"
+[1] 101
 ~~~
-{: .error}
+{: .output}
 
-> ## TIP:  Getting Functions 
+And R will print out the answer, with a preceding "[1]". Don't worry about this
+for now, we'll explain that later. For now think of it as indicating output.
+
+Like bash, if you type in an incomplete command, R will wait for you to
+complete it:
+
+~~~
+> 1 +
+~~~
+{: .r}
+
+~~~
++
+~~~
+{: .output}
+
+Any time you hit return and the R session shows a "+" instead of a ">", it
+means it's waiting for you to complete the command. If you want to cancel
+a command you can simply hit "Esc" and RStudio will give you back the ">"
+prompt.
+
+> ## Tip: Cancelling commands
 >
-> The use a function, for example seq(), which makes regular 
-> sequences of numbers, type se and hit TAB.  A popup shows you 
-> possible completions.  Specify seq() by typing the next letter
-> "q", or by using Up/Down arrows to select.  A floating tooltip 
-> will be displayed, giving information about the functions's 
-> arguments and purpose.  To display the details in the Help tab 
-> in the lower right pane, press F1.
+> If you're using R from the commandline instead of from within RStudio,
+> you need to use <kbd>Ctrl</kbd>+<kbd>C</kbd> instead of <kbd>Esc</kbd>
+> to cancel the command. This applies to Mac users as well!
 >
-> When you have selected the function you want, press TAB once 
-> more, and RStudio will add matching opening and closing 
-> parenthese for you.  
+> Cancelling a command isn't only useful for killing incomplete commands:
+> you can also use it to tell R to stop running code (for example if it's
+> taking much longer than you expect), or to get rid of the code you're
+> currently writing.
+>
 {: .callout}
 
+When using R as a calculator, the order of operations is the same as you
+would have learned back in school.
 
-Type the arguments and hit return.
+From highest to lowest precedence:
 
-
-~~~
-seq(1, 10)  # seq function
-~~~
-{: .language-r}
-
-
-
-~~~
- [1]  1  2  3  4  5  6  7  8  9 10
-~~~
-{: .output}
-
-Typing a `?` before the name of a command will open the help page
-for that command. As well as providing a detailed description of
-the command and how it works, scrolling to the bottom of the
-help page will usually show a collection of code examples which
-illustrate command usage.
-
-
-## Mathematical functions
-
-R has many built in mathematical functions. To call a function,
-we simply type its name, followed by  open and closing parentheses.
-Anything we type inside the parentheses is called the function's
-arguments:
+ * Parentheses: `(`, `)`
+ * Exponents: `^` or `**`
+ * Divide: `/`
+ * Multiply: `*`
+ * Add: `+`
+ * Subtract: `-`
 
 
 ~~~
-sin(1)  # trigonometry functions
+3 + 5 * 2
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 0.841471
+[1] 13
 ~~~
 {: .output}
 
+Use parentheses to group operations in order to force the order of
+evaluation if it differs from the default, or to make clear what you
+intend.
+
 
 ~~~
-log10(10) # base-10 logarithm
+(3 + 5) * 2
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 1
+[1] 16
 ~~~
 {: .output}
 
+This can get unwieldy when not needed, but  clarifies your intentions.
+Remember that others may later read your code.
+
 
 ~~~
-exp(0.5) # e^(1/2)
+(3 + (5 * (2 ^ 2))) # hard to read
+3 + 5 * 2 ^ 2       # clear, if you remember the rules
+3 + 5 * (2 ^ 2)     # if you forget some rules, this might help
+~~~
+{: .language-r}
+
+
+The text after each line of code is called a
+"comment". Anything that follows after the hash (or octothorpe) symbol
+`#` is ignored by R when it executes code.
+
+Really small or large numbers get a scientific notation:
+
+
+~~~
+2/10000
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 1.648721
+[1] 2e-04
 ~~~
 {: .output}
 
+Which is shorthand for "multiplied by `10^XX`". So `2e-4`
+is shorthand for `2 * 10^(-4)`.
+
+You can write numbers in scientific notation too:
+
+
+~~~
+5e3  # Note the lack of minus here
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] 5000
+~~~
+{: .output}
 
 
 ## Comparing things
@@ -221,73 +259,6 @@ We can also do comparison in R:
 {: .callout}
 
 
-## Help
-
-
-## Naming Conventions
-
-Object names can contain letters, numbers, underscores and periods. They
-cannot start with a number nor contain spaces at all. Different people use
-different conventions for long variable names, these include
-
-
-~~~
-this_is_snake_case
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in eval(expr, envir, enclos): object 'this_is_snake_case' not found
-~~~
-{: .error}
-
-
-
-~~~
-otherPeopleUseCamelCase
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in eval(expr, envir, enclos): object 'otherPeopleUseCamelCase' not found
-~~~
-{: .error}
-
-
-
-~~~
-some.people.use.periods
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in eval(expr, envir, enclos): object 'some.people.use.periods' not found
-~~~
-{: .error}
-
-
-
-~~~
-And_aFew.People_RENOUNCEconvention
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in eval(expr, envir, enclos): object 'And_aFew.People_RENOUNCEconvention' not found
-~~~
-{: .error}
-HadleyWickham recommends <b>snake_case</b>.  However, what you use is up 
-to you, but **be consistent**.
-
-
 ## Variables and assignment
 
 We can store values in variables using the assignment operator `<-`, like this:
@@ -355,6 +326,23 @@ y <- x * 2
 The right hand side of the assignment can be any valid R expression.
 The right hand side is *fully evaluated* before the assignment occurs.
 
+### Naming things
+
+Object names can contain letters, numbers, underscores and periods. They
+cannot start with a number nor contain spaces at all. Different people use
+different conventions for long variable names, which include:
+
+
+~~~
+this_is_snake_case
+otherPeopleUseCamelCase
+some.people.use.periods
+And_aFew.People_RENOUNCEconvention
+~~~
+{: .language-r}
+
+Hadley Wickham recommends `snake_case`. What you use is up 
+to you, but **be consistent**.
 
 It is also possible to use the `=` operator for assignment:
 
@@ -414,206 +402,6 @@ symbol used in the community. So the recommendation is to use `<-`.
 > > {: .language-r}
 > {: .solution}
 {: .challenge}
-
-## Vectorization
-
-One final thing to be aware of is that R is *vectorized*, meaning that
-variables and functions can have vectors as values. In contrast to physics and
-mathematics, a vector in R describes a set of values in a certain order of the 
-same data type. For example
-
-
-~~~
-1:5
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] 1 2 3 4 5
-~~~
-{: .output}
-
-
-
-~~~
-2^(1:5)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1]  2  4  8 16 32
-~~~
-{: .output}
-
-
-
-~~~
-x <- 1:5
-2^x
-~~~
-{: .language-r}
-
-
-
-~~~
-[1]  2  4  8 16 32
-~~~
-{: .output}
-
-This is incredibly powerful; we will discuss this further in an
-upcoming lesson.
-
-
-## Managing your environment
-
-There are a few useful commands you can use to interact with the R session.
-
-`ls` will list all of the variables and functions stored in the global environment
-(your working R session):
-
-
-~~~
-ls()
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] "args"          "dest_md"       "missing_pkgs"  "required_pkgs"
-[5] "src_rmd"       "x"             "y"            
-~~~
-{: .output}
-
-> ## Tip: hidden objects
->
-> Like in the shell, `ls` will hide any variables or functions starting
-> with a "." by default. To list all objects, type `ls(all.names=TRUE)`
-> instead
->
-{: .callout}
-
-Note here that we didn't give any arguments to `ls`, but we still
-needed to give the parentheses to tell R to call the function.
-
-If we type `ls` by itself, R will print out the source code for that function!
-
-
-~~~
-ls
-~~~
-{: .language-r}
-
-
-
-~~~
-function (name, pos = -1L, envir = as.environment(pos), all.names = FALSE, 
-    pattern, sorted = TRUE) 
-{
-    if (!missing(name)) {
-        pos <- tryCatch(name, error = function(e) e)
-        if (inherits(pos, "error")) {
-            name <- substitute(name)
-            if (!is.character(name)) 
-                name <- deparse(name)
-            warning(gettextf("%s converted to character string", 
-                sQuote(name)), domain = NA)
-            pos <- name
-        }
-    }
-    all.names <- .Internal(ls(envir, all.names, sorted))
-    if (!missing(pattern)) {
-        if ((ll <- length(grep("[", pattern, fixed = TRUE))) && 
-            ll != length(grep("]", pattern, fixed = TRUE))) {
-            if (pattern == "[") {
-                pattern <- "\\["
-                warning("replaced regular expression pattern '[' by  '\\\\['")
-            }
-            else if (length(grep("[^\\\\]\\[<-", pattern))) {
-                pattern <- sub("\\[<-", "\\\\\\[<-", pattern)
-                warning("replaced '[<-' by '\\\\[<-' in regular expression pattern")
-            }
-        }
-        grep(pattern, all.names, value = TRUE)
-    }
-    else all.names
-}
-<bytecode: 0x7fd50c39ff88>
-<environment: namespace:base>
-~~~
-{: .output}
-
-You can use `rm` to delete objects you no longer need:
-
-
-~~~
-rm(x)
-~~~
-{: .language-r}
-
-If you have lots of things in your environment and want to delete all of them,
-you can pass the results of `ls` to the `rm` function:
-
-
-~~~
-rm(list = ls())
-~~~
-{: .language-r}
-
-In this case we've combined the two. Like the order of operations, anything
-inside the innermost parentheses is evaluated first, and so on.
-
-In this case we've specified that the results of `ls` should be used for the
-`list` argument in `rm`. When assigning values to arguments by name, you *must*
-use the `=` operator!!
-
-If instead we use `<-`, there will be unintended side effects, or you may get an error message:
-
-
-~~~
-rm(list <- ls())
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in rm(list <- ls()): ... must contain names or character strings
-~~~
-{: .error}
-
-> ## Tip: Warnings vs. Errors
->
-> Pay attention when R does something unexpected! Errors, like above,
-> are thrown when R cannot proceed with a calculation. Warnings on the
-> other hand usually mean that the function has run, but it probably
-> hasn't worked as expected.
->
-> In both cases, the message that R prints out usually give you clues
-> how to fix a problem.
->
-{: .callout}
-
-
-## Packages
-## R Packages
-
-It is possible to add functions to R by writing a package, or by
-obtaining a package written by someone else. As of this writing, there
-are over 10,000 packages available on CRAN (the comprehensive R archive
-network). R and RStudio have functionality for managing packages:
-
-* You can see what packages are installed by typing
-  `installed.packages()`
-* You can install packages by typing `install.packages("packagename")`,
-  where `packagename` is the package name, in quotes.
-* You can update installed packages by typing `update.packages()`
-* You can remove a package with `remove.packages("packagename")`
-* You can make a package available for use with `library(packagename)`
 
 > ## Challenge 2
 >
@@ -689,6 +477,308 @@ network). R and RStudio have functionality for managing packages:
 {: .challenge}
 
 
+## Commenting
+
+Comments are 'notes' that are added to your script to provide further details for a human to read. 
+They are ignored by R when the code is run.  To add comments to your code,
+just type a `#` before your note text.
+
+It's a good habit to get into writing comments about what the code you're writing is for - think of them as notes to help a future user (probably you!) understand why the code is there.
+
+
+~~~
+# this is a comment line
+# a <- 5 this code will not assign 5 to the variable a
+a <- 5 #but this line will
+~~~
+{: .language-r}
+
+## Functions
+
+Functions are a stored list of instructions that can be "called" by a user. R has lots of built in functions to perform many different tasks. 
+
+To call a function, we type its name, followed by open and closing parentheses, like `function_name()`. 
+
+Many functions take *arguments*, which are a list of parameters that can be given to the function to modify its behaviour. In R, argument values are defined with an `=` sign, in the form of: `function_name(arg1 = val1, arg2 = val2)`. 
+
+Some functions have some arguments that must be defined, and others that are optional. 
+
+> ## Tip:  Remembering/finding function names and arguments
+>
+> To use a function, for example `seq()`, which makes regular 
+> sequences of numbers, type `se` and hit TAB.  RStudio will provide a popup which will show
+> possible completions.  Specify seq() by typing the next letter
+> "q", or by using Up/Down arrows to select.  
+> Inside the parentheses, RStudio will show a list of the arguments that the function expects.  To display the details in the Help tab 
+> in the lower right pane, press F1.
+>
+{: .callout}
+
+
+
+~~~
+seq(1, 10)  # seq function
+~~~
+{: .language-r}
+
+
+
+~~~
+ [1]  1  2  3  4  5  6  7  8  9 10
+~~~
+{: .output}
+
+Typing a `?` before the name of a function will open its help page. As well as providing a detailed description of
+the function and how it works, scrolling to the bottom of the
+help page will usually show a collection of code examples which
+illustrate function usage.
+
+
+## Mathematical functions
+
+R has many built in mathematical functions. To call a function,
+we simply type its name, followed by  open and closing parentheses.
+Anything we type inside the parentheses is called the function's
+arguments:
+
+
+~~~
+sin(1)  # trigonometry functions
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] 0.841471
+~~~
+{: .output}
+
+
+~~~
+log10(10) # base-10 logarithm
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] 1
+~~~
+{: .output}
+
+
+~~~
+exp(0.5) # e^(1/2)
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] 1.648721
+~~~
+{: .output}
+
+## Vectorization
+
+One final thing to be aware of is that R is *vectorized*, meaning that
+variables and functions can have vectors (which we'll describe soon) as values. In contrast to physics and
+mathematics, a vector in R describes a set of values in a certain order of the 
+same data type. For example
+
+
+~~~
+1:5
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] 1 2 3 4 5
+~~~
+{: .output}
+
+
+
+~~~
+2^(1:5)
+~~~
+{: .language-r}
+
+
+
+~~~
+[1]  2  4  8 16 32
+~~~
+{: .output}
+
+
+
+~~~
+x <- 1:5
+2^x
+~~~
+{: .language-r}
+
+
+
+~~~
+[1]  2  4  8 16 32
+~~~
+{: .output}
+
+This is incredibly powerful and makes for efficient and readable code.
+
+## Managing your environment
+
+There are a few useful commands you can use to interact with objects available in an R session.
+
+`ls` will list all of the variables and functions stored in the global environment
+(your working R session):
+
+
+~~~
+ls()
+~~~
+{: .language-r}
+
+
+
+~~~
+ [1] "a"             "age"           "args"          "dest_md"      
+ [5] "mass"          "missing_pkgs"  "required_pkgs" "src_rmd"      
+ [9] "x"             "y"            
+~~~
+{: .output}
+
+> ## Tip: hidden objects
+>
+> Like in the shell, `ls` will hide any variables or functions starting
+> with a "." by default. To list all objects, type `ls(all.names=TRUE)`
+> instead
+>
+{: .callout}
+
+Note here that we didn't give any arguments to `ls`, but we still
+needed to give the parentheses to tell R to call the function.
+
+If we type `ls` by itself, R will print out the source code for that function!
+
+
+~~~
+ls
+~~~
+{: .language-r}
+
+
+
+~~~
+function (name, pos = -1L, envir = as.environment(pos), all.names = FALSE, 
+    pattern, sorted = TRUE) 
+{
+    if (!missing(name)) {
+        pos <- tryCatch(name, error = function(e) e)
+        if (inherits(pos, "error")) {
+            name <- substitute(name)
+            if (!is.character(name)) 
+                name <- deparse(name)
+            warning(gettextf("%s converted to character string", 
+                sQuote(name)), domain = NA)
+            pos <- name
+        }
+    }
+    all.names <- .Internal(ls(envir, all.names, sorted))
+    if (!missing(pattern)) {
+        if ((ll <- length(grep("[", pattern, fixed = TRUE))) && 
+            ll != length(grep("]", pattern, fixed = TRUE))) {
+            if (pattern == "[") {
+                pattern <- "\\["
+                warning("replaced regular expression pattern '[' by  '\\\\['")
+            }
+            else if (length(grep("[^\\\\]\\[<-", pattern))) {
+                pattern <- sub("\\[<-", "\\\\\\[<-", pattern)
+                warning("replaced '[<-' by '\\\\[<-' in regular expression pattern")
+            }
+        }
+        grep(pattern, all.names, value = TRUE)
+    }
+    else all.names
+}
+<bytecode: 0x7fffd6ce73a8>
+<environment: namespace:base>
+~~~
+{: .output}
+
+You can use `rm` to delete objects you no longer need:
+
+
+~~~
+rm(x)
+~~~
+{: .language-r}
+
+If you have lots of things in your environment and want to delete all of them,
+you can pass the results of `ls` to the `rm` function:
+
+
+~~~
+rm(list = ls())
+~~~
+{: .language-r}
+
+In this case we've combined the two. Like the order of operations, anything
+inside the innermost parentheses is evaluated first, and so on.
+
+In this case we've specified that the results of `ls` should be used for the
+`list` argument in `rm`. When assigning values to arguments by name, you *must*
+use the `=` operator!!
+
+If instead we use `<-`, there will be unintended side effects, or you may get an error message:
+
+
+~~~
+rm(list <- ls())
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in rm(list <- ls()): ... must contain names or character strings
+~~~
+{: .error}
+
+> ## Tip: Warnings vs. Errors
+>
+> Pay attention when R does something unexpected! Errors, like above,
+> are thrown when R cannot proceed with a calculation. Warnings on the
+> other hand usually mean that the function has run, but it probably
+> hasn't worked as expected.
+>
+> In both cases, the message that R prints out usually give you clues
+> how to fix a problem.
+>
+{: .callout}
+
+
+## Packages
+
+In R, a package is a collection of functions and documentation that are bundled together to provide some functionality. They are a convenient and standardised way for the community to share code with each other. As of this writing, there
+are over 10,000 packages available on CRAN (the comprehensive R archive
+network). R and RStudio have functionality for managing packages:
+
+* You can see what packages are installed by typing
+  `installed.packages()`
+* You can install packages by typing `install.packages("packagename")`,
+  where `packagename` is the package name, in quotes.
+* You can update installed packages by typing `update.packages()`
+* You can remove a package with `remove.packages("packagename")`
+* You can make a package available for use with `library(packagename)`
+
+
+
 > ## Challenge 4
 >
 > Clean up your working environment by deleting the mass and age
@@ -702,21 +792,21 @@ network). R and RStudio have functionality for managing packages:
 > > rm(age, mass)
 > > ~~~
 > > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > Warning in rm(age, mass): object 'age' not found
+> > ~~~
+> > {: .error}
+> > 
+> > 
+> > 
+> > ~~~
+> > Warning in rm(age, mass): object 'mass' not found
+> > ~~~
+> > {: .error}
 > {: .solution}
 {: .challenge}
 
-
-## Commenting
-
-Comments are 'notes' that are added to your script to provide further details, 
-but do not get processed when you run the code.  To add comments to you code,
-just type a "#" before your note text.
-
-
-~~~
-# this is a comment line
-~~~
-{: .language-r}
-
-
-
+Before we go on, make sure you have the `tidyverse` package installed. You can check by running `library(tidyverse)`, and if it's not available, you can install it with `install.packages(tidyverse)`.
