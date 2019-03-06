@@ -24,7 +24,7 @@ source: Rmd
 
 
 [What is R and what makes it different from the other software packages out there?] (https://select-statistics.co.uk/blog/what-is-r-and-why-should-you-use-it/)
-Well, R is designed specifically for statistical computing and graphics.
+R is designed specifically for statistical computing and graphics, and is able to perform any task associated with handling and manipulating data.
 It is free and open source, the latter meaning that anyone can interrogate the code to see what’s going on –  there’s no black box involved.
 R provides a flexible analysis toolkit where all of the standard statistical techniques are built-in. 
 Not only that, but there is a large R community who regularly contribute new functionality through add-on ‘packages’.
