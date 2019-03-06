@@ -8,7 +8,8 @@ This lesson is part of the CSIRO Data School. If you would like to contribute to
 
 ## Maintainer(s)
 
-* FIXME
+Alex Whan
+Stephen Pearce
 
 ## Authors
 
