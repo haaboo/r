@@ -11,8 +11,8 @@ objectives:
   - "To know how to inspect the data in a data frame"
 keypoints:
   - "Data frames (or tibbles in the tidyverse) are lists where each element is a vector of the same length"
-  - "Create them with `tibble()`"
-  - "Use `nrow()`, `ncol()`, `dim()`, `colnames()`, or `rownames()` to find information about a data frame"
+  - "Create them with `data_frame()`"
+  - "Use `nrow()`, `ncol()`, `dim()`, or `colnames()` to find information about a data frame"
   - "Use `head()`, `tail()`, `summary()`, or `glimpse()` to inspect a data frame's content"
 source: Rmd
 ---
@@ -22,6 +22,7 @@ source("../bin/chunk-options.R")
 knitr_fig_path("06-")
 
 library(tidyverse)
+options(max.print = 80)
 ```
 
 ## Dataframes
@@ -34,363 +35,168 @@ List of vectors
 ## Inspecting the data
 * Head/Tail
 * Glimpse
-* Pairs
 * Summary
 * Class
 
-NOTE:  for tidy data frames with many vectors, how do you get the full list of vectors?
-
-DATASET: Diamonds Data
-GOTCHA:  $ notations
-
-
-###=========================================================
-###=========================================================
-###=========================================================
 ---
 
-At this point, you've see it all - in the last lesson, we toured all the basic
-data types and data structures in R. Everything you do will be a manipulation of
-those tools. But a whole lot of the time, the star of the show is going to be
-the data frame - the table that we created by loading information from a csv file. In this lesson, we'll learn a few more things
-about working with data frames.
+Now that we understand a little bit about why we might prefer our data to be 'tidy', we have one data
+structure left to learn - the data frame. Data frames are a special type of list comprised of vectors
+that all have to be the same length. This means that a data frame produces a rectangular table of data,
+as shown below using the `diamonds` data set that is loaded as part of the tidyverse. Data frames are
+an ideal format for storing and working with tidy data and all the tidyverse tools we will be learning
+from here are designed to work with data in this form.
 
-## Adding columns and rows in data frame
-
-We learned last time that the columns in a data frame were vectors, so that our
-data are consistent in type throughout the column. As such, if we want to add a
-new column, we need to start by making a new vector:
-
-```{r, echo = FALSE}
-cats <- read.csv("data/feline-data.csv")
+```{r tibble}
+diamonds
 ```
 
-```{r}
-age <- c(2, 3, 5)
-cats
+> ## What's a tibble?
+> You might notice in the output above that it calls itself a tibble, rather than a data frame.
+> A tibble is just the tidyverse's version of a data frame that has a few behaviours tweaked to 
+> make it behave more predictibly. Try comparing the output of a base R `data.frame` version of 
+> diamonds with `as.data.frame(diamonds)` to get some idea of the differences.
+> 
+> We will try to refer to them as data frames throughout these lessons. But know that data frames
+> and tibbles are interchangable for our purposes.
+{: .callout}
+
+
+## Inspecting a data frame
+
+Looking at the printed output from the `diamonds` data frame can tell us a lot of information about
+it. The first line tells us the dimensions of the data, in this case there are 53,940 rows and 10 
+columns. This information can also be found with:
+```{r data-frame-dimensions}
+nrow(diamonds)
+ncol(diamonds)
+dim(diamonds)
 ```
 
-We can then add this as a column via:
+The next row of output gives the names of the columns, which can also be found using `colnames()`.
 
-```{r}
-cbind(cats, age)
-```
-Note that if we tried to add a vector of ages with a different number of entries than the number of rows in the dataframe, it would fail:
-```{r, error=TRUE}
-age <- c(2, 3, 5, 12)
-cbind(cats, age)
-
-age <- c(2, 3)
-cbind(cats, age)
+```{rdata-frame-colnames}
+colnames(diamonds)
 ```
 
-Why didn't this work? Of course, R wants to see one element in our new column
-for every row in the table:
+The next row tells you the data type of each column, followed by the data itself.
 
-```{r}
-nrow(cats)
-length(age)
+Because data frames are just lists underneath, you can use the same `$` or `[[` notation to access just the
+data from a single column:
+
+```{r df-dollar}
+# Use $ to access by name
+diamonds$price
+
+# Use [[ ]] to access by name or position 
+diamonds[["price"]]
+diamonds[[7]]
 ```
 
-So for it to work we have to have `nrow(cats)` = `length(age)`. Let's store it into cats and overwite the contents of that data frame.
+While it might seem confusing, data frames can also be subset using `[`. In this case, you call it 
+using `data_frame[row_selector , column_selector]`. Where `row_selector` and `column_selector` can
+be a set of numeric indexes or names to extract, or a vector of logical TRUE/FALSEs that show which
+rows/column to keep.
 
-```{r}
-age <- c(2, 3, 5)
-cats <- cbind(cats, age)
+```{r df-subset}
+#First 5 rows
+diamonds[1:5, ]
+
+#First 5 columns, don't forget the comma
+diamonds[, 1:5]
+
+#Rows 1, 3 and 5 with the carat and price columns
+diamonds[c(1, 3, 5), c("carat", "price")]
 ```
 
-Now how about adding rows - in this case, we saw last time that the rows of a
-data frame are made of lists:
+## Overview of a data frame
+There are many other ways to view the data and look at its data types, and the
+structure of the data. To look at the first 5 rows of the diamonds dataset, use `head()`:
 
-```{r}
-newRow <- list("tortoiseshell", 3.3, TRUE, 9)
-cats <- rbind(cats, newRow)
+```{r df-head}
+head(diamonds, 5)
 ```
 
-## Factors
+and use `tail()` to look at the last 10 rows:
 
-Another thing to look out for has emerged - when R creates a factor, it only
-allows whatever is originally there when our data was first loaded, which was
-'black', 'calico' and 'tabby' in our case. Anything new that doesn't fit into
-one of these categories is rejected as nonsense (becomes NA).
-
-The warning is telling us that we unsuccessfully added 'tortoiseshell' to our
-*coat* factor, but 3.3 (a numeric), TRUE (a logical), and 9 (a numeric) were
-successfully added to *weight*, *likes_string*, and *age*, respectively, since
-those values are not factors. To successfully add a cat with a
-'tortoiseshell' *coat*, explicitly add 'tortoiseshell' as a *level* in the factor:
-
-```{r}
-levels(cats$coat)
-levels(cats$coat) <- c(levels(cats$coat), 'tortoiseshell')
-cats <- rbind(cats, list("tortoiseshell", 3.3, TRUE, 9))
+```{r df-tail}
+tail(diamonds, 10)
 ```
 
-Alternatively, we can change a factor column to a character vector; we lose the
-handy categories of the factor, but can subsequently add any word we want to the
-column without babysitting the factor levels:
+To look at the structure of the data (particularly when there are many columns) use `glimpse()`:
 
-```{r}
-str(cats)
-cats$coat <- as.character(cats$coat)
-str(cats)
+```{r df-glimpse}
+glimpse(diamonds)
+```
+
+And use `summary()` to get a summarised breakdown of each column:
+
+```{r df-summary}
+summary(diamonds)
 ```
 
 > ## Challenge 1
-> Let's imagine that, like dogs, 1 human year is equivalent to 7 cat years. (The Purina company uses a [more sophisticated alogrithm](https://www.purina.co.uk/cats/key-life-stages/ageing/cats-age-in-human-years)). 
-> 1. Create a vector called `human.age` by multiplying `cats$age` by 7.
-> 2. Convert `human.age` to a factor.
-> 3. Convert `human.age` back to a numeric vector using the `as.numeric()` function. Now divide it by 7 to get back the original ages. Explain what happened.
->
+> What does the output from `summary(diamonds)` show you? Why do you think it has a different format
+> for different columns?
 > > ## Solution to Challenge 1
-> > 1. `human.age <- cats$age * 7`
-> > 2. `human.age <- factor(human.age)`. `as.factor(human.age)` works just as well.
-> > 3. `as.numeric(human.age)` yields `1 2 3 4 4` because factors are stored as integers (here, 1:4), each of which is associated with a label (here, 28, 35, 56, and 63). Converting the factor to a numeric vector gives us the underlying integers, not the labels. If we want the original numbers, we need to convert `human.age` to a character vector and then to a numeric vector (why does this work?). This comes up in real life when we accidentally include a character somewhere in a column of a .csv file that is supposed to only contain numbers, and forget to set `stringsAsFactors=FALSE` when we read in the data.
-> {: .solution}
-{: .challenge}
+> > The output from `summary()` changes depending on the class of the data in the column. For the numeric
+> > columns it shows the minimum, maximum, mean and quartile values. For the others, it shows a count 
+> > of the contents.
 
-## Removing rows
+## Factors
 
-We now know how to add rows and columns to our data frame in R - but in our
-first attempt to add a 'tortoiseshell' cat to the data frame we've accidentally
-added a garbage row:
-
-```{r}
-cats
-```
-
-We can ask for a data frame minus this offending row:
+The `cut`, `color`, and `clarity` columns in the `diamonds` data set might be a little confusing. What
+is this `<ord>` type, and why are they summarised as a count of the individual terms? These columns 
+are each *factors* (specifically ordered factors, hence the `<ord>`), which usually look like character 
+data, but are typically used to represent categorical information.
 
 ```{r}
-cats[-4,]
+class(diamonds$cut)
+diamonds$cut
 ```
 
-Notice the comma with nothing after it to indicate we want to drop the entire fourth row.
+Here you can see that the `cut` column in the `diamonds` data set appears to be a character vector,
+listing the quality of the diamond's cut. In the final line, you can see that there are a set of 
+levels of this factor: "Fair < Good < Very Good < Premium < Ideal". The levels of this factor can
+also be accessed using:
 
-Note: We could also remove both new rows at once by putting the row numbers
-inside of a vector: `cats[c(-4,-5),]`
+```{r df-levels}
+levels(diamonds$cut)
+```
+ 
+But what happens when we look more closely at this data using `glimpse()`
 
-Alternatively, we can drop all rows with `NA` values:
-
-```{r}
-na.omit(cats)
+```{r glimpse-factor}
+glimpse(diamonds$cut)
 ```
 
-Let's reassign the output to `cats`, so that our changes will be permanent:
+This tells us we have an ordered factor with 5 levels, just like we expected. But when it comes to 
+show the data itself, all we see are a bunch of numbers. This is because, to R, a factor is really 
+just an integer underneath, with the levels telling it how to map the integer to the actual category.
+So a value of 1 would map to the first level (`Fair`), while a value of 4 would map to the fourth
+level (`Premium`).
 
-```{r}
-cats <- na.omit(cats)
-```
+Expecting factors to behave as characters, rather than integers, is a common cause of errors for 
+people new to R. So always remember to inspect your data with the methods shown here to make sure it
+is of the right type.
 
-## Appending to a data frame
-
-The key to remember when adding data to a data frame is that *columns are
-vectors or factors, and rows are lists.* We can also glue two data frames
-together with `rbind`:
-
-```{r}
-cats <- rbind(cats, cats)
-cats
-```
-But now the row names are unnecessarily complicated. We can remove the rownames,
-and R will automatically re-name them sequentially:
-
-```{r}
-rownames(cats) <- NULL
-cats
-```
+## Your turn
+So far, you've been walked through investigating a data frame. Let's use those skills to explore a
+data set you have not yet been exposed to. 
 
 > ## Challenge 2
 >
-> You can create a new data frame right from within R with the following syntax:
-> ```{r}
-> df <- data.frame(id = c('a', 'b', 'c'),
->                  x = 1:3,
->                  y = c(TRUE, TRUE, FALSE),
->                  stringsAsFactors = FALSE)
-> ```
-> Make a data frame that holds the following information for yourself:
->
-> - first name
-> - last name
-> - lucky number
->
-> Then use `rbind` to add an entry for the people sitting beside you.
-> Finally, use `cbind` to add a column with each person's answer to the question, "Is it time for coffee break?"
+> The `storms` data set contains information on hurricanes recorded in the Atlantic Ocean. Using the 
+> tools you have learned so far, explore this data set and describe what it contains. Explain both
+> the structural features of the data set as a whole, as well as it's content.
 >
 > > ## Solution to Challenge 2
-> > ```{r}
-> > df <- data.frame(first = c('Grace'),
-> >                  last = c('Hopper'),
-> >                  lucky_number = c(0),
-> >                  stringsAsFactors = FALSE)
-> > df <- rbind(df, list('Marie', 'Curie', 238) )
-> > df <- cbind(df, coffeetime = c(TRUE,TRUE))
-> > ```
-> {: .solution}
-{: .challenge}
-
-## Realistic example
-So far, you've seen the basics of manipulating data frames with our cat data;
-now, let's use those skills to digest a more realistic dataset. Let's read in the
-gapminder dataset that we downloaded previously:
-
-```{r}
-gapminder <- read.csv("data/gapminder-FiveYearData.csv")
-```
-
-> ## Miscellaneous Tips
->
-> * Another type of file you might encounter are tab-separated value files (.tsv). To specify a tab as a separator, use `"\\t"` or `read.delim()`.
->
-> * Files can also be downloaded directly from the Internet into a local
-> folder of your choice onto your computer using the `download.file` function.
-> The `read.csv` function can then be executed to read the downloaded file from the download location, for example,
-> ```{r eval=FALSE, echo=TRUE}
-> download.file("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv", destfile = "data/gapminder-FiveYearData.csv")
-> gapminder <- read.csv("data/gapminder-FiveYearData.csv")
-> ```
->
-> * Alternatively, you can also read in files directly into R from the Internet by replacing the file paths with a web address in `read.csv`. One should note that in doing this no local copy of the csv file is first saved onto your computer. For example,
-> ```{r eval=FALSE, echo=TRUE}
-> gapminder <- read.csv("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv")
-> ```
->
-> * You can read directly from excel spreadsheets without
-> converting them to plain text first by using the [readxl](https://cran.r-project.org/web/packages/readxl/index.html) package.
-{: .callout}
-
-Let's investigate gapminder a bit; the first thing we should always do is check
-out what the data looks like with `str`:
-
-```{r}
-str(gapminder)
-```
-
-We can also examine individual columns of the data frame with our `typeof` function:
-
-```{r}
-typeof(gapminder$year)
-typeof(gapminder$country)
-str(gapminder$country)
-```
-
-We can also interrogate the data frame for information about its dimensions;
-remembering that `str(gapminder)` said there were 1704 observations of 6
-variables in gapminder, what do you think the following will produce, and why?
-
-```{r}
-length(gapminder)
-```
-
-A fair guess would have been to say that the length of a data frame would be the
-number of rows it has (1704), but this is not the case; remember, a data frame
-is a *list of vectors and factors*:
-
-```{r}
-typeof(gapminder)
-```
-
-When `length` gave us 6, it's because gapminder is built out of a list of 6
-columns. To get the number of rows and columns in our dataset, try:
-
-```{r}
-nrow(gapminder)
-ncol(gapminder)
-```
-
-Or, both at once:
-
-```{r}
-dim(gapminder)
-```
-
-We'll also likely want to know what the titles of all the columns are, so we can
-ask for them later:
-
-```{r}
-colnames(gapminder)
-```
-
-At this stage, it's important to ask ourselves if the structure R is reporting
-matches our intuition or expectations; do the basic data types reported for each
-column make sense? If not, we need to sort any problems out now before they turn
-into bad surprises down the road, using what we've learned about how R
-interprets data, and the importance of *strict consistency* in how we record our
-data.
-
-Once we're happy that the data types and structures seem reasonable, it's time
-to start digging into our data proper. Check out the first few lines:
-
-```{r}
-head(gapminder)
-```
-
-> ## Challenge 3
->
-> It's good practice to also check the last few lines of your data and some in the middle. How would you do this?
->
-> Searching for ones specifically in the middle isn't too hard but we could simply ask for a few lines at random. How would you code this?
->
-> > ## Solution to Challenge 3
-> > To check the last few lines it's relatively simple as R already has a function for this:
-> > 
-> > ~~~
-> > tail(gapminder)
-> > tail(gapminder, n = 15)
-> > ~~~
-> > {: .r}
-> > 
-> > What about a few arbitrary rows just for sanity (or insanity depending on your view)?
-> > ## Tip: There are several ways to achieve this.
-> > The solution here presents one form using nested functions. i.e. a function passed as an argument to another function. This might sound like a new concept but you are already using it in fact.
-> > Remember `my_dataframe[rows, cols]` will print to screen your data frame with the number of rows and columns you asked for (although you might have asked for a range or named columns for example). How would you get the last row if you don't know how many rows your data frame has? R has a function for this. What about getting a (pseudorandom) sample? R also has a function for this.
-> > ~~~
-> > gapminder[sample(nrow(gapminder), 5), ]
-> > ~~~
-> > {: .r}
-> {: .solution}
-{: .challenge}
-
-
-To make sure our analysis is reproducible, we should put the code
-into a script file so we can come back to it later.
-
-> ## Challenge 4
->
-> Go to file -> new file -> R script, and write an R script
-> to load in the gapminder dataset. Put it in the `scripts/`
-> directory and add it to version control.
->
-> Run the script using the `source` function, using the file path
-> as its argument (or by pressing the "source" button in RStudio).
->
-> > ## Solution to Challenge 4
-> > The contents of `scripts/load-gapminder.R`:
-> > ```{r eval = FALSE}
-> > download.file("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv", destfile = "data/gapminder-FiveYearData.csv")
-> > gapminder <- read.csv(file = "data/gapminder-FiveYearData.csv")
-> > ```
-> > To run the script and load the data into the `gapminder` variable:
-> > ```{r eval = FALSE}
-> > source(file = "scripts/load-gapminder.R")
-> > ```
-> {: .solution}
-{: .challenge}
-
-> ## Challenge 5
->
-> Read the output of `str(gapminder)` again;
-> this time, use what you've learned about factors, lists and vectors,
-> as well as the output of functions like `colnames` and `dim`
-> to explain what everything that `str` prints out for gapminder means.
-> If there are any parts you can't interpret, discuss with your neighbors!
->
-> > ## Solution to Challenge 5
 > >
-> > The object `gapminder` is a data frame with columns
-> > - `country` and `continent` are factors.
-> > - `year` is an integer vector.
-> > - `pop`, `lifeExp`, and `gdpPercap` are numeric vectors.
+> > The object `storms` is a data frame (a tibble) with 10,010 rows and 13 columns.
+> > - `name` and `status` are character vectors.
+> > - `year`, `month`, `hour`, `lat`, `long`, `ts_diamater` and `hu_diameter` are numeric vectors.
+> > - `day`, `wind`, and `pressure` are integer vectors.
+> > - `category` is an ordered factor vector, with levels `-1 < 0 < 1 < 2 < 3 < 4 < 5`
 > >
 > {: .solution}
+{: .challenge}
