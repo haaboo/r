@@ -3,17 +3,17 @@ title: Dataframes
 teaching: 25
 exercises: 15
 questions:
-  - "What is a data frame?"
-  - "Why use a data frame as a tidy data structure?"
+  - "What is a dataframe?"
+  - "Why use a dataframe as a tidy data structure?"
 objectives:
-  - "To learn how to create a data frame."
-  - "To understand how to find basic information about a data frame"
-  - "To know how to inspect the data in a data frame"
+  - "To learn how to create a dataframe."
+  - "To understand how to find basic information about a dataframe"
+  - "To know how to inspect the data in a dataframe"
 keypoints:
-  - "Data frames (or tibbles in the tidyverse) are lists where each element is a vector of the same length"
+  - "Dataframes (or tibbles in the tidyverse) are lists where each element is a vector of the same length"
   - "Create them with `data_frame()`"
-  - "Use `nrow()`, `ncol()`, `dim()`, or `colnames()` to find information about a data frame"
-  - "Use `head()`, `tail()`, `summary()`, or `glimpse()` to inspect a data frame's content"
+  - "Use `nrow()`, `ncol()`, `dim()`, or `colnames()` to find information about a dataframe"
+  - "Use `head()`, `tail()`, `summary()`, or `glimpse()` to inspect a dataframe's content"
 source: Rmd
 ---
 
@@ -25,26 +25,12 @@ library(tidyverse)
 options(max.print = 80)
 ```
 
-## Dataframes
-List of vectors
-
-## Dataframes as a Tidy structure
-
-## Structor of the dataframe
-
-## Inspecting the data
-* Head/Tail
-* Glimpse
-* Summary
-* Class
-
----
 
 Now that we understand a little bit about why we might prefer our data to be 'tidy', we have one data
-structure left to learn - the data frame. Data frames are a special type of list comprised of vectors
-that all have to be the same length. This means that a data frame produces a rectangular table of data,
-as shown below using the `diamonds` data set that is loaded as part of the tidyverse. Data frames are
-an ideal format for storing and working with tidy data and all the tidyverse tools we will be learning
+structure left to learn - the dataframe. Dataframes are where the vast majority of work in R is done. Dataframes can look a lot like any table of data (and we will often refer to them in that way), but they are a very particular structure. Dataframes are a special type of list that is made up of vectors
+that all have to be the same length. Remembering that vectors must have the same type of values, this means that a dataframe produces a rectangular table of data, where each column **must** have the same type. We can see this below using the `diamonds` data set that is loaded as part of the tidyverse. 
+
+Dataframes are an ideal format for storing and working with tidy data. All the tidyverse tools we will be learning
 from here are designed to work with data in this form.
 
 ```{r tibble}
@@ -52,19 +38,19 @@ diamonds
 ```
 
 > ## What's a tibble?
-> You might notice in the output above that it calls itself a tibble, rather than a data frame.
-> A tibble is just the tidyverse's version of a data frame that has a few behaviours tweaked to 
+> You might notice in the output above that it calls itself a tibble, rather than a dataframe.
+> A tibble is just the tidyverse's version of a dataframe that has a few behaviours tweaked to 
 > make it behave more predictibly. Try comparing the output of a base R `data.frame` version of 
 > diamonds with `as.data.frame(diamonds)` to get some idea of the differences.
 > 
-> We will try to refer to them as data frames throughout these lessons. But know that data frames
+> We will try to refer to them as dataframes throughout these lessons. But know that dataframes
 > and tibbles are interchangable for our purposes.
 {: .callout}
 
 
-## Inspecting a data frame
+## Inspecting a dataframe
 
-Looking at the printed output from the `diamonds` data frame can tell us a lot of information about
+Looking at the printed output from the `diamonds` dataframe can tell us a lot of information about
 it. The first line tells us the dimensions of the data, in this case there are 53,940 rows and 10 
 columns. This information can also be found with:
 ```{r data-frame-dimensions}
@@ -75,14 +61,17 @@ dim(diamonds)
 
 The next row of output gives the names of the columns, which can also be found using `colnames()`.
 
-```{rdata-frame-colnames}
+```{r data-frame-colnames}
 colnames(diamonds)
 ```
 
 The next row tells you the data type of each column, followed by the data itself.
 
-Because data frames are just lists underneath, you can use the same `$` or `[[` notation to access just the
-data from a single column:
+### A note on subsetting
+
+We will not focus on these methods, but it is important to know that there are a range of ways to access parts of data structures in R. 
+
+Elements can be accessed using either `$` or `[[` notation.
 
 ```{r df-dollar}
 # Use $ to access by name
@@ -93,7 +82,7 @@ diamonds[["price"]]
 diamonds[[7]]
 ```
 
-While it might seem confusing, data frames can also be subset using `[`. In this case, you call it 
+While it might seem confusing, dataframes can also be subset using `[`. In this case, you call it 
 using `data_frame[row_selector , column_selector]`. Where `row_selector` and `column_selector` can
 be a set of numeric indexes or names to extract, or a vector of logical TRUE/FALSEs that show which
 rows/column to keep.
@@ -109,7 +98,9 @@ diamonds[, 1:5]
 diamonds[c(1, 3, 5), c("carat", "price")]
 ```
 
-## Overview of a data frame
+At this stage, don't let this subsetting confuse you - we're going to focus on more natural ways to do these tasks soon. But if you're working with other people's R code, you are definitely going to come across `$`, `[` and `[[`, so it's important to have some idea of what is going on.
+
+## Overview of a dataframe
 There are many other ways to view the data and look at its data types, and the
 structure of the data. To look at the first 5 rows of the diamonds dataset, use `head()`:
 
@@ -136,12 +127,16 @@ summary(diamonds)
 ```
 
 > ## Challenge 1
+>
 > What does the output from `summary(diamonds)` show you? Why do you think it has a different format
 > for different columns?
+>
 > > ## Solution to Challenge 1
 > > The output from `summary()` changes depending on the class of the data in the column. For the numeric
 > > columns it shows the minimum, maximum, mean and quartile values. For the others, it shows a count 
 > > of the contents.
+> {: .solution}
+{: .challenge}
 
 ## Factors
 
@@ -181,18 +176,18 @@ people new to R. So always remember to inspect your data with the methods shown 
 is of the right type.
 
 ## Your turn
-So far, you've been walked through investigating a data frame. Let's use those skills to explore a
+So far, you've been walked through investigating a dataframe. Let's use those skills to explore a
 data set you have not yet been exposed to. 
 
 > ## Challenge 2
 >
 > The `storms` data set contains information on hurricanes recorded in the Atlantic Ocean. Using the 
 > tools you have learned so far, explore this data set and describe what it contains. Explain both
-> the structural features of the data set as a whole, as well as it's content.
+> the structural features of the data set as a whole, as well as its content.
 >
 > > ## Solution to Challenge 2
 > >
-> > The object `storms` is a data frame (a tibble) with 10,010 rows and 13 columns.
+> > The object `storms` is a dataframe (a tibble) with 10,010 rows and 13 columns.
 > > - `name` and `status` are character vectors.
 > > - `year`, `month`, `hour`, `lat`, `long`, `ts_diamater` and `hu_diameter` are numeric vectors.
 > > - `day`, `wind`, and `pressure` are integer vectors.

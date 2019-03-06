@@ -5,724 +5,505 @@ title: Dataframes
 teaching: 25
 exercises: 15
 questions:
-  - "What is a data frame?"
-  - "Why use a data frame as a tidy data structure?"
+  - "What is a dataframe?"
+  - "Why use a dataframe as a tidy data structure?"
 objectives:
-  - "To learn how to create a data frame."
-  - "To understand how to find basic information about a data frame"
-  - "To know how to inspect the data in a data frame"
+  - "To learn how to create a dataframe."
+  - "To understand how to find basic information about a dataframe"
+  - "To know how to inspect the data in a dataframe"
 keypoints:
-  - "Data frames (or tibbles in the tidyverse) are lists where each element is a vector of the same length"
-  - "Create them with `tibble()`"
-  - "Use `nrow()`, `ncol()`, `dim()`, `colnames()`, or `rownames()` to find information about a data frame"
-  - "Use `head()`, `tail()`, `summary()`, or `glimpse()` to inspect a data frame's content"
+  - "Dataframes (or tibbles in the tidyverse) are lists where each element is a vector of the same length"
+  - "Create them with `data_frame()`"
+  - "Use `nrow()`, `ncol()`, `dim()`, or `colnames()` to find information about a dataframe"
+  - "Use `head()`, `tail()`, `summary()`, or `glimpse()` to inspect a dataframe's content"
 source: Rmd
 ---
 
 
 
-## Dataframes
-List of vectors
 
-## Dataframes as a Tidy structure
+Now that we understand a little bit about why we might prefer our data to be 'tidy', we have one data
+structure left to learn - the dataframe. Dataframes are where the vast majority of work in R is done. Dataframes can look a lot like any table of data (and we will often refer to them in that way), but they are a very particular structure. Dataframes are a special type of list that is made up of vectors
+that all have to be the same length. Remembering that vectors must have the same type of values, this means that a dataframe produces a rectangular table of data, where each column **must** have the same type. We can see this below using the `diamonds` data set that is loaded as part of the tidyverse. 
 
-## Structor of the dataframe
-
-## Inspecting the data
-* Head/Tail
-* Glimpse
-* Pairs
-* Summary
-* Class
-
-NOTE:  for tidy data frames with many vectors, how do you get the full list of vectors?
-
-DATASET: Diamonds Data
-GOTCHA:  $ notations
-
-
-###=========================================================
-###=========================================================
-###=========================================================
----
-
-At this point, you've see it all - in the last lesson, we toured all the basic
-data types and data structures in R. Everything you do will be a manipulation of
-those tools. But a whole lot of the time, the star of the show is going to be
-the data frame - the table that we created by loading information from a csv file. In this lesson, we'll learn a few more things
-about working with data frames.
-
-## Adding columns and rows in data frame
-
-We learned last time that the columns in a data frame were vectors, so that our
-data are consistent in type throughout the column. As such, if we want to add a
-new column, we need to start by making a new vector:
-
-
+Dataframes are an ideal format for storing and working with tidy data. All the tidyverse tools we will be learning
+from here are designed to work with data in this form.
 
 
 ~~~
-age <- c(2, 3, 5)
-cats
+diamonds
 ~~~
 {: .language-r}
 
 
 
 ~~~
-    coat weight likes_string
-1 calico    2.1            1
-2  black    5.0            0
-3  tabby    3.2            1
+# A tibble: 53,940 x 10
+   carat cut       color clarity depth table price     x     y     z
+   <dbl> <ord>     <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+ 1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+ 2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+ 3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+ 4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+ 5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+ 6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+ 7 0.24  Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+ 8 0.26  Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+ 9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
+# … with 53,930 more rows
 ~~~
 {: .output}
 
-We can then add this as a column via:
+> ## What's a tibble?
+> You might notice in the output above that it calls itself a tibble, rather than a dataframe.
+> A tibble is just the tidyverse's version of a dataframe that has a few behaviours tweaked to 
+> make it behave more predictibly. Try comparing the output of a base R `data.frame` version of 
+> diamonds with `as.data.frame(diamonds)` to get some idea of the differences.
+> 
+> We will try to refer to them as dataframes throughout these lessons. But know that dataframes
+> and tibbles are interchangable for our purposes.
+{: .callout}
 
 
-~~~
-cbind(cats, age)
-~~~
-{: .language-r}
+## Inspecting a dataframe
 
-
-
-~~~
-    coat weight likes_string age
-1 calico    2.1            1   2
-2  black    5.0            0   3
-3  tabby    3.2            1   5
-~~~
-{: .output}
-Note that if we tried to add a vector of ages with a different number of entries than the number of rows in the dataframe, it would fail:
+Looking at the printed output from the `diamonds` dataframe can tell us a lot of information about
+it. The first line tells us the dimensions of the data, in this case there are 53,940 rows and 10 
+columns. This information can also be found with:
 
 ~~~
-age <- c(2, 3, 5, 12)
-cbind(cats, age)
+nrow(diamonds)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Error in data.frame(..., check.names = FALSE): arguments imply differing number of rows: 3, 4
-~~~
-{: .error}
-
-
-
-~~~
-age <- c(2, 3)
-cbind(cats, age)
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in data.frame(..., check.names = FALSE): arguments imply differing number of rows: 3, 2
-~~~
-{: .error}
-
-Why didn't this work? Of course, R wants to see one element in our new column
-for every row in the table:
-
-
-~~~
-nrow(cats)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] 3
+[1] 53940
 ~~~
 {: .output}
 
 
 
 ~~~
-length(age)
+ncol(diamonds)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 2
-~~~
-{: .output}
-
-So for it to work we have to have `nrow(cats)` = `length(age)`. Let's store it into cats and overwite the contents of that data frame.
-
-
-~~~
-age <- c(2, 3, 5)
-cats <- cbind(cats, age)
-~~~
-{: .language-r}
-
-Now how about adding rows - in this case, we saw last time that the rows of a
-data frame are made of lists:
-
-
-~~~
-newRow <- list("tortoiseshell", 3.3, TRUE, 9)
-cats <- rbind(cats, newRow)
-~~~
-{: .language-r}
-
-
-
-~~~
-Warning in `[<-.factor`(`*tmp*`, ri, value = "tortoiseshell"): invalid
-factor level, NA generated
-~~~
-{: .error}
-
-## Factors
-
-Another thing to look out for has emerged - when R creates a factor, it only
-allows whatever is originally there when our data was first loaded, which was
-'black', 'calico' and 'tabby' in our case. Anything new that doesn't fit into
-one of these categories is rejected as nonsense (becomes NA).
-
-The warning is telling us that we unsuccessfully added 'tortoiseshell' to our
-*coat* factor, but 3.3 (a numeric), TRUE (a logical), and 9 (a numeric) were
-successfully added to *weight*, *likes_string*, and *age*, respectively, since
-those values are not factors. To successfully add a cat with a
-'tortoiseshell' *coat*, explicitly add 'tortoiseshell' as a *level* in the factor:
-
-
-~~~
-levels(cats$coat)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] "black"  "calico" "tabby" 
+[1] 10
 ~~~
 {: .output}
 
 
 
 ~~~
-levels(cats$coat) <- c(levels(cats$coat), 'tortoiseshell')
-cats <- rbind(cats, list("tortoiseshell", 3.3, TRUE, 9))
-~~~
-{: .language-r}
-
-Alternatively, we can change a factor column to a character vector; we lose the
-handy categories of the factor, but can subsequently add any word we want to the
-column without babysitting the factor levels:
-
-
-~~~
-str(cats)
+dim(diamonds)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-'data.frame':	5 obs. of  4 variables:
- $ coat        : Factor w/ 4 levels "black","calico",..: 2 1 3 NA 4
- $ weight      : num  2.1 5 3.2 3.3 3.3
- $ likes_string: int  1 0 1 1 1
- $ age         : num  2 3 5 9 9
+[1] 53940    10
+~~~
+{: .output}
+
+The next row of output gives the names of the columns, which can also be found using `colnames()`.
+
+
+~~~
+colnames(diamonds)
+~~~
+{: .language-r}
+
+
+
+~~~
+ [1] "carat"   "cut"     "color"   "clarity" "depth"   "table"   "price"  
+ [8] "x"       "y"       "z"      
+~~~
+{: .output}
+
+The next row tells you the data type of each column, followed by the data itself.
+
+### A note on subsetting
+
+We will not focus on these methods, but it is important to know that there are a range of ways to access parts of data structures in R. 
+
+Elements can be accessed using either `$` or `[[` notation.
+
+
+~~~
+# Use $ to access by name
+diamonds$price
+~~~
+{: .language-r}
+
+
+
+~~~
+ [1] 326 326 327 334 335 336 336 337 337 338 339 340 342 344 345 345 348
+[18] 351 351 351 351 352 353 353 353 354 355 357 357 357 402 402 402 402
+[35] 402 402 402 402 403 403 403 403 403 403 403 403 403 403 404 404 404
+[52] 404 404 404 404 405 405 405 405 405 552 552 552 552 552 553 553 553
+[69] 553 553 553 554 554 554 554 554 554 554 554 554
+ [ reached getOption("max.print") -- omitted 53860 entries ]
 ~~~
 {: .output}
 
 
 
 ~~~
-cats$coat <- as.character(cats$coat)
-str(cats)
+# Use [[ ]] to access by name or position 
+diamonds[["price"]]
 ~~~
 {: .language-r}
 
 
 
 ~~~
-'data.frame':	5 obs. of  4 variables:
- $ coat        : chr  "calico" "black" "tabby" NA ...
- $ weight      : num  2.1 5 3.2 3.3 3.3
- $ likes_string: int  1 0 1 1 1
- $ age         : num  2 3 5 9 9
+ [1] 326 326 327 334 335 336 336 337 337 338 339 340 342 344 345 345 348
+[18] 351 351 351 351 352 353 353 353 354 355 357 357 357 402 402 402 402
+[35] 402 402 402 402 403 403 403 403 403 403 403 403 403 403 404 404 404
+[52] 404 404 404 404 405 405 405 405 405 552 552 552 552 552 553 553 553
+[69] 553 553 553 554 554 554 554 554 554 554 554 554
+ [ reached getOption("max.print") -- omitted 53860 entries ]
+~~~
+{: .output}
+
+
+
+~~~
+diamonds[[7]]
+~~~
+{: .language-r}
+
+
+
+~~~
+ [1] 326 326 327 334 335 336 336 337 337 338 339 340 342 344 345 345 348
+[18] 351 351 351 351 352 353 353 353 354 355 357 357 357 402 402 402 402
+[35] 402 402 402 402 403 403 403 403 403 403 403 403 403 403 404 404 404
+[52] 404 404 404 404 405 405 405 405 405 552 552 552 552 552 553 553 553
+[69] 553 553 553 554 554 554 554 554 554 554 554 554
+ [ reached getOption("max.print") -- omitted 53860 entries ]
+~~~
+{: .output}
+
+While it might seem confusing, dataframes can also be subset using `[`. In this case, you call it 
+using `data_frame[row_selector , column_selector]`. Where `row_selector` and `column_selector` can
+be a set of numeric indexes or names to extract, or a vector of logical TRUE/FALSEs that show which
+rows/column to keep.
+
+
+~~~
+#First 5 rows
+diamonds[1:5, ]
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 5 x 10
+  carat cut     color clarity depth table price     x     y     z
+  <dbl> <ord>   <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+1 0.23  Ideal   E     SI2      61.5    55   326  3.95  3.98  2.43
+2 0.21  Premium E     SI1      59.8    61   326  3.89  3.84  2.31
+3 0.23  Good    E     VS1      56.9    65   327  4.05  4.07  2.31
+4 0.290 Premium I     VS2      62.4    58   334  4.2   4.23  2.63
+5 0.31  Good    J     SI2      63.3    58   335  4.34  4.35  2.75
+~~~
+{: .output}
+
+
+
+~~~
+#First 5 columns, don't forget the comma
+diamonds[, 1:5]
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 53,940 x 5
+   carat cut       color clarity depth
+   <dbl> <ord>     <ord> <ord>   <dbl>
+ 1 0.23  Ideal     E     SI2      61.5
+ 2 0.21  Premium   E     SI1      59.8
+ 3 0.23  Good      E     VS1      56.9
+ 4 0.290 Premium   I     VS2      62.4
+ 5 0.31  Good      J     SI2      63.3
+ 6 0.24  Very Good J     VVS2     62.8
+ 7 0.24  Very Good I     VVS1     62.3
+ 8 0.26  Very Good H     SI1      61.9
+ 9 0.22  Fair      E     VS2      65.1
+10 0.23  Very Good H     VS1      59.4
+# … with 53,930 more rows
+~~~
+{: .output}
+
+
+
+~~~
+#Rows 1, 3 and 5 with the carat and price columns
+diamonds[c(1, 3, 5), c("carat", "price")]
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 3 x 2
+  carat price
+  <dbl> <int>
+1  0.23   326
+2  0.23   327
+3  0.31   335
+~~~
+{: .output}
+
+At this stage, don't let this subsetting confuse you - we're going to focus on more natural ways to do these tasks soon. But if you're working with other people's R code, you are definitely going to come across `$`, `[` and `[[`, so it's important to have some idea of what is going on.
+
+## Overview of a dataframe
+There are many other ways to view the data and look at its data types, and the
+structure of the data. To look at the first 5 rows of the diamonds dataset, use `head()`:
+
+
+~~~
+head(diamonds, 5)
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 5 x 10
+  carat cut     color clarity depth table price     x     y     z
+  <dbl> <ord>   <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+1 0.23  Ideal   E     SI2      61.5    55   326  3.95  3.98  2.43
+2 0.21  Premium E     SI1      59.8    61   326  3.89  3.84  2.31
+3 0.23  Good    E     VS1      56.9    65   327  4.05  4.07  2.31
+4 0.290 Premium I     VS2      62.4    58   334  4.2   4.23  2.63
+5 0.31  Good    J     SI2      63.3    58   335  4.34  4.35  2.75
+~~~
+{: .output}
+
+and use `tail()` to look at the last 10 rows:
+
+
+~~~
+tail(diamonds, 10)
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 10 x 10
+   carat cut       color clarity depth table price     x     y     z
+   <dbl> <ord>     <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
+ 1  0.71 Premium   E     SI1      60.5    55  2756  5.79  5.74  3.49
+ 2  0.71 Premium   F     SI1      59.8    62  2756  5.74  5.73  3.43
+ 3  0.7  Very Good E     VS2      60.5    59  2757  5.71  5.76  3.47
+ 4  0.7  Very Good E     VS2      61.2    59  2757  5.69  5.72  3.49
+ 5  0.72 Premium   D     SI1      62.7    59  2757  5.69  5.73  3.58
+ 6  0.72 Ideal     D     SI1      60.8    57  2757  5.75  5.76  3.5 
+ 7  0.72 Good      D     SI1      63.1    55  2757  5.69  5.75  3.61
+ 8  0.7  Very Good D     SI1      62.8    60  2757  5.66  5.68  3.56
+ 9  0.86 Premium   H     SI2      61      58  2757  6.15  6.12  3.74
+10  0.75 Ideal     D     SI2      62.2    55  2757  5.83  5.87  3.64
+~~~
+{: .output}
+
+To look at the structure of the data (particularly when there are many columns) use `glimpse()`:
+
+
+~~~
+glimpse(diamonds)
+~~~
+{: .language-r}
+
+
+
+~~~
+Observations: 53,940
+Variables: 10
+$ carat   <dbl> 0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, 0.…
+$ cut     <ord> Ideal, Premium, Good, Premium, Good, Very Good, Very Goo…
+$ color   <ord> E, E, E, I, J, J, I, H, E, H, J, J, F, J, E, E, I, J, J,…
+$ clarity <ord> SI2, SI1, VS1, VS2, SI2, VVS2, VVS1, SI1, VS2, VS1, SI1,…
+$ depth   <dbl> 61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, 59…
+$ table   <dbl> 55, 61, 65, 58, 58, 57, 57, 55, 61, 61, 55, 56, 61, 54, …
+$ price   <int> 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 3…
+$ x       <dbl> 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87, 4.…
+$ y       <dbl> 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4.…
+$ z       <dbl> 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, 2.…
+~~~
+{: .output}
+
+And use `summary()` to get a summarised breakdown of each column:
+
+
+~~~
+summary(diamonds)
+~~~
+{: .language-r}
+
+
+
+~~~
+     carat               cut        color        clarity     
+ Min.   :0.2000   Fair     : 1610   D: 6775   SI1    :13065  
+ 1st Qu.:0.4000   Good     : 4906   E: 9797   VS2    :12258  
+ Median :0.7000   Very Good:12082   F: 9542   SI2    : 9194  
+ Mean   :0.7979   Premium  :13791   G:11292   VS1    : 8171  
+ 3rd Qu.:1.0400   Ideal    :21551   H: 8304   VVS2   : 5066  
+ Max.   :5.0100                     I: 5422   VVS1   : 3655  
+                                    J: 2808   (Other): 2531  
+     depth           table           price             x         
+ Min.   :43.00   Min.   :43.00   Min.   :  326   Min.   : 0.000  
+ 1st Qu.:61.00   1st Qu.:56.00   1st Qu.:  950   1st Qu.: 4.710  
+ Median :61.80   Median :57.00   Median : 2401   Median : 5.700  
+ Mean   :61.75   Mean   :57.46   Mean   : 3933   Mean   : 5.731  
+ 3rd Qu.:62.50   3rd Qu.:59.00   3rd Qu.: 5324   3rd Qu.: 6.540  
+ Max.   :79.00   Max.   :95.00   Max.   :18823   Max.   :10.740  
+                                                                 
+       y                z         
+ Min.   : 0.000   Min.   : 0.000  
+ 1st Qu.: 4.720   1st Qu.: 2.910  
+ Median : 5.710   Median : 3.530  
+ Mean   : 5.735   Mean   : 3.539  
+ 3rd Qu.: 6.540   3rd Qu.: 4.040  
+ Max.   :58.900   Max.   :31.800  
+                                  
 ~~~
 {: .output}
 
 > ## Challenge 1
-> Let's imagine that, like dogs, 1 human year is equivalent to 7 cat years. (The Purina company uses a [more sophisticated alogrithm](https://www.purina.co.uk/cats/key-life-stages/ageing/cats-age-in-human-years)). 
-> 1. Create a vector called `human.age` by multiplying `cats$age` by 7.
-> 2. Convert `human.age` to a factor.
-> 3. Convert `human.age` back to a numeric vector using the `as.numeric()` function. Now divide it by 7 to get back the original ages. Explain what happened.
+>
+> What does the output from `summary(diamonds)` show you? Why do you think it has a different format
+> for different columns?
 >
 > > ## Solution to Challenge 1
-> > 1. `human.age <- cats$age * 7`
-> > 2. `human.age <- factor(human.age)`. `as.factor(human.age)` works just as well.
-> > 3. `as.numeric(human.age)` yields `1 2 3 4 4` because factors are stored as integers (here, 1:4), each of which is associated with a label (here, 28, 35, 56, and 63). Converting the factor to a numeric vector gives us the underlying integers, not the labels. If we want the original numbers, we need to convert `human.age` to a character vector and then to a numeric vector (why does this work?). This comes up in real life when we accidentally include a character somewhere in a column of a .csv file that is supposed to only contain numbers, and forget to set `stringsAsFactors=FALSE` when we read in the data.
+> > The output from `summary()` changes depending on the class of the data in the column. For the numeric
+> > columns it shows the minimum, maximum, mean and quartile values. For the others, it shows a count 
+> > of the contents.
 > {: .solution}
 {: .challenge}
 
-## Removing rows
+## Factors
 
-We now know how to add rows and columns to our data frame in R - but in our
-first attempt to add a 'tortoiseshell' cat to the data frame we've accidentally
-added a garbage row:
+The `cut`, `color`, and `clarity` columns in the `diamonds` data set might be a little confusing. What
+is this `<ord>` type, and why are they summarised as a count of the individual terms? These columns 
+are each *factors* (specifically ordered factors, hence the `<ord>`), which usually look like character 
+data, but are typically used to represent categorical information.
 
 
 ~~~
-cats
+class(diamonds$cut)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-           coat weight likes_string age
-1        calico    2.1            1   2
-2         black    5.0            0   3
-3         tabby    3.2            1   5
-4          <NA>    3.3            1   9
-5 tortoiseshell    3.3            1   9
+[1] "ordered" "factor" 
 ~~~
 {: .output}
 
-We can ask for a data frame minus this offending row:
 
 
 ~~~
-cats[-4,]
+diamonds$cut
 ~~~
 {: .language-r}
 
 
 
 ~~~
-           coat weight likes_string age
-1        calico    2.1            1   2
-2         black    5.0            0   3
-3         tabby    3.2            1   5
-5 tortoiseshell    3.3            1   9
+ [1] Ideal     Premium   Good      Premium   Good      Very Good Very Good
+ [8] Very Good Fair      Very Good Good      Ideal     Premium   Ideal    
+[15] Premium   Premium   Ideal     Good      Good      Very Good Good     
+[22] Very Good Very Good Very Good Very Good Very Good Premium   Very Good
+[29] Very Good Very Good Very Good Very Good Very Good Very Good Very Good
+[36] Good      Good      Good      Very Good Ideal     Ideal     Ideal    
+[43] Good      Good      Good      Premium   Very Good Good      Very Good
+[50] Very Good Very Good Ideal     Ideal     Premium   Premium   Ideal    
+[57] Premium   Very Good Very Good Good      Ideal     Premium   Ideal    
+[64] Ideal     Premium   Ideal     Ideal     Very Good Premium   Premium  
+[71] Very Good Very Good Premium   Premium   Good      Very Good Very Good
+[78] Very Good Very Good Very Good
+ [ reached getOption("max.print") -- omitted 53860 entries ]
+Levels: Fair < Good < Very Good < Premium < Ideal
 ~~~
 {: .output}
 
-Notice the comma with nothing after it to indicate we want to drop the entire fourth row.
-
-Note: We could also remove both new rows at once by putting the row numbers
-inside of a vector: `cats[c(-4,-5),]`
-
-Alternatively, we can drop all rows with `NA` values:
+Here you can see that the `cut` column in the `diamonds` data set appears to be a character vector,
+listing the quality of the diamond's cut. In the final line, you can see that there are a set of 
+levels of this factor: "Fair < Good < Very Good < Premium < Ideal". The levels of this factor can
+also be accessed using:
 
 
 ~~~
-na.omit(cats)
+levels(diamonds$cut)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-           coat weight likes_string age
-1        calico    2.1            1   2
-2         black    5.0            0   3
-3         tabby    3.2            1   5
-5 tortoiseshell    3.3            1   9
+[1] "Fair"      "Good"      "Very Good" "Premium"   "Ideal"    
+~~~
+{: .output}
+ 
+But what happens when we look more closely at this data using `glimpse()`
+
+
+~~~
+glimpse(diamonds$cut)
+~~~
+{: .language-r}
+
+
+
+~~~
+ Ord.factor w/ 5 levels "Fair"<"Good"<..: 5 4 2 4 2 3 3 3 1 3 ...
 ~~~
 {: .output}
 
-Let's reassign the output to `cats`, so that our changes will be permanent:
+This tells us we have an ordered factor with 5 levels, just like we expected. But when it comes to 
+show the data itself, all we see are a bunch of numbers. This is because, to R, a factor is really 
+just an integer underneath, with the levels telling it how to map the integer to the actual category.
+So a value of 1 would map to the first level (`Fair`), while a value of 4 would map to the fourth
+level (`Premium`).
 
+Expecting factors to behave as characters, rather than integers, is a common cause of errors for 
+people new to R. So always remember to inspect your data with the methods shown here to make sure it
+is of the right type.
 
-~~~
-cats <- na.omit(cats)
-~~~
-{: .language-r}
-
-## Appending to a data frame
-
-The key to remember when adding data to a data frame is that *columns are
-vectors or factors, and rows are lists.* We can also glue two data frames
-together with `rbind`:
-
-
-~~~
-cats <- rbind(cats, cats)
-cats
-~~~
-{: .language-r}
-
-
-
-~~~
-            coat weight likes_string age
-1         calico    2.1            1   2
-2          black    5.0            0   3
-3          tabby    3.2            1   5
-5  tortoiseshell    3.3            1   9
-11        calico    2.1            1   2
-21         black    5.0            0   3
-31         tabby    3.2            1   5
-51 tortoiseshell    3.3            1   9
-~~~
-{: .output}
-But now the row names are unnecessarily complicated. We can remove the rownames,
-and R will automatically re-name them sequentially:
-
-
-~~~
-rownames(cats) <- NULL
-cats
-~~~
-{: .language-r}
-
-
-
-~~~
-           coat weight likes_string age
-1        calico    2.1            1   2
-2         black    5.0            0   3
-3         tabby    3.2            1   5
-4 tortoiseshell    3.3            1   9
-5        calico    2.1            1   2
-6         black    5.0            0   3
-7         tabby    3.2            1   5
-8 tortoiseshell    3.3            1   9
-~~~
-{: .output}
+## Your turn
+So far, you've been walked through investigating a dataframe. Let's use those skills to explore a
+data set you have not yet been exposed to. 
 
 > ## Challenge 2
 >
-> You can create a new data frame right from within R with the following syntax:
-> 
-> ~~~
-> df <- data.frame(id = c('a', 'b', 'c'),
->                  x = 1:3,
->                  y = c(TRUE, TRUE, FALSE),
->                  stringsAsFactors = FALSE)
-> ~~~
-> {: .language-r}
-> Make a data frame that holds the following information for yourself:
->
-> - first name
-> - last name
-> - lucky number
->
-> Then use `rbind` to add an entry for the people sitting beside you.
-> Finally, use `cbind` to add a column with each person's answer to the question, "Is it time for coffee break?"
+> The `storms` data set contains information on hurricanes recorded in the Atlantic Ocean. Using the 
+> tools you have learned so far, explore this data set and describe what it contains. Explain both
+> the structural features of the data set as a whole, as well as its content.
 >
 > > ## Solution to Challenge 2
-> > 
-> > ~~~
-> > df <- data.frame(first = c('Grace'),
-> >                  last = c('Hopper'),
-> >                  lucky_number = c(0),
-> >                  stringsAsFactors = FALSE)
-> > df <- rbind(df, list('Marie', 'Curie', 238) )
-> > df <- cbind(df, coffeetime = c(TRUE,TRUE))
-> > ~~~
-> > {: .language-r}
-> {: .solution}
-{: .challenge}
-
-## Realistic example
-So far, you've seen the basics of manipulating data frames with our cat data;
-now, let's use those skills to digest a more realistic dataset. Let's read in the
-gapminder dataset that we downloaded previously:
-
-
-~~~
-gapminder <- read.csv("data/gapminder-FiveYearData.csv")
-~~~
-{: .language-r}
-
-> ## Miscellaneous Tips
->
-> * Another type of file you might encounter are tab-separated value files (.tsv). To specify a tab as a separator, use `"\\t"` or `read.delim()`.
->
-> * Files can also be downloaded directly from the Internet into a local
-> folder of your choice onto your computer using the `download.file` function.
-> The `read.csv` function can then be executed to read the downloaded file from the download location, for example,
-> 
-> ~~~
-> download.file("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv", destfile = "data/gapminder-FiveYearData.csv")
-> gapminder <- read.csv("data/gapminder-FiveYearData.csv")
-> ~~~
-> {: .language-r}
->
-> * Alternatively, you can also read in files directly into R from the Internet by replacing the file paths with a web address in `read.csv`. One should note that in doing this no local copy of the csv file is first saved onto your computer. For example,
-> 
-> ~~~
-> gapminder <- read.csv("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv")
-> ~~~
-> {: .language-r}
->
-> * You can read directly from excel spreadsheets without
-> converting them to plain text first by using the [readxl](https://cran.r-project.org/web/packages/readxl/index.html) package.
-{: .callout}
-
-Let's investigate gapminder a bit; the first thing we should always do is check
-out what the data looks like with `str`:
-
-
-~~~
-str(gapminder)
-~~~
-{: .language-r}
-
-
-
-~~~
-'data.frame':	1704 obs. of  6 variables:
- $ country  : Factor w/ 142 levels "Afghanistan",..: 1 1 1 1 1 1 1 1 1 1 ...
- $ year     : int  1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
- $ pop      : num  8425333 9240934 10267083 11537966 13079460 ...
- $ continent: Factor w/ 5 levels "Africa","Americas",..: 3 3 3 3 3 3 3 3 3 3 ...
- $ lifeExp  : num  28.8 30.3 32 34 36.1 ...
- $ gdpPercap: num  779 821 853 836 740 ...
-~~~
-{: .output}
-
-We can also examine individual columns of the data frame with our `typeof` function:
-
-
-~~~
-typeof(gapminder$year)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] "integer"
-~~~
-{: .output}
-
-
-
-~~~
-typeof(gapminder$country)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] "integer"
-~~~
-{: .output}
-
-
-
-~~~
-str(gapminder$country)
-~~~
-{: .language-r}
-
-
-
-~~~
- Factor w/ 142 levels "Afghanistan",..: 1 1 1 1 1 1 1 1 1 1 ...
-~~~
-{: .output}
-
-We can also interrogate the data frame for information about its dimensions;
-remembering that `str(gapminder)` said there were 1704 observations of 6
-variables in gapminder, what do you think the following will produce, and why?
-
-
-~~~
-length(gapminder)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] 6
-~~~
-{: .output}
-
-A fair guess would have been to say that the length of a data frame would be the
-number of rows it has (1704), but this is not the case; remember, a data frame
-is a *list of vectors and factors*:
-
-
-~~~
-typeof(gapminder)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] "list"
-~~~
-{: .output}
-
-When `length` gave us 6, it's because gapminder is built out of a list of 6
-columns. To get the number of rows and columns in our dataset, try:
-
-
-~~~
-nrow(gapminder)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] 1704
-~~~
-{: .output}
-
-
-
-~~~
-ncol(gapminder)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] 6
-~~~
-{: .output}
-
-Or, both at once:
-
-
-~~~
-dim(gapminder)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] 1704    6
-~~~
-{: .output}
-
-We'll also likely want to know what the titles of all the columns are, so we can
-ask for them later:
-
-
-~~~
-colnames(gapminder)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] "country"   "year"      "pop"       "continent" "lifeExp"   "gdpPercap"
-~~~
-{: .output}
-
-At this stage, it's important to ask ourselves if the structure R is reporting
-matches our intuition or expectations; do the basic data types reported for each
-column make sense? If not, we need to sort any problems out now before they turn
-into bad surprises down the road, using what we've learned about how R
-interprets data, and the importance of *strict consistency* in how we record our
-data.
-
-Once we're happy that the data types and structures seem reasonable, it's time
-to start digging into our data proper. Check out the first few lines:
-
-
-~~~
-head(gapminder)
-~~~
-{: .language-r}
-
-
-
-~~~
-      country year      pop continent lifeExp gdpPercap
-1 Afghanistan 1952  8425333      Asia  28.801  779.4453
-2 Afghanistan 1957  9240934      Asia  30.332  820.8530
-3 Afghanistan 1962 10267083      Asia  31.997  853.1007
-4 Afghanistan 1967 11537966      Asia  34.020  836.1971
-5 Afghanistan 1972 13079460      Asia  36.088  739.9811
-6 Afghanistan 1977 14880372      Asia  38.438  786.1134
-~~~
-{: .output}
-
-> ## Challenge 3
->
-> It's good practice to also check the last few lines of your data and some in the middle. How would you do this?
->
-> Searching for ones specifically in the middle isn't too hard but we could simply ask for a few lines at random. How would you code this?
->
-> > ## Solution to Challenge 3
-> > To check the last few lines it's relatively simple as R already has a function for this:
-> > 
-> > ~~~
-> > tail(gapminder)
-> > tail(gapminder, n = 15)
-> > ~~~
-> > {: .r}
-> > 
-> > What about a few arbitrary rows just for sanity (or insanity depending on your view)?
-> > ## Tip: There are several ways to achieve this.
-> > The solution here presents one form using nested functions. i.e. a function passed as an argument to another function. This might sound like a new concept but you are already using it in fact.
-> > Remember `my_dataframe[rows, cols]` will print to screen your data frame with the number of rows and columns you asked for (although you might have asked for a range or named columns for example). How would you get the last row if you don't know how many rows your data frame has? R has a function for this. What about getting a (pseudorandom) sample? R also has a function for this.
-> > ~~~
-> > gapminder[sample(nrow(gapminder), 5), ]
-> > ~~~
-> > {: .r}
-> {: .solution}
-{: .challenge}
-
-
-To make sure our analysis is reproducible, we should put the code
-into a script file so we can come back to it later.
-
-> ## Challenge 4
->
-> Go to file -> new file -> R script, and write an R script
-> to load in the gapminder dataset. Put it in the `scripts/`
-> directory and add it to version control.
->
-> Run the script using the `source` function, using the file path
-> as its argument (or by pressing the "source" button in RStudio).
->
-> > ## Solution to Challenge 4
-> > The contents of `scripts/load-gapminder.R`:
-> > 
-> > ~~~
-> > download.file("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv", destfile = "data/gapminder-FiveYearData.csv")
-> > gapminder <- read.csv(file = "data/gapminder-FiveYearData.csv")
-> > ~~~
-> > {: .language-r}
-> > To run the script and load the data into the `gapminder` variable:
-> > 
-> > ~~~
-> > source(file = "scripts/load-gapminder.R")
-> > ~~~
-> > {: .language-r}
-> {: .solution}
-{: .challenge}
-
-> ## Challenge 5
->
-> Read the output of `str(gapminder)` again;
-> this time, use what you've learned about factors, lists and vectors,
-> as well as the output of functions like `colnames` and `dim`
-> to explain what everything that `str` prints out for gapminder means.
-> If there are any parts you can't interpret, discuss with your neighbors!
->
-> > ## Solution to Challenge 5
 > >
-> > The object `gapminder` is a data frame with columns
-> > - `country` and `continent` are factors.
-> > - `year` is an integer vector.
-> > - `pop`, `lifeExp`, and `gdpPercap` are numeric vectors.
+> > The object `storms` is a dataframe (a tibble) with 10,010 rows and 13 columns.
+> > - `name` and `status` are character vectors.
+> > - `year`, `month`, `hour`, `lat`, `long`, `ts_diamater` and `hu_diameter` are numeric vectors.
+> > - `day`, `wind`, and `pressure` are integer vectors.
+> > - `category` is an ordered factor vector, with levels `-1 < 0 < 1 < 2 < 3 < 4 < 5`
 > >
 > {: .solution}
+{: .challenge}
