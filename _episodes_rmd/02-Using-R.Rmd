@@ -219,7 +219,7 @@ Object names can contain letters, numbers, underscores and periods. They
 cannot start with a number nor contain spaces at all. Different people use
 different conventions for long variable names, which include:
 
-```{r eval=FALSE naming}
+```{r naming, eval=FALSE}
 this_is_snake_case
 otherPeopleUseCamelCase
 some.people.use.periods
@@ -337,7 +337,7 @@ arguments:
 sin(1)  # trigonometry functions
 ```
 
-```{r log}
+```{r log2}
 log10(10) # base-10 logarithm
 ```
 
