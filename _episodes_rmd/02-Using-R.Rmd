@@ -1,7 +1,7 @@
 ---
 title: Using R
-teaching: 25
-exercises: 10
+teaching: 50
+exercises: 15
 questions:
 - "What can R do?"
 - "How can I install new packages?"
@@ -26,90 +26,126 @@ source("../bin/chunk-options.R")
 knitr_fig_path("02-")
 ```
 
-## Interactions
-Sending code from script to console and repeating the previous lines from script
+## Interacting with R
+Remember that in RStudio, R itself is accessed through the console pane. This can by done by typing commands directly in the pane, or sending them from a script file with <kbd>Ctrl</kbd>+<kbd>Return</kbd> (in Windows and Linux) or <kbd>&#8984;</kbd>+<kbd>Return</kbd> on OS X.
 
-## Functions
-R has many built in mathematical functions. To call a function,
-we simply type its name, followed by  open and closing parentheses.
-Anything we type inside the parentheses is called the function's
-arguments:
+## Using R as a calculator
 
-```{r}
-function_name(args1 = val1, arg2 = val2, ...)  # functions  
+The simplest thing you could do with R is do arithmetic:
+
+```{r basic1}
+1 + 100
 ```
 
-> ## TIP:  Getting Functions 
+And R will print out the answer, with a preceding "[1]". Don't worry about this
+for now, we'll explain that later. For now think of it as indicating output.
+
+Like bash, if you type in an incomplete command, R will wait for you to
+complete it:
+
+~~~
+> 1 +
+~~~
+{: .r}
+
+~~~
++
+~~~
+{: .output}
+
+Any time you hit return and the R session shows a "+" instead of a ">", it
+means it's waiting for you to complete the command. If you want to cancel
+a command you can simply hit "Esc" and RStudio will give you back the ">"
+prompt.
+
+> ## Tip: Cancelling commands
 >
-> The use a function, for example seq(), which makes regular 
-> sequences of numbers, type se and hit TAB.  A popup shows you 
-> possible completions.  Specify seq() by typing the next letter
-> "q", or by using Up/Down arrows to select.  A floating tooltip 
-> will be displayed, giving information about the functions's 
-> arguments and purpose.  To display the details in the Help tab 
-> in the lower right pane, press F1.
+> If you're using R from the commandline instead of from within RStudio,
+> you need to use <kbd>Ctrl</kbd>+<kbd>C</kbd> instead of <kbd>Esc</kbd>
+> to cancel the command. This applies to Mac users as well!
 >
-> When you have selected the function you want, press TAB once 
-> more, and RStudio will add matching opening and closing 
-> parenthese for you.  
+> Cancelling a command isn't only useful for killing incomplete commands:
+> you can also use it to tell R to stop running code (for example if it's
+> taking much longer than you expect), or to get rid of the code you're
+> currently writing.
+>
 {: .callout}
 
+When using R as a calculator, the order of operations is the same as you
+would have learned back in school.
 
-Type the arguments and hit return.
+From highest to lowest precedence:
 
-```{r}
-seq(1, 10)  # seq function
+ * Parentheses: `(`, `)`
+ * Exponents: `^` or `**`
+ * Divide: `/`
+ * Multiply: `*`
+ * Add: `+`
+ * Subtract: `-`
+
+```{r basic2}
+3 + 5 * 2
 ```
 
-Typing a `?` before the name of a command will open the help page
-for that command. As well as providing a detailed description of
-the command and how it works, scrolling to the bottom of the
-help page will usually show a collection of code examples which
-illustrate command usage.
+Use parentheses to group operations in order to force the order of
+evaluation if it differs from the default, or to make clear what you
+intend.
 
-
-## Mathematical functions
-
-R has many built in mathematical functions. To call a function,
-we simply type its name, followed by  open and closing parentheses.
-Anything we type inside the parentheses is called the function's
-arguments:
-
-```{r}
-sin(1)  # trigonometry functions
+```{r basic3}
+(3 + 5) * 2
 ```
 
-```{r}
-log10(10) # base-10 logarithm
+This can get unwieldy when not needed, but  clarifies your intentions.
+Remember that others may later read your code.
+
+```{r, eval=FALSE}
+(3 + (5 * (2 ^ 2))) # hard to read
+3 + 5 * 2 ^ 2       # clear, if you remember the rules
+3 + 5 * (2 ^ 2)     # if you forget some rules, this might help
 ```
 
-```{r}
-exp(0.5) # e^(1/2)
+
+The text after each line of code is called a
+"comment". Anything that follows after the hash (or octothorpe) symbol
+`#` is ignored by R when it executes code.
+
+Really small or large numbers get a scientific notation:
+
+```{r basic4}
+2/10000
 ```
 
+Which is shorthand for "multiplied by `10^XX`". So `2e-4`
+is shorthand for `2 * 10^(-4)`.
+
+You can write numbers in scientific notation too:
+
+```{r basic5}
+5e3  # Note the lack of minus here
+```
 
 
 ## Comparing things
 
 We can also do comparison in R:
 
-```{r}
+```{r basic6}
 1 == 1  # equality (note two equals signs, read as "is equal to")
 ```
 
-```{r}
+```{r basic7}
 1 != 2  # inequality (read as "is not equal to")
 ```
 
-```{r}
+```{r basic8}
 1 < 2  # less than
 ```
 
-```{r}
+```{r basic9}
 1 <= 1  # less than or equal to
 ```
 
-```{r}
+```{r basic10}
 1 >= -9 # greater than or equal to
 ```
 
@@ -134,37 +170,18 @@ We can also do comparison in R:
 {: .callout}
 
 
-## Help
-
-
-## Naming Conventions
-
-Object names can contain letters, numbers, underscores and periods. They
-cannot start with a number nor contain spaces at all. Different people use
-different conventions for long variable names, these include
-
-```{r}
-this_is_snake_case
-otherPeopleUseCamelCase
-some.people.use.periods
-And_aFew.People_RENOUNCEconvention
-```
-HadleyWickham recommends <b>snake_case</b>.  However, what you use is up 
-to you, but **be consistent**.
-
-
 ## Variables and assignment
 
 We can store values in variables using the assignment operator `<-`, like this:
 
-```{r}
+```{r assignment1}
 x <- 1/40
 ```
 
 Notice that assignment does not print a value. Instead, we stored it for later
 in something called a **variable**. `x` now contains the **value** `0.025`:
 
-```{r}
+```{r assignment2}
 x
 ```
 
@@ -174,13 +191,13 @@ this fraction called a [floating point number](http://en.wikipedia.org/wiki/Floa
 Look for the `Environment` tab in one of the panes of RStudio, and you will see that `x` and its value
 have appeared. Our variable `x` can be used in place of a number in any calculation that expects a number:
 
-```{r}
+```{r log}
 log(x)
 ```
 
 Notice also that variables can be reassigned:
 
-```{r}
+```{r reassignment}
 x <- 100
 ```
 
@@ -188,7 +205,7 @@ x <- 100
 
 Assignment values can contain the variable being assigned to:
 
-```{r}
+```{r assignment3}
 x <- x + 1 #notice how RStudio updates its description of x on the top right tab
 y <- x * 2
 ```
@@ -196,10 +213,25 @@ y <- x * 2
 The right hand side of the assignment can be any valid R expression.
 The right hand side is *fully evaluated* before the assignment occurs.
 
+**Naming things**
+
+Object names can contain letters, numbers, underscores and periods. They
+cannot start with a number nor contain spaces at all. Different people use
+different conventions for long variable names, which include:
+
+```{r eval=FALSE naming}
+this_is_snake_case
+otherPeopleUseCamelCase
+some.people.use.periods
+And_aFew.People_RENOUNCEconvention
+```
+
+Hadley Wickham recommends `snake_case`. What you use is up 
+to you, but **be consistent**.
 
 It is also possible to use the `=` operator for assignment:
 
-```{r}
+```{r equal_assignment}
 x = 1/40
 ```
 
@@ -246,32 +278,97 @@ symbol used in the community. So the recommendation is to use `<-`.
 > {: .solution}
 {: .challenge}
 
+## Commenting
+
+Comments are 'notes' that are added to your script to provide further details for a human to read. 
+They are ignored by R when the code is run.  To add comments to your code,
+just type a `#` before your note text.
+
+```{r comments, error=TRUE}
+# this is a comment line
+# a <- 5 this code will not assign 5 to the variable a
+a <- 5 #but this line will
+```
+
+## Functions
+
+Functions are a stored list of instructions that can be "called" by a user. R has lots of built in functions to perform many different tasks. 
+
+To call a function, we type its name, followed by open and closing parentheses, like `function_name()`. 
+
+Many functions take *arguments*, which are a list of parameters that can be given to the function to modify its behaviour. In R, argument values are defined with an `=` sign, in the form of: `function_name(arg1 = val1, arg2 = val2)`. 
+
+Some functions have some arguments that must be defined, and others that are optional. 
+
+> ## Tip:  Remembering/finding function names
+>
+> To use a function, for example `seq()`, which makes regular 
+> sequences of numbers, type `se` and hit TAB.  RStudio will provide a popup which will show
+> possible completions.  Specify seq() by typing the next letter
+> "q", or by using Up/Down arrows to select.  A floating tooltip 
+> will be displayed, giving information about the functions's 
+> arguments and purpose.  To display the details in the Help tab 
+> in the lower right pane, press F1.
+>
+> When you have selected the function you want, press TAB once 
+> more, and RStudio will add matching opening and closing 
+> parenthese for you.  
+{: .callout}
+
+
+```{r seq}
+seq(1, 10)  # seq function
+```
+
+Typing a `?` before the name of a function will open its help page. As well as providing a detailed description of
+the function and how it works, scrolling to the bottom of the
+help page will usually show a collection of code examples which
+illustrate function usage.
+
+
+## Mathematical functions
+
+R has many built in mathematical functions. To call a function,
+we simply type its name, followed by  open and closing parentheses.
+Anything we type inside the parentheses is called the function's
+arguments:
+
+```{r sin}
+sin(1)  # trigonometry functions
+```
+
+```{r log}
+log10(10) # base-10 logarithm
+```
+
+```{r exp}
+exp(0.5) # e^(1/2)
+```
+
 ## Vectorization
 
 One final thing to be aware of is that R is *vectorized*, meaning that
-variables and functions can have vectors as values. In contrast to physics and
+variables and functions can have vectors (which we'll describe soon) as values. In contrast to physics and
 mathematics, a vector in R describes a set of values in a certain order of the 
 same data type. For example
 
-```{r}
+```{r vectorization}
 1:5
 2^(1:5)
 x <- 1:5
 2^x
 ```
 
-This is incredibly powerful; we will discuss this further in an
-upcoming lesson.
-
+This is incredibly powerful and makes for efficient and readable code.
 
 ## Managing your environment
 
-There are a few useful commands you can use to interact with the R session.
+There are a few useful commands you can use to interact with objects available in an R session.
 
 `ls` will list all of the variables and functions stored in the global environment
 (your working R session):
 
-```{r}
+```{r ls}
 ls()
 ```
 
@@ -288,20 +385,20 @@ needed to give the parentheses to tell R to call the function.
 
 If we type `ls` by itself, R will print out the source code for that function!
 
-```{r}
+```{r ls2}
 ls
 ```
 
 You can use `rm` to delete objects you no longer need:
 
-```{r}
+```{r rm}
 rm(x)
 ```
 
 If you have lots of things in your environment and want to delete all of them,
 you can pass the results of `ls` to the `rm` function:
 
-```{r}
+```{r rm2}
 rm(list = ls())
 ```
 
@@ -314,7 +411,7 @@ use the `=` operator!!
 
 If instead we use `<-`, there will be unintended side effects, or you may get an error message:
 
-```{r, error=TRUE}
+```{r rm3, error=TRUE}
 rm(list <- ls())
 ```
 
@@ -416,16 +513,4 @@ network). R and RStudio have functionality for managing packages:
 > {: .solution}
 {: .challenge}
 
-
-## Commenting
-
-Comments are 'notes' that are added to your script to provide further details, 
-but do not get processed when you run the code.  To add comments to you code,
-just type a "#" before your note text.
-
-```{r, error=TRUE}
-# this is a comment line
-```
-
-
-
+Before we go on, make sure you have the `tidyverse` package installed. You can check by running `library(tidyverse)`, and if it's not available, you can install it with `install.packages(tidyverse)`.
