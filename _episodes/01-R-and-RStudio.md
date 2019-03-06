@@ -23,7 +23,7 @@ source: Rmd
 ## Why should you use R?
 
 
-[What is R and what makes it different from the other software packages out there?] (https://select-statistics.co.uk/blog/what-is-r-and-why-should-you-use-it/)
+[What is R and what makes it different from the other software packages out there?](https://select-statistics.co.uk/blog/what-is-r-and-why-should-you-use-it/)
 R is designed specifically for statistical computing and graphics, and is able to perform any task associated with handling and manipulating data.
 It is free and open source, the latter meaning that anyone can interrogate the code to see what’s going on –  there’s no black box involved.
 R provides a flexible analysis toolkit where all of the standard statistical techniques are built-in. 
@@ -231,7 +231,7 @@ Now we have a good directory structure we will now place/save the data file in t
 > > 
 > > 
 > > ~~~
-> > -rwxrwxrwx 1 alex alex 81K Feb 25 02:13 data/gapminder.csv
+> > -rwxrwxrwx 1 alex alex 81K Feb 25 13:13 data/gapminder.csv
 > > ~~~
 > > {: .output}
 > > The file size is 80K.
