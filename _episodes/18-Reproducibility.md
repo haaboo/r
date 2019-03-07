@@ -78,19 +78,27 @@ you are using, as well as the versions of any packages you use. This information
 > 
 > As a final challenge, you will complete an end to end data analysis task in a reproducible fashion.
 >
-> Create a new project and download this [raw data](link_goes_here). Write a script to 
-> answer the following questions:
-> * **1**:<Q1>
-> * **2**:<Q2>
-> * **3**:<Q3>
-> * **4**: One question of your own design
+> Create a new project and download two data files from the Bureau of Meterology, one
+> containing [meterological information]({{ page.root }}{% link data/BOM_data.csv %}),
+> and one containing [metadata about weather stations](({{ page.root }}{% link data/BOM_stations.csv %}))
+> 
+> Take some time to explore the data files and understand what they contain, then write a script 
+> that answers the following questions:
+> * **1**: For each station, how many days have a minimum temperature, a maximum temperature and 
+> a rainfall measurement recorded?
+> * **2**: Which month saw the lowest difference between minimum and maximum temperatures in a day?
+> And which state saw the highest?
+> * **3**: Which state had the lowest average monthly minimum temperature after excluding sites
+> more than 500m above sea level.
+> * **4**: Design your own question. What is something you wanted to find out after exploring what
+> the data set contained. Or was there something that surprised you when working with the data.
 > Write the answer to question 4 out to a file.
 >
 > Once you are finished, swap scripts with another person, along with any instructions they will need
 > to make sure it works. Can you get their script to run? 
 > 
-> Compare your code. Were there any instances where you took different approaches to solve the same
-> problem?
+> Compare your code for the first three questions. Were there any instances where you took different
+> approaches to solve the same problem? 
 {: .challenge}
 
 
