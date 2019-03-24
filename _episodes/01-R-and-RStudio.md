@@ -92,23 +92,6 @@ interactive R console.
 > including the modifications you have made.
 {: .callout}
 
-## Introduction to R
-
-Your time in R will be split between the R interactive
-console working in scripts. The console is where you will run all of your code, and can be a useful environment to try out ideas before adding them to an R script
-file. This console in RStudio is the same as the one you would get if
-you typed in `R` in your command-line environment.
-
-*Anything that you want to keep needs to go in a script.*
-
-The first thing you will see in the R interactive session is a bunch
-of information, followed by a ">" and a blinking cursor. In many ways
-this is similar to the shell environment you learned about during the
-shell lessons: it operates on the same idea of a "Read, evaluate,
-print loop": you type in commands, R tries to execute them, and then
-returns a result.
-
-
 # Projects
 
 R Studio provides in-built support for keeping all files associated with a project 
@@ -231,7 +214,7 @@ Now we have a good directory structure we will now place/save the data file in t
 > > 
 > > 
 > > ~~~
-> > -rwxrwxrwx 1 alex alex 81K Feb 25 13:13 data/gapminder.csv
+> > -rw-r--r--  1 pea25i  348785    80K 20 Mar 11:17 data/gapminder.csv
 > > ~~~
 > > {: .output}
 > > The file size is 80K.
@@ -245,7 +228,7 @@ Now we have a good directory structure we will now place/save the data file in t
 > > 
 > > 
 > > ~~~
-> > 1705 data/gapminder.csv
+> >     1705 data/gapminder.csv
 > > ~~~
 > > {: .output}
 > > There are 1705 lines. The data looks like:
