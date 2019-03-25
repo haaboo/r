@@ -105,42 +105,6 @@ No matter how complicated our analyses become, all values in R is
 interpreted as one of these basic data types. This strictness has some 
 really important consequences, and can be the cause of some confusing errors.
 
-## Missing data
-
-In all data types, it is possible to have missing values. In R, missing values are represented as `NA`. It is very important to understand this is different to `0`, or `""`, which are each values in themselves. `NA` means **missing** (or not available). 
-
-If you want to check whether the variable `x` is `NA` it would be natural to use the equality operator (`==`):
-
-
-~~~
-x <- NA
-x == NA
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] NA
-~~~
-{: .output}
-
-Using `==` with `NA` returns `NA`, because making a comparison to a missing value doesn't make sense. Instead we need to check for the "state of missingness" rather than a value. We can do this with the `is.na()` function:
-
-
-~~~
-x <- NA
-is.na(x)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] TRUE
-~~~
-{: .output}
-
 ## Dates
 
 Dates and times are another special data type it's good to be aware of in R. Working with dates and times is its own detailed topic, but we'll cover them very briefly here so you're aware of some of the options.
@@ -158,7 +122,7 @@ today()
 
 
 ~~~
-[1] "2019-03-06"
+[1] "2019-03-25"
 ~~~
 {: .output}
 
@@ -171,7 +135,7 @@ now()
 
 
 ~~~
-[1] "2019-03-06 14:04:52 Australia"
+[1] "2019-03-25 12:30:50 AEDT"
 ~~~
 {: .output}
 
@@ -724,7 +688,7 @@ By combining the strictness of vectors with the flexibility of lists, soon we'll
 > > 
 > > ~~~
 > > [[1]]
-> > [1] "2019-03-06"
+> > [1] "2019-03-25"
 > > 
 > > [[2]]
 > > [1] "My name" "Puce"   

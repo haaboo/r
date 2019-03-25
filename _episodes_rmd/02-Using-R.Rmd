@@ -229,6 +229,24 @@ y <- x * 2
 The right hand side of the assignment can be any valid R expression.
 The right hand side is *fully evaluated* before the assignment occurs.
 
+## Missing data
+
+For all data types, it is possible to have missing values. In R, missing values are represented as `NA`. It is very important to understand this is different to `0`, or `""`, which are each values in themselves. `NA` means **missing** (or not available). 
+
+If you want to check whether the variable `x` is `NA` it would be natural to use the equality operator (`==`):
+
+```{r equality-na}
+x <- NA
+x == NA
+```
+
+Using `==` with `NA` returns `NA`, because making a comparison to a missing value doesn't make sense. Instead we need to check for the "state of missingness" rather than a value. We can do this with the `is.na()` function:
+
+```{r is.na}
+x <- NA
+is.na(x)
+```
+
 ### Naming things
 
 Object names can contain letters, numbers, underscores and periods. They
