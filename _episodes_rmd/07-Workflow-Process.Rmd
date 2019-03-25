@@ -14,7 +14,7 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("08-")
+knitr_fig_path("07-")
 ```
 
 Now that we've read in some data, we have completed the first step in a data analysis. Before we 

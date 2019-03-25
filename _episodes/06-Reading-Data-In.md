@@ -148,6 +148,7 @@ We can also see that it has imported the data in the
 
 Similarly, for the tsv file there is a `read_tsv` function
 
+> ## Challenge 2
 >  Read in the `gapminder.tsv` file using `read_tsv`
 >
 >  Confirm that reading from csv or tsv files produce the same output (you might find the `all.equal`
@@ -503,6 +504,6 @@ read_excel("data/gapminder.xlsx", range = "A1:E4")
 > newer R users. For this reason, we will stick with using the tidyverse equivalents where possible.
 > 
 > Regardless of the method chosen. After importing your data, it's always a good choice to check
-> it afterwards using the [data frame]({{ page.root }}{% link _episodes/06-Dataframes.md %}) 
+> it afterwards using the [data frame]({{ page.root }}{% link _episodes/05-Dataframes.md %}) 
 > exploration methods
 {: .callout}

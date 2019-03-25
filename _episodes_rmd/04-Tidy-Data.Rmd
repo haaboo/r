@@ -18,11 +18,9 @@ exercises: 10
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("05-")
+knitr_fig_path("04-")
 library(tidyr)
 library(kableExtra)
-# Silently load in the data so the rest of the lesson works
-gapminder <- readr::read_csv("data/gapminder-FiveYearData.csv")
 ```
 
 

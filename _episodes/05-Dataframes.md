@@ -13,7 +13,7 @@ objectives:
   - "To know how to inspect the data in a dataframe"
 keypoints:
   - "Dataframes (or tibbles in the tidyverse) are lists where each element is a vector of the same length"
-  - "Create them with `data_frame()`"
+  - "Use `read_csv()` to read comma separated files into a data frame"
   - "Use `nrow()`, `ncol()`, `dim()`, or `colnames()` to find information about a dataframe"
   - "Use `head()`, `tail()`, `summary()`, or `glimpse()` to inspect a dataframe's content"
 source: Rmd
@@ -23,92 +23,141 @@ source: Rmd
 
 
 Now that we understand a little bit about why we might prefer our data to be 'tidy', we have one data
-structure left to learn - the dataframe. Dataframes are where the vast majority of work in R is done. Dataframes can look a lot like any table of data (and we will often refer to them in that way), but they are a very particular structure. Dataframes are a special type of list that is made up of vectors
-that all have to be the same length. Remembering that vectors must have the same type of values, this means that a dataframe produces a rectangular table of data, where each column **must** have the same type. We can see this below using the `diamonds` data set that is loaded as part of the tidyverse. 
+structure left to learn - the dataframe. Dataframes are where the vast majority of work in R is done. Dataframes can look a lot like any table of data (and we will often refer to them in that way), but they are a very particular structure. Dataframes are a special type of list that is made up of vectors that all have to be the same length. Since vectors must have the same data types, this means that a dataframe produces a rectangular table of data, where each column **must** have the same type. 
+Dataframes are an ideal format for storing and working with tidy data. All the tidyverse tools we will be learning from here are designed to work with data in this form.
 
-Dataframes are an ideal format for storing and working with tidy data. All the tidyverse tools we will be learning
-from here are designed to work with data in this form.
+## Creating a data frame
+
+In order to start working with data, we first need to learn how to read it in to R. For learning how
+to work with data, we will be using records from the [Gapminder](www.gapminder.org) organisation, 
+which contains various statistics for 142 countries betwen 1952 and 2007. This
+data *is* available as an [R package](https://cran.r-project.org/web/packages/gapminder/index.html),
+but we have prepared a [csv version]({{ page.root }}{% link data/gapminder.csv %}) for you to practice with.
+
+> ## Challenge 1
+>
+>  Download the gapminder.csv file and save it in your project directory.
+>  
+>  Open the file in a text editor and describe what statistics are recorded.
+> > ## Solution to Challenge 1
+> > Using the ideas discussed previously about [project structure]({{ page.root }}{% link _episodes/01-R-and-RStudio.md %}), 
+> > we will save the files into a `data` directory within our project. We can then access them with 
+> > a relative path `data/gapminder.csv.
+> >
+> > Opening the file we can see that there are six columns of data: a country name and continent, the
+> > year that the data was recorded, and the life expectancy, population and GDP per capita.
+> {: .solution}
+{: .challenge}
+
+To load this data into R, we will use the `read_csv` function from the [`readr`](http://readr.tidyverse.org) package (which will 
+be loaded automatically if you have preciously run `library(tidyverse)`, but here we will 
+load it separately). For reading in different data formats, or for control of the import options,
+see the optional section on [reading data in to R]({ page.root }{{% link _episodes/18-Additional-content---Reading-Data-In.md %}}).
 
 
 ~~~
-diamonds
+library(readr)
+
+gapminder <- read_csv("data/gapminder.csv")
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 53,940 x 10
-   carat cut       color clarity depth table price     x     y     z
-   <dbl> <ord>     <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
- 1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
- 2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
- 3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
- 4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
- 5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
- 6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
- 7 0.24  Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
- 8 0.26  Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
- 9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
-10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
-# … with 53,930 more rows
+Parsed with column specification:
+cols(
+  country = col_character(),
+  continent = col_character(),
+  year = col_double(),
+  lifeExp = col_double(),
+  pop = col_double(),
+  gdpPercap = col_double()
+)
+~~~
+{: .output}
+
+
+
+~~~
+gapminder
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 1,704 x 6
+   country     continent  year lifeExp      pop gdpPercap
+   <chr>       <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+ 1 Afghanistan Asia       1952    28.8  8425333      779.
+ 2 Afghanistan Asia       1957    30.3  9240934      821.
+ 3 Afghanistan Asia       1962    32.0 10267083      853.
+ 4 Afghanistan Asia       1967    34.0 11537966      836.
+ 5 Afghanistan Asia       1972    36.1 13079460      740.
+ 6 Afghanistan Asia       1977    38.4 14880372      786.
+ 7 Afghanistan Asia       1982    39.9 12881816      978.
+ 8 Afghanistan Asia       1987    40.8 13867957      852.
+ 9 Afghanistan Asia       1992    41.7 16317921      649.
+10 Afghanistan Asia       1997    41.8 22227415      635.
+# … with 1,694 more rows
 ~~~
 {: .output}
 
 > ## What's a tibble?
-> You might notice in the output above that it calls itself a tibble, rather than a dataframe.
-> A tibble is just the tidyverse's version of a dataframe that has a few behaviours tweaked to 
+> You might notice in the output above that it calls itself a tibble, rather than a data frame.
+> A tibble is just the tidyverse's version of a data frame that has a few behaviours tweaked to 
 > make it behave more predictibly. Try comparing the output of a base R `data.frame` version of 
-> diamonds with `as.data.frame(diamonds)` to get some idea of the differences.
+> gapminder with `as.data.frame(gapminder)` to get some idea of the differences.
 > 
-> We will try to refer to them as dataframes throughout these lessons. But know that dataframes
+> We will try to refer to them as data frames throughout these lessons. But know that dataframes
 > and tibbles are interchangable for our purposes.
 {: .callout}
 
 
 ## Inspecting a dataframe
 
-Looking at the printed output from the `diamonds` dataframe can tell us a lot of information about
-it. The first line tells us the dimensions of the data, in this case there are 53,940 rows and 10 
+Looking at the printed output from the `gapminder` dataframe can tell us a lot of information about
+it. The first line tells us the dimensions of the data, in this case there are 1,704 rows and 6 
 columns. This information can also be found with:
 
 ~~~
-nrow(diamonds)
+nrow(gapminder)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 53940
+[1] 1704
 ~~~
 {: .output}
 
 
 
 ~~~
-ncol(diamonds)
+ncol(gapminder)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 10
+[1] 6
 ~~~
 {: .output}
 
 
 
 ~~~
-dim(diamonds)
+dim(gapminder)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] 53940    10
+[1] 1704    6
 ~~~
 {: .output}
 
@@ -116,181 +165,64 @@ The next row of output gives the names of the columns, which can also be found u
 
 
 ~~~
-colnames(diamonds)
+colnames(gapminder)
 ~~~
 {: .language-r}
 
 
 
 ~~~
- [1] "carat"   "cut"     "color"   "clarity" "depth"   "table"   "price"  
- [8] "x"       "y"       "z"      
+[1] "country"   "continent" "year"      "lifeExp"   "pop"       "gdpPercap"
 ~~~
 {: .output}
 
-The next row tells you the data type of each column, followed by the data itself.
+The next row tells you the data type of each column, followed by the data itself. We won't discuss 
+data types in too much detail, but see [this section]({ page.root }{{% link  _episodes/18-Additional-content---Data-types.md %}}) for a full description.
 
-### A note on subsetting
-
-We will not focus on these methods, but it is important to know that there are a range of ways to access parts of data structures in R. 
-
-Elements can be accessed using either `$` or `[[` notation.
+Should you need the data from a specific column, it can be accessed using the `$` notation.
 
 
 ~~~
-# Use $ to access by name
-diamonds$price
+gapminder$lifeExp
 ~~~
 {: .language-r}
 
 
 
 ~~~
- [1] 326 326 327 334 335 336 336 337 337 338 339 340 342 344 345 345 348
-[18] 351 351 351 351 352 353 353 353 354 355 357 357 357 402 402 402 402
-[35] 402 402 402 402 403 403 403 403 403 403 403 403 403 403 404 404 404
-[52] 404 404 404 404 405 405 405 405 405 552 552 552 552 552 553 553 553
-[69] 553 553 553 554 554 554 554 554 554 554 554 554
- [ reached getOption("max.print") -- omitted 53860 entries ]
+ [1] 28.801 30.332 31.997 34.020 36.088 38.438 39.854 40.822 41.674 41.763
+[11] 42.129 43.828 55.230 59.280 64.820 66.220 67.690 68.930 70.420 72.000
+[21] 71.581 72.950 75.651 76.423 43.077 45.685 48.303 51.407 54.518 58.014
+[31] 61.368 65.799 67.744 69.152 70.994 72.301 30.015 31.999 34.000 35.985
+[41] 37.928 39.483 39.942 39.906 40.647 40.963 41.003 42.731 62.485 64.399
+[51] 65.142 65.634 67.065 68.481 69.942 70.774 71.868 73.275 74.340 75.320
+[61] 69.120 70.330 70.930 71.100 71.930 73.490 74.740 76.320 77.560 78.830
+[71] 80.370 81.235 66.800 67.480 69.540 70.140 70.630 72.170 73.180 74.940
+ [ reached getOption("max.print") -- omitted 1624 entries ]
 ~~~
 {: .output}
-
-
-
-~~~
-# Use [[ ]] to access by name or position 
-diamonds[["price"]]
-~~~
-{: .language-r}
-
-
-
-~~~
- [1] 326 326 327 334 335 336 336 337 337 338 339 340 342 344 345 345 348
-[18] 351 351 351 351 352 353 353 353 354 355 357 357 357 402 402 402 402
-[35] 402 402 402 402 403 403 403 403 403 403 403 403 403 403 404 404 404
-[52] 404 404 404 404 405 405 405 405 405 552 552 552 552 552 553 553 553
-[69] 553 553 553 554 554 554 554 554 554 554 554 554
- [ reached getOption("max.print") -- omitted 53860 entries ]
-~~~
-{: .output}
-
-
-
-~~~
-diamonds[[7]]
-~~~
-{: .language-r}
-
-
-
-~~~
- [1] 326 326 327 334 335 336 336 337 337 338 339 340 342 344 345 345 348
-[18] 351 351 351 351 352 353 353 353 354 355 357 357 357 402 402 402 402
-[35] 402 402 402 402 403 403 403 403 403 403 403 403 403 403 404 404 404
-[52] 404 404 404 404 405 405 405 405 405 552 552 552 552 552 553 553 553
-[69] 553 553 553 554 554 554 554 554 554 554 554 554
- [ reached getOption("max.print") -- omitted 53860 entries ]
-~~~
-{: .output}
-
-While it might seem confusing, dataframes can also be subset using `[`. In this case, you call it 
-using `data_frame[row_selector , column_selector]`. Where `row_selector` and `column_selector` can
-be a set of numeric indexes or names to extract, or a vector of logical TRUE/FALSEs that show which
-rows/column to keep.
-
-
-~~~
-#First 5 rows
-diamonds[1:5, ]
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 5 x 10
-  carat cut     color clarity depth table price     x     y     z
-  <dbl> <ord>   <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
-1 0.23  Ideal   E     SI2      61.5    55   326  3.95  3.98  2.43
-2 0.21  Premium E     SI1      59.8    61   326  3.89  3.84  2.31
-3 0.23  Good    E     VS1      56.9    65   327  4.05  4.07  2.31
-4 0.290 Premium I     VS2      62.4    58   334  4.2   4.23  2.63
-5 0.31  Good    J     SI2      63.3    58   335  4.34  4.35  2.75
-~~~
-{: .output}
-
-
-
-~~~
-#First 5 columns, don't forget the comma
-diamonds[, 1:5]
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 53,940 x 5
-   carat cut       color clarity depth
-   <dbl> <ord>     <ord> <ord>   <dbl>
- 1 0.23  Ideal     E     SI2      61.5
- 2 0.21  Premium   E     SI1      59.8
- 3 0.23  Good      E     VS1      56.9
- 4 0.290 Premium   I     VS2      62.4
- 5 0.31  Good      J     SI2      63.3
- 6 0.24  Very Good J     VVS2     62.8
- 7 0.24  Very Good I     VVS1     62.3
- 8 0.26  Very Good H     SI1      61.9
- 9 0.22  Fair      E     VS2      65.1
-10 0.23  Very Good H     VS1      59.4
-# … with 53,930 more rows
-~~~
-{: .output}
-
-
-
-~~~
-#Rows 1, 3 and 5 with the carat and price columns
-diamonds[c(1, 3, 5), c("carat", "price")]
-~~~
-{: .language-r}
-
-
-
-~~~
-# A tibble: 3 x 2
-  carat price
-  <dbl> <int>
-1  0.23   326
-2  0.23   327
-3  0.31   335
-~~~
-{: .output}
-
-At this stage, don't let this subsetting confuse you - we're going to focus on more natural ways to do these tasks soon. But if you're working with other people's R code, you are definitely going to come across `$`, `[` and `[[`, so it's important to have some idea of what is going on.
 
 ## Overview of a dataframe
 There are many other ways to view the data and look at its data types, and the
-structure of the data. To look at the first 5 rows of the diamonds dataset, use `head()`:
+structure of the data. To look at the first 5 rows of the gapminder dataset, use `head()`:
 
 
 ~~~
-head(diamonds, 5)
+head(gapminder, 5)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 5 x 10
-  carat cut     color clarity depth table price     x     y     z
-  <dbl> <ord>   <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
-1 0.23  Ideal   E     SI2      61.5    55   326  3.95  3.98  2.43
-2 0.21  Premium E     SI1      59.8    61   326  3.89  3.84  2.31
-3 0.23  Good    E     VS1      56.9    65   327  4.05  4.07  2.31
-4 0.290 Premium I     VS2      62.4    58   334  4.2   4.23  2.63
-5 0.31  Good    J     SI2      63.3    58   335  4.34  4.35  2.75
+# A tibble: 5 x 6
+  country     continent  year lifeExp      pop gdpPercap
+  <chr>       <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+1 Afghanistan Asia       1952    28.8  8425333      779.
+2 Afghanistan Asia       1957    30.3  9240934      821.
+3 Afghanistan Asia       1962    32.0 10267083      853.
+4 Afghanistan Asia       1967    34.0 11537966      836.
+5 Afghanistan Asia       1972    36.1 13079460      740.
 ~~~
 {: .output}
 
@@ -298,26 +230,26 @@ and use `tail()` to look at the last 10 rows:
 
 
 ~~~
-tail(diamonds, 10)
+tail(gapminder, 10)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-# A tibble: 10 x 10
-   carat cut       color clarity depth table price     x     y     z
-   <dbl> <ord>     <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
- 1  0.71 Premium   E     SI1      60.5    55  2756  5.79  5.74  3.49
- 2  0.71 Premium   F     SI1      59.8    62  2756  5.74  5.73  3.43
- 3  0.7  Very Good E     VS2      60.5    59  2757  5.71  5.76  3.47
- 4  0.7  Very Good E     VS2      61.2    59  2757  5.69  5.72  3.49
- 5  0.72 Premium   D     SI1      62.7    59  2757  5.69  5.73  3.58
- 6  0.72 Ideal     D     SI1      60.8    57  2757  5.75  5.76  3.5 
- 7  0.72 Good      D     SI1      63.1    55  2757  5.69  5.75  3.61
- 8  0.7  Very Good D     SI1      62.8    60  2757  5.66  5.68  3.56
- 9  0.86 Premium   H     SI2      61      58  2757  6.15  6.12  3.74
-10  0.75 Ideal     D     SI2      62.2    55  2757  5.83  5.87  3.64
+# A tibble: 10 x 6
+   country  continent  year lifeExp      pop gdpPercap
+   <chr>    <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+ 1 Zimbabwe Africa     1962    52.4  4277736      527.
+ 2 Zimbabwe Africa     1967    54.0  4995432      570.
+ 3 Zimbabwe Africa     1972    55.6  5861135      799.
+ 4 Zimbabwe Africa     1977    57.7  6642107      686.
+ 5 Zimbabwe Africa     1982    60.4  7636524      789.
+ 6 Zimbabwe Africa     1987    62.4  9216418      706.
+ 7 Zimbabwe Africa     1992    60.4 10704340      693.
+ 8 Zimbabwe Africa     1997    46.8 11404948      792.
+ 9 Zimbabwe Africa     2002    40.0 11926563      672.
+10 Zimbabwe Africa     2007    43.5 12311143      470.
 ~~~
 {: .output}
 
@@ -325,25 +257,21 @@ To look at the structure of the data (particularly when there are many columns) 
 
 
 ~~~
-glimpse(diamonds)
+glimpse(gapminder)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Observations: 53,940
-Variables: 10
-$ carat   <dbl> 0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, 0.…
-$ cut     <ord> Ideal, Premium, Good, Premium, Good, Very Good, Very Goo…
-$ color   <ord> E, E, E, I, J, J, I, H, E, H, J, J, F, J, E, E, I, J, J,…
-$ clarity <ord> SI2, SI1, VS1, VS2, SI2, VVS2, VVS1, SI1, VS2, VS1, SI1,…
-$ depth   <dbl> 61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, 59…
-$ table   <dbl> 55, 61, 65, 58, 58, 57, 57, 55, 61, 61, 55, 56, 61, 54, …
-$ price   <int> 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 3…
-$ x       <dbl> 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87, 4.…
-$ y       <dbl> 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4.…
-$ z       <dbl> 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, 2.…
+Observations: 1,704
+Variables: 6
+$ country   <chr> "Afghanistan", "Afghanistan", "Afghanistan", "Afghanis…
+$ continent <chr> "Asia", "Asia", "Asia", "Asia", "Asia", "Asia", "Asia"…
+$ year      <dbl> 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, …
+$ lifeExp   <dbl> 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39.854…
+$ pop       <dbl> 8425333, 9240934, 10267083, 11537966, 13079460, 148803…
+$ gdpPercap <dbl> 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, 786.…
 ~~~
 {: .output}
 
@@ -351,114 +279,110 @@ And use `summary()` to get a summarised breakdown of each column:
 
 
 ~~~
-summary(diamonds)
+summary(gapminder)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-     carat               cut        color        clarity     
- Min.   :0.2000   Fair     : 1610   D: 6775   SI1    :13065  
- 1st Qu.:0.4000   Good     : 4906   E: 9797   VS2    :12258  
- Median :0.7000   Very Good:12082   F: 9542   SI2    : 9194  
- Mean   :0.7979   Premium  :13791   G:11292   VS1    : 8171  
- 3rd Qu.:1.0400   Ideal    :21551   H: 8304   VVS2   : 5066  
- Max.   :5.0100                     I: 5422   VVS1   : 3655  
-                                    J: 2808   (Other): 2531  
-     depth           table           price             x         
- Min.   :43.00   Min.   :43.00   Min.   :  326   Min.   : 0.000  
- 1st Qu.:61.00   1st Qu.:56.00   1st Qu.:  950   1st Qu.: 4.710  
- Median :61.80   Median :57.00   Median : 2401   Median : 5.700  
- Mean   :61.75   Mean   :57.46   Mean   : 3933   Mean   : 5.731  
- 3rd Qu.:62.50   3rd Qu.:59.00   3rd Qu.: 5324   3rd Qu.: 6.540  
- Max.   :79.00   Max.   :95.00   Max.   :18823   Max.   :10.740  
-                                                                 
-       y                z         
- Min.   : 0.000   Min.   : 0.000  
- 1st Qu.: 4.720   1st Qu.: 2.910  
- Median : 5.710   Median : 3.530  
- Mean   : 5.735   Mean   : 3.539  
- 3rd Qu.: 6.540   3rd Qu.: 4.040  
- Max.   :58.900   Max.   :31.800  
-                                  
+   country           continent              year         lifeExp     
+ Length:1704        Length:1704        Min.   :1952   Min.   :23.60  
+ Class :character   Class :character   1st Qu.:1966   1st Qu.:48.20  
+ Mode  :character   Mode  :character   Median :1980   Median :60.71  
+                                       Mean   :1980   Mean   :59.47  
+                                       3rd Qu.:1993   3rd Qu.:70.85  
+                                       Max.   :2007   Max.   :82.60  
+      pop              gdpPercap       
+ Min.   :6.001e+04   Min.   :   241.2  
+ 1st Qu.:2.794e+06   1st Qu.:  1202.1  
+ Median :7.024e+06   Median :  3531.8  
+ Mean   :2.960e+07   Mean   :  7215.3  
+ 3rd Qu.:1.959e+07   3rd Qu.:  9325.5  
+ Max.   :1.319e+09   Max.   :113523.1  
 ~~~
 {: .output}
-
-> ## Challenge 1
->
-> What does the output from `summary(diamonds)` show you? Why do you think it has a different format
-> for different columns?
->
-> > ## Solution to Challenge 1
-> > The output from `summary()` changes depending on the class of the data in the column. For the numeric
-> > columns it shows the minimum, maximum, mean and quartile values. For the others, it shows a count 
-> > of the contents.
-> {: .solution}
-{: .challenge}
 
 ## Factors
 
-The `cut`, `color`, and `clarity` columns in the `diamonds` data set might be a little confusing. What
-is this `<ord>` type, and why are they summarised as a count of the individual terms? These columns 
-are each *factors* (specifically ordered factors, hence the `<ord>`), which usually look like character 
-data, but are typically used to represent categorical information.
+One special type of data in R is a *factor*, which is most often used in statistical modelling for
+categorical data. We can look at what these are by explicitly reading part of our data frame in as a
+factor. 
+
+> ## Challenge 2
+> Read in a new gapminder data frame with the continent column as a factor using
+> 
+> ~~~
+> gapminder_factor <- read_csv("data/gapminder.csv", col_types = cols(continent = col_factor()))
+> ~~~
+> {: .language-r}
+> What does the output from `glimpse` and `summary` on this new data frame show you? How is it different from 
+> our original `gapminder` data frame and why do you think it has a different format for different columns?
+>
+> > ## Solution to Challenge 2
+> > The output from `summary()` changes depending on the class of the data in the column. For the numeric
+> > columns it shows the minimum, maximum, mean and quartile values. For the factor column, it shows a count 
+> > of each category. For the character column it cannot provide any useful summary.
+> {: .solution}
+{: .challenge}
+
+Let's look at what has changed in this column.
 
 
 ~~~
-class(diamonds$cut)
+class(gapminder_factor$continent)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] "ordered" "factor" 
+[1] "factor"
 ~~~
 {: .output}
 
 
 
 ~~~
-diamonds$cut
+gapminder_factor$continent
 ~~~
 {: .language-r}
 
 
 
 ~~~
- [1] Ideal     Premium   Good      Premium   Good      Very Good Very Good
- [8] Very Good Fair      Very Good Good      Ideal     Premium   Ideal    
-[15] Premium   Premium   Ideal     Good      Good      Very Good Good     
-[22] Very Good Very Good Very Good Very Good Very Good Premium   Very Good
-[29] Very Good Very Good Very Good Very Good Very Good Very Good Very Good
-[36] Good      Good      Good      Very Good Ideal     Ideal     Ideal    
-[43] Good      Good      Good      Premium   Very Good Good      Very Good
-[50] Very Good Very Good Ideal     Ideal     Premium   Premium   Ideal    
-[57] Premium   Very Good Very Good Good      Ideal     Premium   Ideal    
-[64] Ideal     Premium   Ideal     Ideal     Very Good Premium   Premium  
-[71] Very Good Very Good Premium   Premium   Good      Very Good Very Good
-[78] Very Good Very Good Very Good
- [ reached getOption("max.print") -- omitted 53860 entries ]
-Levels: Fair < Good < Very Good < Premium < Ideal
+ [1] Asia     Asia     Asia     Asia     Asia     Asia     Asia    
+ [8] Asia     Asia     Asia     Asia     Asia     Europe   Europe  
+[15] Europe   Europe   Europe   Europe   Europe   Europe   Europe  
+[22] Europe   Europe   Europe   Africa   Africa   Africa   Africa  
+[29] Africa   Africa   Africa   Africa   Africa   Africa   Africa  
+[36] Africa   Africa   Africa   Africa   Africa   Africa   Africa  
+[43] Africa   Africa   Africa   Africa   Africa   Africa   Americas
+[50] Americas Americas Americas Americas Americas Americas Americas
+[57] Americas Americas Americas Americas Oceania  Oceania  Oceania 
+[64] Oceania  Oceania  Oceania  Oceania  Oceania  Oceania  Oceania 
+[71] Oceania  Oceania  Europe   Europe   Europe   Europe   Europe  
+[78] Europe   Europe   Europe  
+ [ reached getOption("max.print") -- omitted 1624 entries ]
+Levels: Asia Europe Africa Americas Oceania
 ~~~
 {: .output}
 
-Here you can see that the `cut` column in the `diamonds` data set appears to be a character vector,
-listing the quality of the diamond's cut. In the final line, you can see that there are a set of 
-levels of this factor: "Fair < Good < Very Good < Premium < Ideal". The levels of this factor can
+Here you can see that the `continent` column in the `gapminder_factor` data set is a factor that 
+lists the continent the country is in. In the final line, you can see that it lists the possible
+categories of the data with `Levels: Asia Europe Africa Americas Oceania`. The levels of this factor can
 also be accessed using:
 
 
 ~~~
-levels(diamonds$cut)
+levels(gapminder_factor$continent)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] "Fair"      "Good"      "Very Good" "Premium"   "Ideal"    
+[1] "Asia"     "Europe"   "Africa"   "Americas" "Oceania" 
 ~~~
 {: .output}
  
@@ -466,22 +390,22 @@ But what happens when we look more closely at this data using `glimpse()`
 
 
 ~~~
-glimpse(diamonds$cut)
+glimpse(gapminder_factor$continent)
 ~~~
 {: .language-r}
 
 
 
 ~~~
- Ord.factor w/ 5 levels "Fair"<"Good"<..: 5 4 2 4 2 3 3 3 1 3 ...
+ Factor w/ 5 levels "Asia","Europe",..: 1 1 1 1 1 1 1 1 1 1 ...
 ~~~
 {: .output}
 
-This tells us we have an ordered factor with 5 levels, just like we expected. But when it comes to 
+This tells us we have a factor with 5 levels, just like we expected. But when it comes to 
 show the data itself, all we see are a bunch of numbers. This is because, to R, a factor is really 
 just an integer underneath, with the levels telling it how to map the integer to the actual category.
-So a value of 1 would map to the first level (`Fair`), while a value of 4 would map to the fourth
-level (`Premium`).
+So a value of 1 would map to the first level (`Asia`), while a value of 2 would map to the second
+level (`Europe`), **etc.**.
 
 Expecting factors to behave as characters, rather than integers, is a common cause of errors for 
 people new to R. So always remember to inspect your data with the methods shown here to make sure it
@@ -491,13 +415,21 @@ is of the right type.
 So far, you've been walked through investigating a dataframe. Let's use those skills to explore a
 data set you have not yet been exposed to. 
 
-> ## Challenge 2
+> ## Challenge 3
 >
-> The `storms` data set contains information on hurricanes recorded in the Atlantic Ocean. Using the 
-> tools you have learned so far, explore this data set and describe what it contains. Explain both
+> The `storms` data set comes built in to the tidyverse packages and contains information on 
+> hurricanes recorded in the Atlantic Ocean. It can be accessed just by typing `storms` into your
+> console. 
+> 
+> Using the tools you have learned so far, explore this data set and describe what it contains. Explain both
 > the structural features of the data set as a whole, as well as its content.
 >
-> > ## Solution to Challenge 2
+> > ## Hint
+> > If you are encountering a data type you haven't seen before, try looking at the `class()` of the 
+> > column to see if that helps you work out what it is.
+> {: .solution}
+>
+> > ## Solution to Challenge 3
 > >
 > > The object `storms` is a dataframe (a tibble) with 10,010 rows and 13 columns.
 > > - `name` and `status` are character vectors.

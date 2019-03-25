@@ -126,7 +126,7 @@ gapminder %>%
 
 > ## Challenge 2
 > The reason for your result in Challenge 1 is easy to see if you look at the population data.
-> <img src="../fig/rmd-13-summarise-histo-1.png" title="Histogram of population data" alt="Histogram of population data" width="504" style="display: block; margin: auto;" />
+> <img src="../fig/rmd-12-summarise-histo-1.png" title="Histogram of population data" alt="Histogram of population data" width="504" style="display: block; margin: auto;" />
 > Try transforming the population data using `mutate()` before repeating your summary. What is the 
 > difference?
 > > ## Solution to Challenge 2

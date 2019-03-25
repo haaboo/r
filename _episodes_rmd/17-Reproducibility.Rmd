@@ -16,7 +16,7 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("18-")
+knitr_fig_path("17-")
 ```
 
 A core concept of reproducible research is that all steps from raw data to results are available
