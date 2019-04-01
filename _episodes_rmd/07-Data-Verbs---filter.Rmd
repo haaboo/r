@@ -15,7 +15,7 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("08-")
+knitr_fig_path("07-")
 
 library(tidyverse)
 gapminder <- read_csv("data/gapminder.csv")
