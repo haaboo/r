@@ -1,9 +1,9 @@
 ---
-title: Selecting rows
+title: Extract rows
 teaching: 15
 exercises: 10
 questions:
-  - "How can I select rows from a data frame based on their values?"
+  - "How can I extract rows from a data frame based on their values?"
 objectives:
   - "Filter data frames using logical operators"
   - "Combine logical expressions in a filter"
@@ -93,7 +93,7 @@ filter(gapminder, country %in% c("Australia", "New Zealand"))
 
 > ## Challenge 3
 > Extract the rows from all countries in Africa, Asia, or Europe. How many rows does your dataframe 
-> have and why?
+> have?
 > > ## Solution to Challenge 3
 > > ``` {r filter-sol-3}
 > > filter(gapminder, continent %in% c("Africa","Asia", "Europe"))

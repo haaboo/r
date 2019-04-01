@@ -32,8 +32,9 @@ gapminder <- read_csv("data/gapminder.csv")
 
 ## `select()`
 
-You can specify columns to keep from a data frame using `select()`. At it's simplest, you provide 
-`select()` with a data frame and the column names you would like to keep.
+You can specify columns to keep from a data frame using `select()`. This function, as well as many 
+others we will be learning today are found in the `dplyr` package of the tidyverse. At it's simplest,
+you provide `select()` with a data frame and the column names you would like to keep.
 
 ```{r select-by-name}
 #Select the year, country and pop columns
@@ -126,7 +127,7 @@ select(gapminder, contains("e"))
 > {: .solution}
 {: .challenge}
 
-> ## Challenge 3
+> ## Challenge 3 (optional)
 > Run the following code:
 > ~~~~
 > select(gapminder, contains("P"))
@@ -135,6 +136,10 @@ select(gapminder, contains("e"))
 >
 > Does it behave the way you expected? What additional argument do you need to provide to `contains()`
 > to make it return only the `gdpPercap` column?
+> > ## Hint
+> > The `contains()` function is actually provided by the `tidyselect` package, try 
+> > `?tidyselect::contains` if you are having trouble finding the help page for it.
+> {: .solution}
 > > ## Solution to Challenge 3
 > > ```{r select-sol-3}
 > > select(gapminder, contains("P"))
