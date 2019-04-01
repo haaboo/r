@@ -87,33 +87,123 @@ can be used in a filter
   * `<`/`>` less/greater than
   * `<=`/`>=` less/greater than or equal to
 
-If you provide multiple filter conditions (separated by a comma) then only rows matching **all** of
-the conditions will be kept.
+Any function that produces a `TRUE`/`FALSE` output (such as the `is.na()` function) can be used as well.
 
 > ## Challenge 1
-> How would you extract just the Australian data from 1997 or later?
+> Extract all rows from `gapminder` where the recorded life expectancy is 80 or higher.
+>
+> Then try to extract just the rows from European countries.
 > > ## Solution to Challenge 1
 > > 
 > > ~~~
-> > filter(gapminder, country == "Australia", year >= 1997)
+> > filter(gapminder, lifeExp >= 80)
 > > ~~~
 > > {: .language-r}
 > > 
 > > 
 > > 
 > > ~~~
-> > # A tibble: 3 x 6
-> >   country   continent  year lifeExp      pop gdpPercap
-> >   <chr>     <chr>     <dbl>   <dbl>    <dbl>     <dbl>
-> > 1 Australia Oceania    1997    78.8 18565243    26998.
-> > 2 Australia Oceania    2002    80.4 19546792    30688.
-> > 3 Australia Oceania    2007    81.2 20434176    34435.
+> > # A tibble: 22 x 6
+> >    country          continent  year lifeExp      pop gdpPercap
+> >    <chr>            <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+> >  1 Australia        Oceania    2002    80.4 19546792    30688.
+> >  2 Australia        Oceania    2007    81.2 20434176    34435.
+> >  3 Canada           Americas   2007    80.7 33390141    36319.
+> >  4 France           Europe     2007    80.7 61083916    30470.
+> >  5 Hong Kong, China Asia       1997    80    6495918    28378.
+> >  6 Hong Kong, China Asia       2002    81.5  6762476    30209.
+> >  7 Hong Kong, China Asia       2007    82.2  6980412    39725.
+> >  8 Iceland          Europe     2002    80.5   288030    31163.
+> >  9 Iceland          Europe     2007    81.8   301931    36181.
+> > 10 Israel           Asia       2007    80.7  6426679    25523.
+> > # … with 12 more rows
+> > ~~~
+> > {: .output}
+> > 
+> > 
+> > 
+> > ~~~
+> > filter(gapminder, continent == "Europe")
+> > ~~~
+> > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > # A tibble: 360 x 6
+> >    country continent  year lifeExp     pop gdpPercap
+> >    <chr>   <chr>     <dbl>   <dbl>   <dbl>     <dbl>
+> >  1 Albania Europe     1952    55.2 1282697     1601.
+> >  2 Albania Europe     1957    59.3 1476505     1942.
+> >  3 Albania Europe     1962    64.8 1728137     2313.
+> >  4 Albania Europe     1967    66.2 1984060     2760.
+> >  5 Albania Europe     1972    67.7 2263554     3313.
+> >  6 Albania Europe     1977    68.9 2509048     3533.
+> >  7 Albania Europe     1982    70.4 2780097     3631.
+> >  8 Albania Europe     1987    72   3075321     3739.
+> >  9 Albania Europe     1992    71.6 3326498     2497.
+> > 10 Albania Europe     1997    73.0 3428038     3193.
+> > # … with 350 more rows
+> > ~~~
+> > {: .output}
+
+If you provide multiple filter conditions (separated by a comma) then only rows matching **all** of
+the conditions will be kept.
+
+
+~~~
+filter(gapminder, country == "Australia", year >= 1997)
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 3 x 6
+  country   continent  year lifeExp      pop gdpPercap
+  <chr>     <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+1 Australia Oceania    1997    78.8 18565243    26998.
+2 Australia Oceania    2002    80.4 19546792    30688.
+3 Australia Oceania    2007    81.2 20434176    34435.
+~~~
+{: .output}
+
+> ## Challenge 2
+> How would you extract just rows that are healthy (life expectancy of 80 or higher) **and** rich
+> (GDP per capita of $30,000 or higher)?
+> > ## Solution to Challenge 2
+> > 
+> > ~~~
+> > filter(gapminder, lifeExp >= 80, gdpPercap >= 30000)
+> > ~~~
+> > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > # A tibble: 13 x 6
+> >    country          continent  year lifeExp       pop gdpPercap
+> >    <chr>            <chr>     <dbl>   <dbl>     <dbl>     <dbl>
+> >  1 Australia        Oceania    2002    80.4  19546792    30688.
+> >  2 Australia        Oceania    2007    81.2  20434176    34435.
+> >  3 Canada           Americas   2007    80.7  33390141    36319.
+> >  4 France           Europe     2007    80.7  61083916    30470.
+> >  5 Hong Kong, China Asia       2002    81.5   6762476    30209.
+> >  6 Hong Kong, China Asia       2007    82.2   6980412    39725.
+> >  7 Iceland          Europe     2002    80.5    288030    31163.
+> >  8 Iceland          Europe     2007    81.8    301931    36181.
+> >  9 Japan            Asia       2007    82.6 127467972    31656.
+> > 10 Norway           Europe     2007    80.2   4627926    49357.
+> > 11 Sweden           Europe     2007    80.9   9031088    33860.
+> > 12 Switzerland      Europe     2002    80.6   7361757    34481.
+> > 13 Switzerland      Europe     2007    81.7   7554661    37506.
 > > ~~~
 > > {: .output}
 > {: .solution}
 {: .challenge}
 
-If you need to keep all rows that meet one or the other condition, use the logical OR operator (`|`)
+If you need to keep all rows that meet one or the other condition, use the logical OR operator (`|`).
+`|` resolves as `TRUE` if either of the left and right conditions are `TRUE`.
 
 
 ~~~
@@ -159,41 +249,41 @@ filter(gapminder, country == "Australia" | country == "New Zealand")
 ~~~
 {: .output}
 
-> ## Challenge 2
-> Modify your answer to Challenge 1 so that you extract all data from Australia, or from 1997 and 
-> later.
-> > ## Solution to Challenge 2
+It might seem natural to write `country == "Australia" | "New Zealand"` but try it and you will see
+that you get an error. Each side of the `|` operator must result in a `TRUE` or `FALSE`, and "New
+Zealand" is neither. 
+
+> ## Challenge 3
+> Modify your answer to Challenge 2 so that you extract the rows where countries are **either**
+> healthy (life expectancy of 80 or higher) or rich (GDP per capita of $30,000 or higher).
+> > ## Solution to Challenge 3
 > > 
 > > ~~~
-> > filter(gapminder, country == "Australia" | year >= 1997)
+> > filter(gapminder, lifeExp >= 80 | gdpPercap >= 30000)
 > > ~~~
 > > {: .language-r}
 > > 
 > > 
 > > 
 > > ~~~
-> > # A tibble: 435 x 6
-> >    country     continent  year lifeExp      pop gdpPercap
-> >    <chr>       <chr>     <dbl>   <dbl>    <dbl>     <dbl>
-> >  1 Afghanistan Asia       1997    41.8 22227415      635.
-> >  2 Afghanistan Asia       2002    42.1 25268405      727.
-> >  3 Afghanistan Asia       2007    43.8 31889923      975.
-> >  4 Albania     Europe     1997    73.0  3428038     3193.
-> >  5 Albania     Europe     2002    75.7  3508512     4604.
-> >  6 Albania     Europe     2007    76.4  3600523     5937.
-> >  7 Algeria     Africa     1997    69.2 29072015     4797.
-> >  8 Algeria     Africa     2002    71.0 31287142     5288.
-> >  9 Algeria     Africa     2007    72.3 33333216     6223.
-> > 10 Angola      Africa     1997    41.0  9875024     2277.
-> > # … with 425 more rows
+> > # A tibble: 65 x 6
+> >    country   continent  year lifeExp      pop gdpPercap
+> >    <chr>     <chr>     <dbl>   <dbl>    <dbl>     <dbl>
+> >  1 Australia Oceania    2002    80.4 19546792    30688.
+> >  2 Australia Oceania    2007    81.2 20434176    34435.
+> >  3 Austria   Europe     2002    79.0  8148312    32418.
+> >  4 Austria   Europe     2007    79.8  8199783    36126.
+> >  5 Belgium   Europe     2002    78.3 10311970    30486.
+> >  6 Belgium   Europe     2007    79.4 10392226    33693.
+> >  7 Canada    Americas   2002    79.8 31902268    33329.
+> >  8 Canada    Americas   2007    80.7 33390141    36319.
+> >  9 Denmark   Europe     2002    77.2  5374693    32167.
+> > 10 Denmark   Europe     2007    78.3  5468120    35278.
+> > # … with 55 more rows
 > > ~~~
 > > {: .output}
 > {: .solution}
 {: .challenge}
-
-It might seem natural to write `country == "Australia" | "New Zealand"` but try it and you will see
-that you get an error. Each side of the `|` operator must result in a `TRUE` or `FALSE`, and "New
-Zealand" is neither.
 
 When you have many possible matches from a row that you want to keep, writing a long expression with 
 many `|` can be time consuming and error prone. Instead, the `%in%` operator can be used to simplify
@@ -226,10 +316,10 @@ filter(gapminder, country %in% c("Australia", "New Zealand"))
 ~~~
 {: .output}
 
-> ## Challenge 3
+> ## Challenge 4
 > Extract the rows from all countries in Africa, Asia, or Europe. How many rows does your dataframe 
 > have?
-> > ## Solution to Challenge 3
+> > ## Solution to Challenge 4
 > > 
 > > ~~~
 > > filter(gapminder, continent %in% c("Africa","Asia", "Europe"))
