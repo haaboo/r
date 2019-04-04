@@ -28,13 +28,24 @@ what if we are needing to create *new* variables? For that task, we will use the
 from the [dplyr](https://dplyr.tidyverse.org) package of the tidyverse.
 
 To create a new variable, you provide `mutate()` with the name of the new column and how to calculate
-the new value
+the new value.
+
 ```{r mutate-intro}
 mutate(gapminder, gdp = gdpPercap * pop)
 ```
 
 This line adds a new column to our gapminder data called `gdp` and the value in this column is 
 calculated by multiplying the `gdpPercap` and the `pop` figure for each row.
+
+> ## Challenge 1
+> Create a new column in the `gapminder` data frame that contains the population in millions (ie.
+> divide the population column by 1,000,000).
+> > ## Solution to Challenge 1
+> > ```{r mutate-sol-1}
+> > mutate(gapminder, pop_m = pop/1e6)
+> > ```
+> {: .solution}
+{: .challenge}
 
 You are not limited to mathematical operators in creating new columns. Any function that produces a
 value for each row can be used:
@@ -48,24 +59,40 @@ mutate(gapminder, log_pop = log(pop))
 mutate(gapminder, country_abbr = str_sub(country, start = 1, end = 4))
 ```
 
-## Chaining mutates
+In fact, anything that produces a vector of the same length as the data frame can be used. It does 
+not even have to reference data within the data frame.
+
+```{r mutate-new-column}
+# 1704 rows in gapminder
+index_numbers <- 1:1704
+
+mutate(gapminder, row_num = index_numbers)
+```
+
+
+## Multiple mutations
+You can perform multiple mutations at the same time by separating them with a comma.
+
+```{r mutate-multiple}
+mutate(gapminder, gdp = gdpPercap * pop, log_pop = log(pop))
+```
+
 One useful feature is that you can refer to your created columns later on in the same
 `mutate()` call.
 
 ```{r mutate-chaining}
-gapminder %>% 
-  mutate(
-    gdp = gdpPercap * pop,
-    log_gdp = log(gdp)
-  )
+mutate(
+  gapminder,
+  gdp = gdpPercap * pop,
+  log_gdp = log(gdp)
+)
 ```
 
-
-> ## Challenge 1
+> ## Challenge 2
 > Create a column in the gapminder data showing the life expectancy in days and one for GDP in billions
 > of dollars
-> > ## Solution to Challenge 1
-> > ``` {r mutate-sol-1}
+> > ## Solution to Challenge 2
+> > ``` {r mutate-sol-2}
 > > gapminder %>% 
 > >   mutate(
 > >     life_exp_days = lifeExp * 365,
@@ -108,11 +135,11 @@ you can get an idea of how they function:
 mutate(gapminder, cumulative_life_exp = cumsum(lifeExp))
 ```
 
-> ## Challenge 2
+> ## Challenge 3
 > Using an offset function, create a column showing the **change** in life expectancy between each sample period. Do any 
 > countries have no change in life expectancy for a period?
-> > ## Solution to Challenge 2
-> > ``` {r mutate-sol-2}
+> > ## Solution to Challenge 3
+> > ``` {r mutate-sol-3}
 > > gapminder %>% 
 > >   mutate(life_exp_change = lifeExp - lag(lifeExp)) %>% 
 > >   filter(life_exp_change == 0)
@@ -120,14 +147,14 @@ mutate(gapminder, cumulative_life_exp = cumsum(lifeExp))
 > {: .solution}
 {: .challenge}
 
-> ## Challenge 3
+> ## Challenge 4
 > Look more carefully at the output from your previous solution. Is the life expectancy change you
 > are calculating correct in every row? 
 > > ## Hint
 > > What is going on between rows 11 and 14?
 > {: .solution}
-> > ## Solution to Challenge 3
-> > ``` {r mutate-sol-3}
+> > ## Solution to Challenge 4
+> > ``` {r mutate-sol-4}
 > > mutated_data <- gapminder %>% 
 > >   mutate(life_exp_change = lifeExp - lag(lifeExp))
 > >
@@ -158,10 +185,10 @@ of each other.
 When you use one of the data manipulation functions we have looked at on a *grouped* data frame, it
 will apply the function separately for each group.
 
-> ## Challenge 4
+> ## Challenge 5
 > Repeat Challenge 3, but try to fix the problem you identified by grouping the data frame first.
-> > ## Solution to Challenge 4
-> > ``` {r mutate-sol-4}
+> > ## Solution to Challenge 5
+> > ``` {r mutate-sol-5}
 > > mutated_by_group <- gapminder %>% 
 > >   group_by(country) %>% 
 > >   mutate(life_exp_change = lifeExp - lag(lifeExp))
