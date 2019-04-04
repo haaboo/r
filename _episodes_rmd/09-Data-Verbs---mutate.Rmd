@@ -59,6 +59,16 @@ mutate(gapminder, log_pop = log(pop))
 mutate(gapminder, country_abbr = str_sub(country, start = 1, end = 4))
 ```
 
+> ## Challenge 2
+> Using the function `str_length()` which returns the length of a string, create a new column that 
+> contains the number of letters in the country's name.
+> > ## Solution to Challenge 2
+> > ```{r mutate-sol-2}
+> > mutate(gapminder, num_letters = str_length(country))
+> > ```
+> {: .solution}
+{: .challenge}
+
 In fact, anything that produces a vector of the same length as the data frame can be used. It does 
 not even have to reference data within the data frame.
 
@@ -68,7 +78,6 @@ index_numbers <- 1:1704
 
 mutate(gapminder, row_num = index_numbers)
 ```
-
 
 ## Multiple mutations
 You can perform multiple mutations at the same time by separating them with a comma.
@@ -88,11 +97,11 @@ mutate(
 )
 ```
 
-> ## Challenge 2
+> ## Challenge 3
 > Create a column in the gapminder data showing the life expectancy in days and one for GDP in billions
 > of dollars
-> > ## Solution to Challenge 2
-> > ``` {r mutate-sol-2}
+> > ## Solution to Challenge 3
+> > ``` {r mutate-sol-3}
 > > gapminder %>% 
 > >   mutate(
 > >     life_exp_days = lifeExp * 365,
@@ -107,17 +116,6 @@ As mentioned before, any function that can take a vector of inputs and return a 
 length as an output can be used in a `mutate()` call. There are many R functions that can be used
 in this situation, and `dplyr` introduces a number of new functions that may be useful for creating 
 new variables. Some functions that you might find useful are:
-
-#### Ranking functions
-`min_rank()` ranks values in order from lowest to highest.
-```{r}
-mutate(gapminder, life_exp_rank = min_rank(lifeExp))
-```
-
-To rank highest to lowest, you can use `desc()` on the variable to rank in `desc`ending order.
-```{r}
-mutate(gapminder, life_exp_rank = min_rank(desc(lifeExp)))
-```
 
 #### Offset functions
 To calculate differences between observations, you may be wanting to look at the value immediately
@@ -135,65 +133,14 @@ you can get an idea of how they function:
 mutate(gapminder, cumulative_life_exp = cumsum(lifeExp))
 ```
 
-> ## Challenge 3
+> ## Challenge 4
 > Using an offset function, create a column showing the **change** in life expectancy between each sample period. Do any 
 > countries have no change in life expectancy for a period?
-> > ## Solution to Challenge 3
-> > ``` {r mutate-sol-3}
-> > gapminder %>% 
-> >   mutate(life_exp_change = lifeExp - lag(lifeExp)) %>% 
-> >   filter(life_exp_change == 0)
-> > ```
-> {: .solution}
-{: .challenge}
-
-> ## Challenge 4
-> Look more carefully at the output from your previous solution. Is the life expectancy change you
-> are calculating correct in every row? 
-> > ## Hint
-> > What is going on between rows 11 and 14?
-> {: .solution}
 > > ## Solution to Challenge 4
 > > ``` {r mutate-sol-4}
-> > mutated_data <- gapminder %>% 
-> >   mutate(life_exp_change = lifeExp - lag(lifeExp))
+> > diff_lifeExp <- mutate(gapminder, life_exp_change = lifeExp - lag(lifeExp))  
 > >
-> > mutated_data[11:14, ]
-> > ```
-> > In row 13 the data switches from Afghanistan to Albania, so the new column is calculated as
-> > Albania's life expectancy in 1952 minus Afghanistan's life expectancy in 2007. The calculated
-> > value is therefore not comparable to the rest of the measurements.
-> {: .solution}
-{: .challenge}
-
-## Operating on groups
-The problem identified above is that the `lag()` function doesn't know that at some point the data 
-changes country, and that it is not sensible to look at the previous value if it is from a different
-country. To fix this problem, we can use `group_by()`
-
-```{r mutate-group-intro}
-gapminder %>% 
-  group_by(country)
-```
-
-It might not look like much has changed here, but notice the `Groups:   country [142]` in the second
-line. This is telling us that the gapminder dataset is now grouped by country (and that there are
-142 groups in the data frame). Rather than one large data frame, this can be thought of as 142 
-separate data frames that all have the same column structure and just happen to be stacked on top
-of each other.
-
-When you use one of the data manipulation functions we have looked at on a *grouped* data frame, it
-will apply the function separately for each group.
-
-> ## Challenge 5
-> Repeat Challenge 3, but try to fix the problem you identified by grouping the data frame first.
-> > ## Solution to Challenge 5
-> > ``` {r mutate-sol-5}
-> > mutated_by_group <- gapminder %>% 
-> >   group_by(country) %>% 
-> >   mutate(life_exp_change = lifeExp - lag(lifeExp))
-> >   
-> > mutated_by_group[11:14, ]
+> > filter(diff_lifeExp, life_exp_change == 0)
 > > ```
 > {: .solution}
 {: .challenge}
