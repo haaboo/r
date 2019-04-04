@@ -71,7 +71,7 @@ complete it:
 
 Any time you hit return and the R session shows a "+" instead of a ">", it
 means it's waiting for you to complete the command. If you want to cancel
-a command you can simply hit "Esc" and RStudio will give you back the ">"
+a command you can simply hit <kbd>Esc</kbd> and RStudio will give you back the ">"
 prompt.
 
 > ## Tip: Cancelling commands
