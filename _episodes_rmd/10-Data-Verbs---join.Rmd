@@ -15,7 +15,7 @@ source: Rmd
 
 ```{r, include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("11-")
+knitr_fig_path("10-")
 
 library(tidyverse)
 gapminder <- read_csv("data/gapminder.csv")
@@ -144,7 +144,7 @@ full_join(df1, df3, by = c("sample" = "ID"))
 
 ## Realistic data
 For a more realistic example of joins, let's turn back to the gapminder data. We have some additional
-data on [countries sex ratios]({{ page.root }}{% link data/gapminder_sex_ratio.csv %}) that you should
+data on [countries sex ratios]({{ page.root }}{% link data/gapminder_sex_ratios.csv %}) that you should
 download and save to your data folder. 
 
 Read it in and let's join it to our existing data.

@@ -142,7 +142,7 @@ other attached packages:
 loaded via a namespace (and not attached):
  [1] compiler_3.5.1  magrittr_1.5    htmltools_0.3.6 tools_3.5.1    
  [5] yaml_2.2.0      Rcpp_1.0.0      stringi_1.3.1   rmarkdown_1.11 
- [9] stringr_1.4.0   xfun_0.4        digest_0.6.18   rlang_0.3.1    
+ [9] stringr_1.4.0   xfun_0.5        digest_0.6.18   rlang_0.3.1    
 [13] evaluate_0.12  
 ~~~
 {: .output}

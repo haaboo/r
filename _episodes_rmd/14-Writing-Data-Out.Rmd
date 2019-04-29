@@ -15,7 +15,7 @@ source: Rmd
 
 ```{r include=FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("15-")
+knitr_fig_path("14-")
 
 library(tidyverse)
 
@@ -24,7 +24,8 @@ gapminder <- read_csv("data/gapminder.csv")
 
 At some point, you will probably want to write some data out from R when you have finished your
 analysis. Just as with the `read_csv` function (or other `read_XXX` functions we covered in the 
-[data import]({{ page.root }}{% link _episodes/18-Additional-content---Reading-Data-In.md %}) lesson), there are various `write_XXX` functions to write data frames out in different formats. It is usually best to write 
+[data import]({{ page.root }}{% link _episodes/17-Additional-content---Reading-Data-In.md %}) lesson), 
+there are various `write_XXX` functions to write data frames out in different formats. It is usually best to write 
 your data into a plain text format, particularly if you may need to use it again in later analysis.
 
 ## What to write
@@ -53,7 +54,7 @@ change the storage location in the future.
 > Create a new folder called `processed_data` in your project folder. Write just the Australian
 > gapminder data to a csv file in this folder. Open the created file in a text editor to confirm
 > that it has written correctly.
-> > ## Solution to Challenge 2
+> > ## Solution to Challenge 1
 > > ```{r write-sol-1, eval=F}
 > > aust_data <- gapminder %>% 
 > >   filter(country == "Australia")

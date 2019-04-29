@@ -16,7 +16,7 @@ source: Rmd
 ```{r setup, include=FALSE}
 source("../bin/chunk-options.R")
 
-knitr_fig_path("18-")
+knitr_fig_path("17-")
 ```
 
 So far, we have been using datasets that are already available within R. Chances are though that the

@@ -77,7 +77,7 @@ complete it:
 
 Any time you hit return and the R session shows a "+" instead of a ">", it
 means it's waiting for you to complete the command. If you want to cancel
-a command you can simply hit "Esc" and RStudio will give you back the ">"
+a command you can simply hit <kbd>Esc</kbd> and RStudio will give you back the ">"
 prompt.
 
 > ## Tip: Cancelling commands
@@ -758,7 +758,7 @@ function (name, pos = -1L, envir = as.environment(pos), all.names = FALSE,
     }
     else all.names
 }
-<bytecode: 0x7fb42eba0588>
+<bytecode: 0x7fb69fbace88>
 <environment: namespace:base>
 ~~~
 {: .output}
