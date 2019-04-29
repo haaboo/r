@@ -8,8 +8,8 @@ objectives:
   - "To be understand the concepts of ‘long’ and ‘wide’ data formats and be able to convert between them with tidyr."
 keypoints:
   - "Use the tidyr package to change the layout of dataframes."
-  - "Use gather() to go from wide to long format."
-  - "Use spread() to go from long to wide format."
+  - "Use `gather()` to go from wide to long format."
+  - "Use `spread()` to go from long to wide format."
 source: Rmd
 ---
 
@@ -217,3 +217,31 @@ gapminder
 
 Great work! We've taken a messy data set and tidied it into a form that works well with all the 
 tidyverse functions you have been using up until now.
+
+> ## Challenge 3
+> Practice your `gather`ing skills with the inbuilt `tidyr::table4a` data frame, which contains the 
+> number of TB cases recorded by the WHO in three countries in 1999 and 2000. Is the data frame
+> untidy, and can you tidy it with `gather()`?
+> ```{r join-chal-3}
+> tidyr::table4a
+> ```
+> > ## Solution to Challenge 3
+> > ``` {r tidyr-sol-3}
+> > gather(tidyr::table4a, key = year, value = TB_cases, -country)
+> > ```
+> {: .solution}
+{: .challenge}
+
+> ## Challenge 4
+> Practice your `spread`ing skills with the inbuilt `tidyr::table2` data frame, which contains the 
+> number of TB cases recorded by the WHO in three countries in 1999 and 2000 as well as their 
+> population. Is the data frame untidy, and can you tidy it with `spread()`?
+> ```{r join-chal-4}
+> tidyr::table2
+> ```
+> > ## Solution to Challenge 4
+> > ``` {r tidyr-sol-4}
+> > spread(tidyr::table2, key = type, value = count)
+> > ```
+> {: .solution}
+{: .challenge}
