@@ -9,7 +9,6 @@ objectives:
   - "Be able to combine different datasets by row, column or common variable"
 keypoints:
   - "`bind_rows` combines datasets that share the same variables"
-  - "`bind_cols` combines datasets that share the same rows"
   - "The `join` family of functions provide a complete range of methods to merge datasets that share common variables"
 source: Rmd
 ---
@@ -19,7 +18,7 @@ source("../bin/chunk-options.R")
 knitr_fig_path("11-")
 
 library(tidyverse)
-library(nycflights13)
+gapminder <- read_csv("data/gapminder.csv")
 ```
 
 All the functions we have looked at so far work with a single data frame and modify it in some way.
@@ -32,208 +31,140 @@ single data frame.
 ## Combining data
 
 If you have new data that has the same structure as your old data, it can be added onto the end of 
-your data frame with `bind_rows()`
+your data frame with `bind_rows()`. We have collected the [gapminder data for 2012]({{ page.root }}{% link data/gapminder_2012.csv %}) 
+into a separate file for you to practice this with. Download this file and save it in your data
+directory as `gapminder_2012.csv`.
 
 ```{r bind}
-data = tibble(numbers = c(1, 2, 3, 4), letters = c("a", "b", "c", "d"))
-data
+gapminder_2012 <- read_csv("data/gapminder_2012.csv")
 
-new_data <- tibble(numbers = c(24, 25, 26), letters = c("x", "y", "z"))
-
-bind_rows(data, new_data)
+gapminder_2012
 ```
+
+> ## Challenge 1
+> Combine the 2012 data with your gapminder data using `bind_rows(gapminder, gapminder_2012)`.
+> 
+> Explore the resulting data frame to see the effect of `bind_rows()`. 
+> > ## Solution to Challenge 1
+> > ```{r join-sol-1}
+> > combined_gapminder <- bind_rows(gapminder, gapminder_2012)
+> > 
+> > tail(combined_gapminder)
+> > ```
+> {: .solution}
+{: .challenge}
 
 The columns are matched by name, so you need to make sure that both data frames are named 
 consistently. If the names do not match, the data frames will still be bound together but any missing
 data will be replaced with `NA`s
 
 ```{r bind-2}
-new_data <- tibble(numbers = c(24, 25, 26), more_letters = c("x", "y", "z"))
+renamed_2012 <- rename(gapminder_2012, population = pop)
 
-bind_rows(data, new_data)
+mismatched_names <- bind_rows(gapminder, renamed_2012)
+
+mismatched_names
+
+tail(mismatched_names)
 ```
-
-To add more columns to your data frame, use `bind_cols()`
-
-```{r bind-col}
-new_data <- tibble(direction = c("N", "S", "E", "W"))
-
-bind_cols(data, new_data)
-```
-
-`bind_cols()` adds the new column data in the order provided, which means that it is your 
-responsibility to make sure that the new data is the same length and in the same order as the 
-original data.
 
 ## Merging data
 
 If you are instead looking to merge data sets based on some shared variable, there are a number of
-`join`s that are useful
+`join`s that are useful. The [tidyexplain](https://github.com/gadenbuie/tidyexplain) package has a
+number of animations that will help us understand what is happening with each join.
 
-Let’s make a couple of simple data frames to demonstrate how a join works. These two data frames 
-will have a shared column with a sample ID, and an observed measurement which is different for each
-data frame.
+Let's start with two simple data frames that have one shared column indicating a shared ID:
 
-```{r join-data}
-df1 <- tibble(sample = c(1, 2, 3), measure1 = c(4.2, 5.3, 6.1))
-df2 <- tibble(sample = c(1, 3, 4), measure2 = c(7.8, 6.4, 9.0))
+![]({{ page.root }}{% link fig/original-dfs.png %}){:width="50%"}
 
-df1
-df2
-```
+The first join we will look at is an `inner_join()`. This function takes two data frames as input and
+merges them based on their shared column. Only rows with data in *both* data frames are kept.
 
-To merge these two data frames together keeping all the data from both data frames, we can use `full_join()`
+![]({{ page.root }}{% link fig/inner-join.gif %}){:width="50%"}
 
-```{r full-join}
-full_join(df1, df2)
-```
+The opposite of an `inner_join()` is a `full_join()`. This function keeps all rows from both data 
+frames, filling in any missing data with `NA`.
 
-By default, the `join` functions will join based on any shared column names between the two data 
-frames (here just the `sample` column). You can control which columns are used to merge on with the
-`by` argument.
+![]({{ page.root }}{% link fig/full-join.gif %}){:width="50%"}
 
-~~~~
-full_join(df1, df2, by = c("sample"))
-~~~~
-{: .language-r}
+The final join we will look at is a `left_join()`. This uses the first data frame as a reference and
+merges in data from the second data frame. Any rows that are in the left data frame but not the right
+are filled in with `NA`. Any rows in the right data frame but not the left are ignored.
 
-The other join functions are all variations on this that have different ways of dealing with data
-that is present in one data frame and absent in the other.
+![]({{ page.root }}{% link fig/left-join.gif %}){:width="50%"}
 
-The `inner_join()` only only keeps rows that are present in both data frames
-
-```{r inner-join, message = F}
-inner_join(df1, df2)
-```
-
-A `left_join()` keeps all rows from the left hand data frame, and adds any matched data from the 
-right hand data frame
-
-```{r left-join, message = F}
-left_join(df1, df2)
-```
-
-And a `right_join()` does the opposite
-
-```{r right-join, message = F}
-right_join(df1, df2)
-```
-
-There are also two joins known as filtering joins, which don't merge the two data sets but instead 
-use the second data frame as a way to filter the first.
-
-For example, to keep rows in `df1` that have a matching sample in `df2`, use `semi_join()`
-
-```{r semi-join, message = F}
-semi_join(df1, df2)
-```
-
-The opposite of this is an `anti_join()`, which keeps all rows in `df1` which do **not** have a 
-matching sample in `df2`.
-
-```{r anti-join, message = F}
-anti_join(df1, df2)
-```
-
-For a more realistic example of joins, we will use the [`nycflights13`](https://github.com/hadley/nycflights13)
-data set. This contains information about all flights out of New York City airports in 2013, along
-with additional metadata. First, you will need to install the package and load the data: 
-
-~~~~
-install.packages("nycflights13")
-library(nycflights13)
-~~~~
-{: .language-r}
-
-This package includes five data frames:
-
-* `flights`: Information about 336,776 flights departing from NYC airports in 2013
-* `planes`: Construction information about individual planes
-* `airports`: Name, location, and time zone information for airports
-* `airlines`: Name and two letter code for airline companies
-* `weather`: Weather data for each airport at hourly intervals
-
-> ## Challenge 1
-> Explore the data from `nycflights13`. Which columns from the `flights` data frame are shared with
-> the other four?
-> > ## Solution to Challenge 1
-> >
-> > * `flights` and `planes` share the `tailnum` and `year` columns, although in `flights`, `year`
-> > refers to the year the flight took place (2013) and in `planes` it refers to the year the plane
-> > was built
-> > * `flights` and `airlines` share the `carrier` code column
-> > * `flights` and `weather` share the `origin` and the time columns (`year`,`month`,`day`,`hour`,`time_hour`)
-> > * `flights` and `airports` do not share a column name, but the `origin` and `dest` columns from 
-> > `flights` have the three letter airport code in the `faa` column in `airports` 
-> {: .solution}
-{: .challenge}
-
-One potential issue noted in the challenge above is that the column names you are trying to merge on
-may not have the same name. In this case, you will need to provide a named vector to the `by` argument
-indicating which columns from the left and right data frames are to be merged. For example, to find 
-the names of all the destination airports from the `flights` data frame 
-
-```{r join-mismatched-columns}
-# Named 'dest' in the first data frame and 'faa' in the second
-flights %>% 
-  left_join(airports, by = c("dest" = "faa")) %>% 
-  select(flight, origin, dest, name)
-```
+For the sake of completeness, there are also functions for a `right_join()`, `semi_join()`, and
+`anti_join()`. But we will not go into how they work because they are far less commonly needed than
+the three above.
 
 > ## Challenge 2
-> You will see above that one of the destination airports is not present in the `airports` data. Find
-> all missing airports using an `anti_join()`. Find the most common unknown destination with `count()`
-> and search for that airport code online to try and explain why it is missing.
+> Create the following two data frames:
+> ```{r join-chal-1}
+> df1 <- tibble(sample = c(1, 2, 3), measure1 = c(4.2, 5.3, 6.1))
+> df2 <- tibble(sample = c(1, 3, 4), measure2 = c(7.8, 6.4, 9.0))
+> ```
+>
+> Predict the result of running `inner_join()`, `full_join()`, and `left_join()` on these two data 
+> frames. Perform the joins to see if you are correct.
 > > ## Solution to Challenge 2
-> > ``` {r join-sol-2}
-> > flights %>% 
-> >   anti_join(airports, by = c("dest" = "faa")) %>% 
-> >   count(dest, sort = TRUE)
+> > ```{r join-sol-2}
+> > inner_join(df1, df2)
+> > full_join(df1, df2)
+> > # df1 as left data frame
+> > left_join(df1, df2)
+> > # df2 as left data frame
+> > left_join(df2, df1)
 > > ```
-> > SJU is the code for the Luis Muñoz Marín International Airport in San Juan, Puerto Rico. The 
-> > `airports` data set was likely constructed from a list of airports in US states, which would have
-> > not included US territories such as Puerto Rico. 
-> > 
-> > This is a good reminder to always check your data to make sure that it is complete. Or at least
-> > to make yourself aware of it's limitations.
 > {: .solution}
 {: .challenge}
 
-By combining everything we have covered so far, it is possible to start asking more complex questions
-of our data.
+By default, the `join` functions will join based on any shared column names between the two data 
+frames (here just the `sample` column). You may have noticed the helpful message providing information
+about how the join was performed: `Joining, by = "sample"`. You can control which columns are used 
+to merge with the `by` argument. 
+
+```{r join-by-arg}
+full_join(df1, df2, by = c("sample"))
+```
+
+This may be useful if the data frames share a number of column names, bu only some of them should be
+used for merging. You can also use it to merge on a column even if the names don't match between the 
+data frames. In this case you need to specify `by = c("left_name" = "right_name")`:
+
+```{r join-by-diff-names}
+df3 = tibble(ID = c(1, 2, 4), measure3 = c(4.7, 3.5, 9.3))
+
+# Can't do it automatically
+full_join(df1, df3)
+
+# name in df1 is "sample", name in df3 is "ID"
+full_join(df1, df3, by = c("sample" = "ID"))
+```
+
+## Realistic data
+For a more realistic example of joins, let's turn back to the gapminder data. We have some additional
+data on [countries sex ratios]({{ page.root }}{% link data/gapminder_sex_ratio.csv %}) that you should
+download and save to your data folder. 
+
+Read it in and let's join it to our existing data.
+
+```{r join-read-sex-ratio}
+gapminder_sr <- read_csv("data/gapminder_sex_ratios.csv")
+gapminder_sr
+```
 
 > ## Challenge 3
-> Which is the most common route in the `flights` data and what is the destination airport name?
-> > ## Solution to Challenge 3
-> > ``` {r join-sol-3}
-> > flights %>% 
-> >   count(origin, dest, sort = T) %>% 
-> >   left_join(airports, by = c("dest" = "faa"))
-> > ```
-> {: .solution}
-{: .challenge}
-
-> ## Challenge 4
-> What is the theoretical maximum number of passengers that could have been transported on each route? 
-> 
-> How do the top five routes differ between this ordering and the previous one?
+> Which columns are shared between `gapminder` and `gapminder_sr`? 
 >
-> *Hint:* Some of the recorded plane tail numbers might not be present in the `planes` data frame.
-> Which join function will allow us to only look at flights for which we have information about the
-> plane's capacity?
-> > ## Solution to Challenge 4
-> > Can use the `seats` value from the `planes` data frame as the maximum capacity of each plane. 
-> > Because the `year` column in `planes` records the year it was built, we need to make sure that
-> > we don't try to merge this with the `year` column of the `flights` data frame which records the
-> > year the flight took place.
-> > ``` {r join-sol-4}
-> > flights %>% 
-> >   inner_join(planes, by = c("tailnum")) %>%
-> >   group_by(origin, dest) %>% 
-> >   summarise(max_cap = sum(seats))
-> > ```
-> > The ordering of the top five routes differ slightly, with the JFK -> SFO route being fourth for
-> > number of flights, but second for potential capacity. The other routes keep the same relative
-> > ordering.
+> Compare the output of `left`, `full` and `inner` joins for these two datasets.
+> What are the differences? What are they due to?
+> > ## Solution to Challenge 3
+> > The two datasets share the `country` and `year` columns.
+> > 
+> > The output from `outer_join` has the most rows, because it is keeping all the rows from both 
+> > dataframes. `inner_join` is only including those rows that match. and has the least rows. The 
+> > `left_join` output will depend on which data frame was provided first and has the same number of
+> > rows as that data frame. 
 > {: .solution}
 {: .challenge}
