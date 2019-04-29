@@ -124,7 +124,7 @@ gap_long
 Inside `gather()` we first name the new column for the new ID variable (`obstype_year`), the name 
 for the new amalgamated observation variable (`obs_value`), then the names of the old observation 
 variable. We could have typed out all the observation variables, but since `gather()` can use all the same
-[helper functions]({{ page.root }}{% link _episodes/07-Data-Verbs---select.md %}#select-helper-functions)
+[helper functions]({{ page.root }}{% link _episodes/06-Data-Verbs---select.md %}#select-helper-functions)
 as the `select()` function can, we can use the `starts_with()` argument to select all variables
 that starts with the desired character string. Gather also allows the alternative
 syntax of using the `-` symbol to identify which variables are not to be
@@ -145,10 +145,10 @@ type (`pop`,`lifeExp`, or `gdpPercap`) and the `year`. We can use the `separate(
 the character strings into multiple variables. 
 
 ```{r separate-intro}
-gap_split <- gap_long %>% 
+gap_separated <- gap_long %>% 
   separate(obstype_year, into = c('obs_type', 'year'), sep = "_")
 
-gap_split
+gap_separated
 ```
 
 You provide `separate()` with a column name containing the values to split, the names of the columns
@@ -164,10 +164,10 @@ alphanumeric character).
 > > ## Solution to Challenge 1
 > > The `convert` argument will try to convert character strings to other data types when set to `TRUE`
 > > ``` {r tidyr-sol-1}
-> > gap_split <- gap_long %>% 
+> > gap_separated <- gap_long %>% 
 > >   separate(obstype_year, into = c('obs_type', 'year'), sep = "_", convert = TRUE)
 > > 
-> > gap_split
+> > gap_separated
 > > ```
 > {: .solution}
 {: .challenge}
@@ -177,7 +177,7 @@ one long string. You provide `unite()` with the name to give the newly combined 
 names of the columns to combine.
 
 ```{r unite-intro}
-gap_split %>% 
+gap_separated %>% 
   unite(obstype_year, obs_type, year)
 ```
 
@@ -187,11 +187,11 @@ The final step in recreating the gapminder data structure is to spread our obser
 from the long format we have created.
 
 > ## Challenge 2
-> Spread the `gap_split` data above to create a new data frame that has the same dimensions as the 
+> Spread the `gap_separated` data above to create a new data frame that has the same dimensions as the 
 > original `gapminder` data.
 > > ## Solution to Challenge 2
 > > ``` {r tidyr-sol-2}
-> > gap_orig <- gap_split %>% 
+> > gap_orig <- gap_separated %>% 
 > >   spread(obs_type, obs_values)
 > > 
 > > gap_orig
