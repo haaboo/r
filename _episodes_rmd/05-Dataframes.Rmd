@@ -48,7 +48,7 @@ but we have prepared a [csv version]({{ page.root }}{% link data/gapminder.csv %
 > > ## Solution to Challenge 1
 > > Using the ideas discussed previously about [project structure]({{ page.root }}{% link _episodes/01-R-and-RStudio.md %}), 
 > > we will save the files into a `data` directory within our project. We can then access them with 
-> > a relative path `data/gapminder.csv.
+> > a relative path `data/gapminder.csv`.
 > >
 > > Opening the file we can see that there are six columns of data: a country name and continent, the
 > > year that the data was recorded, and the life expectancy, population and GDP per capita.

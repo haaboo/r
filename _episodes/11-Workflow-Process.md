@@ -370,3 +370,4 @@ small steps that can solved using a handful of simple functions.
 > How many verbs did you need for each step?
 >
 > Now, see if you can implement them in code to answer the question.
+{: .challenge} 
