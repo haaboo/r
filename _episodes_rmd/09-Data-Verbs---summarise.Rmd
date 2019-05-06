@@ -1,0 +1,164 @@
+---
+title: Summarise and Grouping
+teaching: 20
+exercises: 20
+questions:
+  - "How can I make summaries of groups of data?"
+  - "How can I count the elements of groups in a dataset?"
+objectives:
+  - "Identify when grouping is necessary to make summaries"
+  - "Be able to to usefully summarise variables in a dataframe"
+keypoints:
+  - "`summarise()` creates a new variable that provides a one row summary per group"
+  - "`n()` is useful to count rows per group"
+source: Rmd
+---
+
+```{r, include=FALSE}
+source("../bin/chunk-options.R")
+knitr_fig_path("09-")
+
+library(tidyverse)
+gapminder <- read_csv("data/gapminder.csv")
+```
+
+The `summarise()` function lets us create new variables by collapsing a data frame into a single 
+summary statistic. You can use `summarise()` with any function that takes a vector as input and 
+returns a single value as output. For example, what is the average life expectance in the gapminder 
+data?
+
+```{r summarise-intro}
+summarise(gapminder, mean_life_exp = mean(lifeExp))
+```
+
+On it's own, this may not seem that exciting. You could just as easily get the same result by using
+`mean(gapminder$lifeExp)`. Where is becomes more useful however, is that you can use multiple 
+summary functions at the same time.
+
+```{r summarise-many-funcs}
+summarise(
+    gapminder,
+    mean_life_exp = mean(lifeExp),
+    sd_life_exp = sd(lifeExp),
+    mean_gdp_per_cap = mean(gdpPercap),
+    max_gdp_per_cap = max(gdpPercap)
+)
+```
+
+> ## Challenge 1
+> Calculate the mean and median population for the gapminder data
+> > ## Solution to Challenge 1
+> > ``` {r summarise-sol-1}
+> > summarise(gapminder, mean_pop = mean(pop), median_pop = median(pop))
+> > ```
+> {: .solution}
+{: .challenge}
+
+and you can get summaries for different groups in conjunction with `group_by()`
+
+```{r summarise-groups}
+gapminder_by_country <- group_by(gapminder, country)
+
+summarise(gapminder_by_country, mean_life_exp = mean(lifeExp))
+```
+
+> ## Challenge 2
+> Adjust your answer to Challenge 1 to show the mean and median population for each continent.
+> > ## Solution to Challenge 2
+> > ``` {r summarise-sol-2}
+> > gapminder_by_country <- group_by(gapminder, country)
+> > 
+> > summarise(gapminder_by_country, mean_pop = mean(pop), median_pop = median(pop))
+> > ```
+> {: .solution}
+{: .challenge}
+
+## Sorting your results
+If you need to sort your resulting data frame by a particular variable, use `arrange()`. This 
+function takes a data frame and a set of column names and it rearranges the rows so that the 
+specified columns are in order.
+
+```{r summarise-arrange}
+arrange(gapminder, gdpPercap)
+
+# Use desc() to sort from highest to lowest
+arrange(gapminder, desc(gdpPercap))
+```
+
+> ## Challenge 3
+> Calculate the average life expectancy per country. Which has the shortest average life expectancy 
+> and which has the longest average life expectancy?
+> > ## Solution to Challenge 3
+> > ``` {r summarise-sol-3}
+> > summarised_life_exp <- summarise(gapminder_by_country, mean_life_exp = mean(lifeExp))
+> >
+> > arrange(summarised_life_exp, mean_life_exp)
+> >
+> > arrange(summarised_life_exp, desc(mean_life_exp))
+> > ```
+> {: .solution}
+{: .challenge}
+
+If you provide multiple variables to sort by, `arrange()` will initially sort by the first variable,
+with any ties broken by the next variable and so on.
+
+> ## Challenge 4
+> Create a new data frame called `summarised_gdp` which calculates the `mean_gdp_per_cap` per 
+> continent for each year. Remember that `group_by()` can be given multiple grouping variables.
+>
+> Observe the result when you run each of the following two lines. What are the differences and 
+> when might you use one over the other?
+> ~~~~
+> arrange(summarised_gdp, desc(year), desc(mean_gdp_per_cap))
+> ~~~~
+> {: .language-r}
+> ~~~~
+> arrange(summarised_gdp, desc(mean_gdp_per_cap), desc(year))
+> ~~~~
+> {: .language-r}
+> > ## Solution to Challenge 4
+> > ``` {r summarise-sol-4}
+> > gap_by_cont_year <- group_by(gapminder, continent, year)
+> >
+> > summarised_gdp <- summarise(gap_by_cont_year, mean_gdp_per_cap = mean(gdpPercap))
+> >
+> > arrange(summarised_gdp, desc(year), desc(mean_gdp_per_cap))
+> >
+> > arrange(summarised_gdp, desc(mean_gdp_per_cap), desc(year))
+> > ```
+> {: .solution}
+{: .challenge}
+
+## Counting things
+A very common summary operation is to count the number of observations. The `n()`
+function will help simplify this process. `n()` will return the number of rows in the data frame (or
+in the group if the data frame is grouped).
+
+```{r using-n}
+summarise(gapminder, num_rows = n())
+
+summarise(gapminder_by_country, num_rows = n())
+```
+
+The `n()` function can be very useful if we need to use the number of observations in calculations.
+For instance, if we wanted to get the standard error of the population per country:
+
+```{r counting-n}
+#standard error = standard deviation / square root of the number of samples
+summarise(gapminder_by_country, se_pop = sd(pop) / sqrt(n()) )
+```
+
+> ## Challenge 5
+> Let's try to put together all three functions introduced here. Produce a data frame that summarises
+> the number of rows for each continent, sorted from highest to lowest. Use 
+> `group_by()`, `summarise()`, and `arrange()` in that order to achieve it.
+> > ## Solution to Challenge 5
+> > ``` {r summarise-sol-5}
+> > gap_by_cont <- group_by(gapminder, continent) 
+> > 
+> > count_by_cont <- summarise(gap_by_cont, num_rows = n())
+> > 
+> > arrange(count_by_cont, desc(num_rows))
+> > ```
+> {: .solution}
+{: .challenge}

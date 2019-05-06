@@ -122,31 +122,28 @@ sessionInfo()
 
 
 ~~~
-R version 3.4.4 (2018-03-15)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 18.04.1 LTS
+R version 3.5.1 (2018-07-02)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS High Sierra 10.13.6
 
 Matrix products: default
-BLAS: /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
 
 locale:
- [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
- [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
- [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
-[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
 
 attached base packages:
-[1] methods   stats     graphics  grDevices utils     datasets  base     
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
 [1] knitr_1.21              requirements_0.0.0.9000 remotes_2.0.2          
 
 loaded via a namespace (and not attached):
- [1] compiler_3.4.4  magrittr_1.5    htmltools_0.3.6 tools_3.4.4    
- [5] yaml_2.2.0      Rcpp_1.0.0      stringi_1.2.4   rmarkdown_1.11 
- [9] stringr_1.4.0   xfun_0.4        digest_0.6.18   rlang_0.3.1    
-[13] evaluate_0.13  
+ [1] compiler_3.5.1  magrittr_1.5    htmltools_0.3.6 tools_3.5.1    
+ [5] yaml_2.2.0      Rcpp_1.0.0      stringi_1.3.1   rmarkdown_1.11 
+ [9] stringr_1.4.0   xfun_0.5        digest_0.6.18   rlang_0.3.1    
+[13] evaluate_0.12  
 ~~~
 {: .output}
 

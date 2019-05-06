@@ -1,0 +1,170 @@
+---
+title: Adding and Combining Datasets
+teaching: 30
+exercises: 30
+questions:
+  - "How can I combine multiple datasets?"
+  - "How can I merge datasets that have a common variable?"
+objectives:
+  - "Be able to combine different datasets by row, column or common variable"
+keypoints:
+  - "`bind_rows` combines datasets that share the same variables"
+  - "The `join` family of functions provide a complete range of methods to merge datasets that share common variables"
+source: Rmd
+---
+
+```{r, include=FALSE}
+source("../bin/chunk-options.R")
+knitr_fig_path("10-")
+
+library(tidyverse)
+gapminder <- read_csv("data/gapminder.csv")
+```
+
+All the functions we have looked at so far work with a single data frame and modify it in some way.
+It is common, however, that your data may not be stored in a single, complete, form and instead will
+be found in a number of places. Perhaps measurements taken in different weeks have been saved to 
+separate places, or maybe you have different files recording observations and metadata. To work with
+data stored like this it is necessary to learn how to combine and merge different datasets into a
+single data frame.
+
+## Combining data
+
+If you have new data that has the same structure as your old data, it can be added onto the end of 
+your data frame with `bind_rows()`. We have collected the [gapminder data for 2012]({{ page.root }}{% link data/gapminder_2012.csv %}) 
+into a separate file for you to practice this with. Download this file and save it in your data
+directory as `gapminder_2012.csv`.
+
+```{r bind}
+gapminder_2012 <- read_csv("data/gapminder_2012.csv")
+
+gapminder_2012
+```
+
+> ## Challenge 1
+> Combine the 2012 data with your gapminder data using `bind_rows(gapminder, gapminder_2012)`.
+> 
+> Explore the resulting data frame to see the effect of `bind_rows()`. 
+> > ## Solution to Challenge 1
+> > ```{r join-sol-1}
+> > combined_gapminder <- bind_rows(gapminder, gapminder_2012)
+> > 
+> > tail(combined_gapminder)
+> > ```
+> {: .solution}
+{: .challenge}
+
+The columns are matched by name, so you need to make sure that both data frames are named 
+consistently. If the names do not match, the data frames will still be bound together but any missing
+data will be replaced with `NA`s
+
+```{r bind-2}
+renamed_2012 <- rename(gapminder_2012, population = pop)
+
+mismatched_names <- bind_rows(gapminder, renamed_2012)
+
+mismatched_names
+
+tail(mismatched_names)
+```
+
+## Merging data
+
+If you are instead looking to merge data sets based on some shared variable, there are a number of
+`join`s that are useful. The [tidyexplain](https://github.com/gadenbuie/tidyexplain) package has a
+number of animations that will help us understand what is happening with each join.
+
+Let's start with two simple data frames that have one shared column indicating a shared ID:
+
+![]({{ page.root }}{% link fig/original-dfs.png %}){:width="50%"}
+
+The first join we will look at is an `inner_join()`. This function takes two data frames as input and
+merges them based on their shared column. Only rows with data in *both* data frames are kept.
+
+![]({{ page.root }}{% link fig/inner-join.gif %}){:width="50%"}
+
+The opposite of an `inner_join()` is a `full_join()`. This function keeps all rows from both data 
+frames, filling in any missing data with `NA`.
+
+![]({{ page.root }}{% link fig/full-join.gif %}){:width="50%"}
+
+The final join we will look at is a `left_join()`. This uses the first data frame as a reference and
+merges in data from the second data frame. Any rows that are in the left data frame but not the right
+are filled in with `NA`. Any rows in the right data frame but not the left are ignored.
+
+![]({{ page.root }}{% link fig/left-join.gif %}){:width="50%"}
+
+For the sake of completeness, there are also functions for a `right_join()`, `semi_join()`, and
+`anti_join()`. But we will not go into how they work because they are far less commonly needed than
+the three above.
+
+> ## Challenge 2
+> Create the following two data frames:
+> ```{r join-chal-1}
+> df1 <- tibble(sample = c(1, 2, 3), measure1 = c(4.2, 5.3, 6.1))
+> df2 <- tibble(sample = c(1, 3, 4), measure2 = c(7.8, 6.4, 9.0))
+> ```
+>
+> Predict the result of running `inner_join()`, `full_join()`, and `left_join()` on these two data 
+> frames. Perform the joins to see if you are correct.
+> > ## Solution to Challenge 2
+> > ```{r join-sol-2}
+> > inner_join(df1, df2)
+> > full_join(df1, df2)
+> > # df1 as left data frame
+> > left_join(df1, df2)
+> > # df2 as left data frame
+> > left_join(df2, df1)
+> > ```
+> {: .solution}
+{: .challenge}
+
+By default, the `join` functions will join based on any shared column names between the two data 
+frames (here just the `sample` column). You may have noticed the helpful message providing information
+about how the join was performed: `Joining, by = "sample"`. You can control which columns are used 
+to merge with the `by` argument. 
+
+```{r join-by-arg}
+full_join(df1, df2, by = c("sample"))
+```
+
+This may be useful if the data frames share a number of column names, bu only some of them should be
+used for merging. You can also use it to merge on a column even if the names don't match between the 
+data frames. In this case you need to specify `by = c("left_name" = "right_name")`:
+
+```{r join-by-diff-names}
+df3 = tibble(ID = c(1, 2, 4), measure3 = c(4.7, 3.5, 9.3))
+
+# Can't do it automatically
+full_join(df1, df3)
+
+# name in df1 is "sample", name in df3 is "ID"
+full_join(df1, df3, by = c("sample" = "ID"))
+```
+
+## Realistic data
+For a more realistic example of joins, let's turn back to the gapminder data. We have some additional
+data on [countries sex ratios]({{ page.root }}{% link data/gapminder_sex_ratios.csv %}) that you should
+download and save to your data folder. 
+
+Read it in and let's join it to our existing data.
+
+```{r join-read-sex-ratio}
+gapminder_sr <- read_csv("data/gapminder_sex_ratios.csv")
+gapminder_sr
+```
+
+> ## Challenge 3
+> Which columns are shared between `gapminder` and `gapminder_sr`? 
+>
+> Compare the output of `left`, `full` and `inner` joins for these two datasets.
+> What are the differences? What are they due to?
+> > ## Solution to Challenge 3
+> > The two datasets share the `country` and `year` columns.
+> > 
+> > The output from `outer_join` has the most rows, because it is keeping all the rows from both 
+> > dataframes. `inner_join` is only including those rows that match. and has the least rows. The 
+> > `left_join` output will depend on which data frame was provided first and has the same number of
+> > rows as that data frame. 
+> {: .solution}
+{: .challenge}

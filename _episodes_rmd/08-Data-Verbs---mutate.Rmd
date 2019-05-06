@@ -1,0 +1,146 @@
+---
+title: Creating New Variables
+teaching: 30
+exercises: 15
+questions:
+  - "How can I create new variables in my data frame?"
+  - "How do I deal with a data frame made up of different groups?"
+objectives:
+  - "Create new columns by performing calculations on old variables."
+  - "Use functions to create new variables."
+keypoints:
+  - "Use `mutate()` to create new variables from old ones."
+  - "You can create new variables using any function that returns a vector of the same length as the data frame."
+  - "Use `group_by()` to group your data based on a variable."
+source: Rmd
+---
+
+```{r, include=FALSE}
+source("../bin/chunk-options.R")
+knitr_fig_path("08-")
+
+library(tidyverse)
+gapminder <- read_csv("data/gapminder.csv")
+```
+
+So far, we have been looking at functions that deal just with the variables in our data frame. But
+what if we are needing to create *new* variables? For that task, we will use the `mutate()` function
+from the [dplyr](https://dplyr.tidyverse.org) package of the tidyverse.
+
+To create a new variable, you provide `mutate()` with the name of the new column and how to calculate
+the new value.
+
+```{r mutate-intro}
+mutate(gapminder, gdp = gdpPercap * pop)
+```
+
+This line adds a new column to our gapminder data called `gdp` and the value in this column is 
+calculated by multiplying the `gdpPercap` and the `pop` figure for each row.
+
+> ## Challenge 1
+> Create a new column in the `gapminder` data frame that contains the population in millions (ie.
+> divide the population column by 1,000,000).
+> > ## Solution to Challenge 1
+> > ```{r mutate-sol-1}
+> > mutate(gapminder, pop_m = pop/1e6)
+> > ```
+> {: .solution}
+{: .challenge}
+
+You are not limited to mathematical operators in creating new columns. Any function that produces a
+value for each row can be used:
+
+```{r mutate-function}
+# Take the logarithm of the population value
+mutate(gapminder, log_pop = log(pop))
+
+# Abbreviate the country name
+# str_sub() takes a subset of a string from the given coordinates
+mutate(gapminder, country_abbr = str_sub(country, start = 1, end = 4))
+```
+
+> ## Challenge 2
+> Using the function `str_length()` which returns the length of a string, create a new column that 
+> contains the number of letters in the country's name.
+> > ## Solution to Challenge 2
+> > ```{r mutate-sol-2}
+> > mutate(gapminder, num_letters = str_length(country))
+> > ```
+> {: .solution}
+{: .challenge}
+
+In fact, anything that produces a vector of the same length as the data frame can be used. It does 
+not even have to reference data within the data frame.
+
+```{r mutate-new-column}
+# 1704 rows in gapminder
+index_numbers <- 1:1704
+
+mutate(gapminder, row_num = index_numbers)
+```
+
+## Multiple mutations
+You can perform multiple mutations at the same time by separating them with a comma.
+
+```{r mutate-multiple}
+mutate(gapminder, gdp = gdpPercap * pop, log_pop = log(pop))
+```
+
+One useful feature is that you can refer to your created columns later on in the same
+`mutate()` call.
+
+```{r mutate-chaining}
+mutate(
+  gapminder,
+  gdp = gdpPercap * pop,
+  log_gdp = log(gdp)
+)
+```
+
+> ## Challenge 3
+> Create a column in the gapminder data showing the life expectancy in days and one for GDP in billions
+> of dollars
+> > ## Solution to Challenge 3
+> > ``` {r mutate-sol-3}
+> > gapminder %>% 
+> >   mutate(
+> >     life_exp_days = lifeExp * 365,
+> >     gdp_billion = gdpPercap * pop / 10^9
+> > )
+> > ```
+> {: .solution}
+{: .challenge}
+
+## Variable creation functions
+As mentioned before, any function that can take a vector of inputs and return a vector with the same 
+length as an output can be used in a `mutate()` call. There are many R functions that can be used
+in this situation, and `dplyr` introduces a number of new functions that may be useful for creating 
+new variables. Some functions that you might find useful are:
+
+#### Offset functions
+To calculate differences between observations, you may be wanting to look at the value immediately
+before or after it. These can be accessed using `lag()` or `lead()` respectively.
+```{r}
+mutate(gapminder, life_exp_prev = lag(lifeExp), life_exp_next = lead(lifeExp))
+```
+
+#### Cumulative computations
+Cumulative sums (`cumsum()`), products (`cumprod()`) and means (`cummean()`) are all available to 
+provide running computation of a variable. While not particularly useful for the gapminder data,
+you can get an idea of how they function:
+
+```{r mutate-cumsum}
+mutate(gapminder, cumulative_life_exp = cumsum(lifeExp))
+```
+
+> ## Challenge 4
+> Using an offset function, create a column showing the **change** in life expectancy between each sample period. Do any 
+> countries have no change in life expectancy for a period?
+> > ## Solution to Challenge 4
+> > ``` {r mutate-sol-4}
+> > diff_lifeExp <- mutate(gapminder, life_exp_change = lifeExp - lag(lifeExp))  
+> >
+> > filter(diff_lifeExp, life_exp_change == 0)
+> > ```
+> {: .solution}
+{: .challenge}

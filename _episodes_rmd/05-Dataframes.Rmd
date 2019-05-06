@@ -1,0 +1,215 @@
+---
+title: Dataframes
+teaching: 25
+exercises: 15
+questions:
+  - "What is a dataframe?"
+  - "Why use a dataframe as a tidy data structure?"
+objectives:
+  - "To learn how to create a dataframe."
+  - "To understand how to find basic information about a dataframe"
+  - "To know how to inspect the data in a dataframe"
+keypoints:
+  - "Dataframes (or tibbles in the tidyverse) are lists where each element is a vector of the same length"
+  - "Use `read_csv()` to read comma separated files into a data frame"
+  - "Use `nrow()`, `ncol()`, `dim()`, or `colnames()` to find information about a dataframe"
+  - "Use `head()`, `tail()`, `summary()`, or `glimpse()` to inspect a dataframe's content"
+source: Rmd
+---
+
+```{r, include=FALSE}
+source("../bin/chunk-options.R")
+knitr_fig_path("05-")
+
+library(tidyverse)
+options(max.print = 80)
+
+gapminder_factor <- read_csv("data/gapminder.csv", col_types = cols(continent = col_factor()))
+```
+
+
+Now that we understand a little bit about why we might prefer our data to be 'tidy', we have one data
+structure left to learn - the dataframe. Dataframes are where the vast majority of work in R is done. Dataframes can look a lot like any table of data (and we will often refer to them in that way), but they are a very particular structure. Dataframes are a special type of list that is made up of vectors that all have to be the same length. Since vectors must have the same data types, this means that a dataframe produces a rectangular table of data, where each column **must** have the same type. 
+Dataframes are an ideal format for storing and working with tidy data. All the tidyverse tools we will be learning from here are designed to work with data in this form.
+
+## Creating a data frame
+
+In order to start working with data, we first need to learn how to read it in to R. For learning how
+to work with data, we will be using records from the [Gapminder](www.gapminder.org) organisation, 
+which contains various statistics for 142 countries betwen 1952 and 2007. This
+data *is* available as an [R package](https://cran.r-project.org/web/packages/gapminder/index.html),
+but we have prepared a [csv version]({{ page.root }}{% link data/gapminder.csv %}) for you to practice with.
+
+> ## Challenge 1
+>
+>  Download the gapminder.csv file and save it in your project directory.
+>  
+>  Open the file in a text editor and describe what statistics are recorded.
+> > ## Solution to Challenge 1
+> > Using the ideas discussed previously about [project structure]({{ page.root }}{% link _episodes/01-R-and-RStudio.md %}), 
+> > we will save the files into a `data` directory within our project. We can then access them with 
+> > a relative path `data/gapminder.csv`.
+> >
+> > Opening the file we can see that there are six columns of data: a country name and continent, the
+> > year that the data was recorded, and the life expectancy, population and GDP per capita.
+> {: .solution}
+{: .challenge}
+
+To load this data into R, we will use the `read_csv` function from the [`readr`](http://readr.tidyverse.org) package (which will 
+be loaded automatically if you have preciously run `library(tidyverse)`, but here we will 
+load it separately). For reading in different data formats, or for control of the import options,
+see the optional section on [reading data in to R]({{ page.root }}{% link _episodes/17-Additional-content---Reading-Data-In.md %}).
+
+```{r read-01}
+library(readr)
+
+gapminder <- read_csv("data/gapminder.csv")
+
+gapminder
+```
+
+> ## What's a tibble?
+> You might notice in the output above that it calls itself a tibble, rather than a data frame.
+> A tibble is just the tidyverse's version of a data frame that has a few behaviours tweaked to 
+> make it behave more predictibly. Try comparing the output of a base R `data.frame` version of 
+> gapminder with `as.data.frame(gapminder)` to get some idea of the differences.
+> 
+> We will try to refer to them as data frames throughout these lessons. But know that dataframes
+> and tibbles are interchangable for our purposes.
+{: .callout}
+
+
+## Inspecting a dataframe
+
+Looking at the printed output from the `gapminder` dataframe can tell us a lot of information about
+it. The first line tells us the dimensions of the data, in this case there are 1,704 rows and 6 
+columns. This information can also be found with:
+```{r data-frame-dimensions}
+nrow(gapminder)
+ncol(gapminder)
+dim(gapminder)
+```
+
+The next row of output gives the names of the columns, which can also be found using `colnames()`.
+
+```{r data-frame-colnames}
+colnames(gapminder)
+```
+
+The next row tells you the data type of each column, followed by the data itself. We won't discuss 
+data types in too much detail, but see [this section]({{ page.root }}{% link  _episodes/16-Additional-content---Data-types.md %}) 
+for a full description.
+
+Should you need the data from a specific column, it can be accessed using the `$` notation.
+
+```{r df-dollar}
+gapminder$lifeExp
+```
+
+## Overview of a dataframe
+There are many other ways to view the data and look at its data types, and the
+structure of the data. To look at the first 5 rows of the gapminder dataset, use `head()`:
+
+```{r df-head}
+head(gapminder, 5)
+```
+
+and use `tail()` to look at the last 10 rows:
+
+```{r df-tail}
+tail(gapminder, 10)
+```
+
+To look at the structure of the data (particularly when there are many columns) use `glimpse()`:
+
+```{r df-glimpse}
+glimpse(gapminder)
+```
+
+And use `summary()` to get a summarised breakdown of each column:
+
+```{r df-summary}
+summary(gapminder)
+```
+
+## Factors
+
+One special type of data in R is a *factor*, which is most often used in statistical modelling for
+categorical data. We can look at what these are by explicitly reading part of our data frame in as a
+factor. 
+
+> ## Challenge 2
+> Read in a new gapminder data frame with the continent column as a factor using
+> ```{r read-factor-chal-2}
+> gapminder_factor <- read_csv("data/gapminder.csv", col_types = cols(continent = col_factor()))
+> ```
+> What does the output from `glimpse` and `summary` on this new data frame show you? How is it different from 
+> our original `gapminder` data frame and why do you think it has a different format for different columns?
+>
+> > ## Solution to Challenge 2
+> > The output from `summary()` changes depending on the class of the data in the column. For the numeric
+> > columns it shows the minimum, maximum, mean and quartile values. For the factor column, it shows a count 
+> > of each category. For the character column it cannot provide any useful summary.
+> {: .solution}
+{: .challenge}
+
+Let's look at what has changed in this column.
+
+```{r}
+class(gapminder_factor$continent)
+gapminder_factor$continent
+```
+
+Here you can see that the `continent` column in the `gapminder_factor` data set is a factor that 
+lists the continent the country is in. In the final line, you can see that it lists the possible
+categories of the data with `Levels: Asia Europe Africa Americas Oceania`. The levels of this factor can
+also be accessed using:
+
+```{r df-levels}
+levels(gapminder_factor$continent)
+```
+ 
+But what happens when we look more closely at this data using `glimpse()`
+
+```{r glimpse-factor}
+glimpse(gapminder_factor$continent)
+```
+
+This tells us we have a factor with 5 levels, just like we expected. But when it comes to 
+show the data itself, all we see are a bunch of numbers. This is because, to R, a factor is really 
+just an integer underneath, with the levels telling it how to map the integer to the actual category.
+So a value of 1 would map to the first level (`Asia`), while a value of 2 would map to the second
+level (`Europe`), **etc.**.
+
+Expecting factors to behave as characters, rather than integers, is a common cause of errors for 
+people new to R. So always remember to inspect your data with the methods shown here to make sure it
+is of the right type.
+
+## Your turn
+So far, you've been walked through investigating a dataframe. Let's use those skills to explore a
+data set you have not yet been exposed to. 
+
+> ## Challenge 3
+>
+> The `storms` data set comes built in to the tidyverse packages and contains information on 
+> hurricanes recorded in the Atlantic Ocean. It can be accessed just by typing `storms` into your
+> console. 
+> 
+> Using the tools you have learned so far, explore this data set and describe what it contains. Explain both
+> the structural features of the data set as a whole, as well as its content.
+>
+> > ## Hint
+> > If you are encountering a data type you haven't seen before, try looking at the `class()` of the 
+> > column to see if that helps you work out what it is.
+> {: .solution}
+>
+> > ## Solution to Challenge 3
+> >
+> > The object `storms` is a dataframe (a tibble) with 10,010 rows and 13 columns.
+> > - `name` and `status` are character vectors.
+> > - `year`, `month`, `hour`, `lat`, `long`, `ts_diamater` and `hu_diameter` are numeric vectors.
+> > - `day`, `wind`, and `pressure` are integer vectors.
+> > - `category` is an ordered factor vector, with levels `-1 < 0 < 1 < 2 < 3 < 4 < 5`
+> >
+> {: .solution}
+{: .challenge}

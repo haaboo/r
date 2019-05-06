@@ -23,8 +23,24 @@ source: Rmd
 
 
 
-## Interacting with R
-Remember that in RStudio, R itself is accessed through the console pane. This can by done by typing commands directly in the pane, or sending them from a script file with <kbd>Ctrl</kbd>+<kbd>Return</kbd> (in Windows and Linux) or <kbd>&#8984;</kbd>+<kbd>Return</kbd> on OS X.
+## Introduction to R
+
+Your time in R will be split between the R interactive console working 
+in scripts. The console is where you will run all of your code, and can 
+be a useful environment to try out ideas before adding them to an R script
+file. This console in RStudio is the same as the one you would get if
+you typed in `R` in your command-line environment.
+
+*Anything that you want to keep needs to go in a script.*
+
+The first thing you will see in the R interactive session is a bunch
+of information, followed by a ">" and a blinking cursor. In many ways
+this is similar to the shell environment you learned about during the
+shell lessons: it operates on the same idea of a "Read, evaluate,
+print loop": you type in commands, press <kbd>Return</kbd>, R tries to execute them, and then
+returns a result. Alternatively, you can type the commands into a script
+file and send them to the R console to be executed with <kbd>Ctrl</kbd>+<kbd>Return</kbd> 
+(in Windows and Linux) or <kbd>⌘</kbd>+<kbd>Return</kbd> on OS X.
 
 ## Using R as a calculator
 
@@ -61,7 +77,7 @@ complete it:
 
 Any time you hit return and the R session shows a "+" instead of a ">", it
 means it's waiting for you to complete the command. If you want to cancel
-a command you can simply hit "Esc" and RStudio will give you back the ">"
+a command you can simply hit <kbd>Esc</kbd> and RStudio will give you back the ">"
 prompt.
 
 > ## Tip: Cancelling commands
@@ -325,6 +341,42 @@ y <- x * 2
 
 The right hand side of the assignment can be any valid R expression.
 The right hand side is *fully evaluated* before the assignment occurs.
+
+## Missing data
+
+For all data types, it is possible to have missing values. In R, missing values are represented as `NA`. It is very important to understand this is different to `0`, or `""`, which are each values in themselves. `NA` means **missing** (or not available). 
+
+If you want to check whether the variable `x` is `NA` it would be natural to use the equality operator (`==`):
+
+
+~~~
+x <- NA
+x == NA
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] NA
+~~~
+{: .output}
+
+Using `==` with `NA` returns `NA`, because making a comparison to a missing value doesn't make sense. Instead we need to check for the "state of missingness" rather than a value. We can do this with the `is.na()` function:
+
+
+~~~
+x <- NA
+is.na(x)
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] TRUE
+~~~
+{: .output}
 
 ### Naming things
 
@@ -706,7 +758,7 @@ function (name, pos = -1L, envir = as.environment(pos), all.names = FALSE,
     }
     else all.names
 }
-<bytecode: 0x7ffff5f4a3a8>
+<bytecode: 0x7fb69fbace88>
 <environment: namespace:base>
 ~~~
 {: .output}
