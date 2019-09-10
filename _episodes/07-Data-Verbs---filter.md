@@ -146,6 +146,8 @@ Any function that produces a `TRUE`/`FALSE` output (such as the `is.na()` functi
 > > # … with 350 more rows
 > > ~~~
 > > {: .output}
+> {: .solution}
+{: .challenge}
 
 If you provide multiple filter conditions (separated by a comma) then only rows matching **all** of
 the conditions will be kept.
