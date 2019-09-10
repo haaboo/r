@@ -121,29 +121,23 @@ summarise(gapminder_by_country, mean_life_exp = mean(lifeExp))
 > > ## Solution to Challenge 2
 > > 
 > > ~~~
-> > gapminder_by_country <- group_by(gapminder, country)
+> > gapminder_by_continent <- group_by(gapminder, continent)
 > > 
-> > summarise(gapminder_by_country, mean_pop = mean(pop), median_pop = median(pop))
+> > summarise(gapminder_by_continent, mean_pop = mean(pop), median_pop = median(pop))
 > > ~~~
 > > {: .language-r}
 > > 
 > > 
 > > 
 > > ~~~
-> > # A tibble: 142 x 3
-> >    country      mean_pop median_pop
-> >    <chr>           <dbl>      <dbl>
-> >  1 Afghanistan 15823715.  13473708.
-> >  2 Albania      2580249.   2644572.
-> >  3 Algeria     19875406.  18593278.
-> >  4 Angola       7309390.   6589530.
-> >  5 Argentina   28602240.  28162601 
-> >  6 Australia   14649312.  14629150 
-> >  7 Austria      7583298.   7571522.
-> >  8 Bahrain       373913.    337688.
-> >  9 Bangladesh  90755395.  86751356 
-> > 10 Belgium      9725119.   9839052.
-> > # … with 132 more rows
+> > # A tibble: 5 x 3
+> >   continent  mean_pop median_pop
+> >   <chr>         <dbl>      <dbl>
+> > 1 Africa     9916003.   4579311 
+> > 2 Americas  24504795.   6227510 
+> > 3 Asia      77038722.  14530830.
+> > 4 Europe    17169765.   8551125 
+> > 5 Oceania    8874672.   6403492.
 > > ~~~
 > > {: .output}
 > {: .solution}
