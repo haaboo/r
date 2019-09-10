@@ -80,7 +80,7 @@ you are using, as well as the versions of any packages you use. This information
 >
 > Create a new project and download two data files from the Bureau of Meterology, one
 > containing [meterological information]({{ page.root }}{% link data/BOM_data.csv %}),
-> and one containing [metadata about weather stations](({{ page.root }}{% link data/BOM_stations.csv %}))
+> and one containing [metadata about weather stations]({{ page.root }}{% link data/BOM_stations.csv %})
 > 
 > Take some time to explore the data files and understand what they contain, then write a script 
 > that answers the following questions:
