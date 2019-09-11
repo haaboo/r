@@ -51,7 +51,7 @@ pane to explore your current environment after completing these lessons. Or use 
 data in your environment, and `loadedNamespaces()` to view the packages that are loaded in the 
 environment. 
 
-> ## Challenge 1
+> ## Challenge: New sessions
 > Create a fresh R session (in RStudio select "Session" > "New Session") and compare the environments.
 > What effect might this have on a script?
 {: .challenge}
@@ -74,29 +74,101 @@ be updated and may not always produce the same results as older versions. Record
 you are using, as well as the versions of any packages you use. This information can be found with
 `sessionInfo()`
 
-> ## Putting it all together
+> ## Challenge: Putting it all together
+> As a final challenge, you will work in pairs to complete an end to end data analysis task in a 
+> reproducible fashion.
 > 
-> As a final challenge, you will complete an end to end data analysis task in a reproducible fashion.
+> #### Getting the data
+> - Create a new RStudio project for this analysis
+> - Download two data files from the Bureau of Meterology, one containing 
+> [meterological information]({{ page.root }}{% link data/BOM_data.csv %}), and one containing 
+> [metadata about weather stations]({{ page.root }}{% link data/BOM_stations.csv %})
+> - Take some time to explore the data files and understand what they contain
+> - Write a script that answers the following questions:
+> 
+> #### Question 1
+> **For each station, how many days have a minimum temperature, a maximum temperature and 
+> a rainfall measurement recorded?**
 >
-> Create a new project and download two data files from the Bureau of Meterology, one
-> containing [meterological information]({{ page.root }}{% link data/BOM_data.csv %}),
-> and one containing [metadata about weather stations]({{ page.root }}{% link data/BOM_stations.csv %})
+> > ## Hint
+> > This question can be answered using just the [BOM_data]({{ page.root }}{% link data/BOM_data.csv %})
+> > file.
+> > 
+> > You will first need to `separate()` a column to access both the minimum and maximum temperature
+> > data.
+> > 
+> > Then, you can `filter()` the data to keep only rows that have minimum temperature, 
+> > maximum temperature, and rainfall measurements.
+> >
+> > A `group_by()` followed by `summarise()` will then allow you to count the number of rows remaining
+> > for each station.
+> {: .solution}
+>
+> #### Question 2
+> **Which month saw the lowest average daily temperature difference?**
 > 
-> Take some time to explore the data files and understand what they contain, then write a script 
-> that answers the following questions:
-> * **1**: For each station, how many days have a minimum temperature, a maximum temperature and 
-> a rainfall measurement recorded?
-> * **2**: Which month saw the lowest difference between minimum and maximum temperatures in a day?
-> And which state saw the highest?
-> * **3**: Which state had the lowest average monthly minimum temperature after excluding sites
-> more than 500m above sea level.
-> * **4**: Design your own question. What is a question you had after exploring the contents of the 
+> > ## Hint
+> > This question can be answered using just the [BOM_data]({{ page.root }}{% link data/BOM_data.csv %})
+> > file.
+> > 
+> > In addition to the functions you used above, this question will need a `mutate()` to calculate
+> > the temperature difference.
+> > 
+> > The temperature values are stored as characters after you have run `separate()` (see
+> > the `<chr>` in the second row if you print the data frame to the console). To be able to calculate
+> > the difference without an error, you will need to convert them to numeric values with 
+> > `as.numeric()` first.
+> >
+> > For rows that are missing a temperature measurement, the temperature difference will be `NA`.
+> > How will you deal with these in the rest of the analysis?
+> {: .solution}
+> 
+> #### Question 3
+> **Which state saw the lowest average daily temperature difference?**
+> > ## Hint
+> > State information is found in the [BOM_stations]({{ page.root }}{% link data/BOM_stations.csv %}) 
+> > file. So we will need to join this with our previous dataset.
+> > 
+> > The station data is not in a tidy format however, as each station is recorded in it's own column.
+> > (Why is this data not tidy?)
+> > 
+> > To tidy it before merging, you will need to `gather()` the station data into an intermediate form
+> > that has three columns, one for the station ID number, one for the type of data being recorded 
+> > (the `info` column in the original data), and one for the actual recorded value itself. 
+> > (Is this intermediate data tidy?)
+> > 
+> > This data frame can then be `spread()` into a shape with one row for each station. Remember that
+> > the `key` argument to `spread()` identifies the column that will provide the data for the new column
+> > names, and the `value` argument identifies the column that will provide the data for the new cells.
+> > 
+> > Finally, you will want to join the two datasets together to identify the state of each weather
+> > station. If you run into errors at this step, check that the two data frames have a shared column
+> > to merge, and that they are the same data type (eg. you can't merge a character column with a
+> > numeric column).
+> {: .solution}
+> 
+> #### Question 4
+> **Does the westmost (lowest longitude) or eastmost (highest longitude) weather station in our 
+> dataset have a higher average solar exposure?**
+> > ## Hint
+> > This question will need both the [BOM_data]({{ page.root }}{% link data/BOM_data.csv %})
+> > and the [BOM_stations]({{ page.root }}{% link data/BOM_stations.csv %}) file.
+> > 
+> > You will not need any new verbs other than what you have used in previous answers.
+> >
+> > If answering this is final question is easy, spend some time reviewing your entire script to see
+> > if there are any ways you can improve it. Are there any repeated steps that you could save as
+> > an intermediate variable? Could you add some comments to make your code understandable?
+> {: .solution}
+>
+> #### Optional extension
+> Design your own question. What is a question you had after exploring the contents of the 
 > data? Or was there something that surprised you when working with the data.
-> Write the data frame that answers your question 4 out to a file.
 >
-> Once you are finished, swap scripts with another person, along with any instructions they will need
-> to make sure it works. Can you get their script to run?
+> #### Sharing your work
+> After answering these questions, swap scripts with another pair, along with any instructions they 
+> will need to make sure it works. Can you get their script to run?
 > 
-> Compare your code for the first three questions. Were there any instances where you took different
-> approaches to solve the same problem? 
+> Compare your code for the first four questions. Are there any major differences in how you went
+> about solving them?
 {: .challenge}
