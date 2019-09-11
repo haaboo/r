@@ -33,22 +33,9 @@ In fact, finding a particular statistical model or technique that is not already
 
 ## Introduction to RStudio
 
-Welcome to the R portion of the Software Carpentry workshop.
-
-Throughout this lesson, we're going to teach you some of the fundamentals of
-the R language as well as some best practices for organizing code for
-scientific projects that will make your life easier.
-
-We'll be using RStudio: a free, open source R integrated development
-environment. It provides a built in editor, works on all platforms (including
-on servers) and provides many advantages such as integration with version
-control and project management.
-
-
-
 **Basic layout**
 
-When you first open RStudio, you will be greeted by three panels:
+As a reminder, when you first open RStudio, you will be greeted by three panels:
 
   * The interactive R console/terminal (entire left)
   * Environment/History (tabbed in upper right)
@@ -64,19 +51,26 @@ in the top left.
 You can move the panels around in RStudio so that their arrangement suits you.
 
 ## Work flow within RStudio
-There are two main ways one can work within RStudio.
 
-1. Test and play within the interactive R console then copy code into
-a .R file to run later.
-   *  This works well when doing small tests and initially starting off.
-   *  It quickly becomes laborious
-2. Start writing in an .R file and use RStudio's short cut keys for the Run command
-to push the current line, selected lines or modified lines to the
-interactive R console.
-   * This is a great way to start; all your code is saved for later
+
+The best way to work with R is to write your commands inside .R files.
+1. Open and save a new .R file
+2. Write some lines of code.
+3. Use RStudio's short cut keys for the Run command to push the current line, selected lines,
+or modified lines ot the interactive R console.
+4. You can rerun commands from the interactive console by using <kbd>&uparrow;</kbd>. This is useful for debugging.
+
+Using this approach:
+   * All your code is saved for later
    * You will be able to run the file you create from within RStudio
    or using R's `source()`  function.
 
+> ## Discussion: the interactive console
+> You can also type commands directly into the interactive console. When might
+> this be appropriate? What are the advantages / disadvantages?
+{: .discussion}
+
+![RStudio scripts](../fig/01-usingRscripts.png)
 > ## Tip: Running segments of your code
 >
 > RStudio offers you great flexibility in running code from within the editor
@@ -121,7 +115,7 @@ A good project layout will ultimately make your life easier:
 Now when we start R in this project directory, or open this project with RStudio,
 all of our work on this project will be entirely self-contained in this directory.
 
-## Best practices for project organization
+## Best practices for project organisation
 
 Although there is no "best" way to lay out a project, there are some general
 principles to adhere to that will make project management easier:
@@ -129,8 +123,8 @@ principles to adhere to that will make project management easier:
 ### Treat raw data as read only
 
 This is probably the most important goal of setting up a project. Data is
-typically time consuming and/or expensive to collect. Working with them
-interactively (e.g., in Excel) where they can be modified means you are never
+typically time consuming and/or expensive to collect. Working with data 
+interactively (e.g., in Excel) where it can be modified means you are never
 sure of where the data came from, or how it has been modified since collection.
 It is therefore a good idea to treat your raw data as "read-only".
 
@@ -147,7 +141,7 @@ all be able to be regenerated from your scripts.
 
 > ## Tip: Good Enough Practices for Scientific Computing
 >
-> [Good Enough Practices for Scientific Computing](https://github.com/swcarpentry/good-enough-practices-in-scientific-computing/blob/gh-pages/good-enough-practices-for-scientific-computing.pdf) gives the following recommendations for project organization:
+> [Good Enough Practices for Scientific Computing](https://github.com/swcarpentry/good-enough-practices-in-scientific-computing/blob/gh-pages/good-enough-practices-for-scientific-computing.pdf) gives the following recommendations for project organisation:
 >
 > 1. Put each project in its own directory, which is named after the project.
 > 2. Put text documents associated with the project in the `doc` directory.
@@ -155,27 +149,6 @@ all be able to be regenerated from your scripts.
 > 4. Put source for the project's scripts and programs in the `src` directory, and programs brought in from elsewhere or compiled locally in the `bin` directory.
 > 5. Name all files to reflect their content or function.
 >
-{: .callout}
-> ## Tip: ProjectTemplate - a possible solution
->
-> One way to automate the management of projects is to install the third-party package, `ProjectTemplate`.
-> This package will set up an ideal directory structure for project management.
-> This is very useful as it enables you to have your analysis pipeline/workflow organised and structured.
-> Together with the default RStudio project functionality and Git you will be able to keep track of your
-> work as well as be able to share your work with collaborators.
->
-> 1. Install `ProjectTemplate`.
-> 2. Load the library
-> 3. Initialise the project:
->
-> ```{r, eval=FALSE}
-> install.packages("ProjectTemplate")
-> library("ProjectTemplate")
-> create.project("../my_project", merge.strategy = "allow.non.conflict")
-> ```
->
-> For more information on ProjectTemplate and its functionality visit the
-> home page [ProjectTemplate](http://projecttemplate.net/index.html)
 {: .callout}
 
 ### Save the data in the data directory
@@ -191,35 +164,6 @@ Now we have a good directory structure we will now place/save the data file in t
 >
 > We will load and inspect these data later.
 {: .challenge}
-> ## Challenge 2
-> It is useful to get some general idea about the dataset, directly from the
-> command line, before loading it into R. Understanding the dataset better
-> will come in handy when making decisions on how to load it in R. Use the command-line
-> shell to answer the following questions:
-> 1. What is the size of the file?
-> 2. How many rows of data does it contain?
-> 3. What kinds of values are stored in this file?
->
-> > ## Solution to Challenge 2
-> >
-> > By running these commands in the shell:
-> > ```{r ch2a-sol, engine='bash'}
-> > ls -lh data/gapminder.csv
-> > ```
-> > The file size is 80K.
-> > ```{r ch2b-sol, engine='bash'}
-> > wc -l data/gapminder.csv
-> > ```
-> > There are 1705 lines. The data looks like:
-> > ```{r ch2c-sol, engine='bash'}
-> > head data/gapminder.csv
-> > ```
-> {: .solution}
-{: .challenge}
-> ## Tip: command line in R Studio
->
-> You can quickly open up a shell in RStudio using the **Tools -> Shell...** menu item.
-{: .callout}
 
 
 
