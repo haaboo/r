@@ -66,9 +66,9 @@ summarise(gapminder_by_country, mean_life_exp = mean(lifeExp))
 > Adjust your answer to Challenge 1 to show the mean and median population for each continent.
 > > ## Solution to Challenge 2
 > > ``` {r summarise-sol-2}
-> > gapminder_by_country <- group_by(gapminder, country)
+> > gapminder_by_continent <- group_by(gapminder, continent)
 > > 
-> > summarise(gapminder_by_country, mean_pop = mean(pop), median_pop = median(pop))
+> > summarise(gapminder_by_continent, mean_pop = mean(pop), median_pop = median(pop))
 > > ```
 > {: .solution}
 {: .challenge}

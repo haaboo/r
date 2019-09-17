@@ -18,10 +18,7 @@ keypoints:
 source: Rmd
 ---
 
-
-
 ## Why should you use R?
-
 
 [What is R and what makes it different from the other software packages out there?](https://select-statistics.co.uk/blog/what-is-r-and-why-should-you-use-it/)
 R is designed specifically for statistical computing and graphics, and is able to perform any task associated with handling and manipulating data.
@@ -32,22 +29,9 @@ In fact, finding a particular statistical model or technique that is not already
 
 ## Introduction to RStudio
 
-Welcome to the R portion of the Software Carpentry workshop.
-
-Throughout this lesson, we're going to teach you some of the fundamentals of
-the R language as well as some best practices for organizing code for
-scientific projects that will make your life easier.
-
-We'll be using RStudio: a free, open source R integrated development
-environment. It provides a built in editor, works on all platforms (including
-on servers) and provides many advantages such as integration with version
-control and project management.
-
-
-
 **Basic layout**
 
-When you first open RStudio, you will be greeted by three panels:
+As a reminder, when you first open RStudio, you will be greeted by three panels:
 
   * The interactive R console/terminal (entire left)
   * Environment/History (tabbed in upper right)
@@ -63,18 +47,27 @@ in the top left.
 You can move the panels around in RStudio so that their arrangement suits you.
 
 ## Work flow within RStudio
-There are two main ways one can work within RStudio.
 
-1. Test and play within the interactive R console then copy code into
-a .R file to run later.
-   *  This works well when doing small tests and initially starting off.
-   *  It quickly becomes laborious
+The best way to work with R is to write your commands inside .R files.
+1. Open and save a new .R file
+2. Write some lines of code.
+3. Use RStudio's short cut keys for the Run command to push the current line, selected lines, 
+or modified lines ot the interactive R console.
+4. You can rerun commands from the interactive console by using <kbd>&uparrow;</kbd>. This is useful for debugging. 
 2. Start writing in an .R file and use RStudio's short cut keys for the Run command
 to push the current line, selected lines or modified lines to the
 interactive R console.
    * This is a great way to start; all your code is saved for later
    * You will be able to run the file you create from within RStudio
    or using R's `source()`  function.
+
+![RStudio scripts](../fig/01-usingRscripts.png)
+
+
+> ## Discussion: the interactive console
+> You can also type commands directly into the interactive console. When might 
+> this be appropriate? What are the advantages / disadvantages?
+{: .discussion}
 
 > ## Tip: Running segments of your code
 >
@@ -120,7 +113,7 @@ A good project layout will ultimately make your life easier:
 Now when we start R in this project directory, or open this project with RStudio,
 all of our work on this project will be entirely self-contained in this directory.
 
-## Best practices for project organization
+## Best practices for project organisation
 
 Although there is no "best" way to lay out a project, there are some general
 principles to adhere to that will make project management easier:
@@ -128,8 +121,8 @@ principles to adhere to that will make project management easier:
 ### Treat raw data as read only
 
 This is probably the most important goal of setting up a project. Data is
-typically time consuming and/or expensive to collect. Working with them
-interactively (e.g., in Excel) where they can be modified means you are never
+typically time consuming and/or expensive to collect. Working with data 
+interactively (e.g., in Excel) where it can be modified means you are never
 sure of where the data came from, or how it has been modified since collection.
 It is therefore a good idea to treat your raw data as "read-only".
 
@@ -155,29 +148,6 @@ all be able to be regenerated from your scripts.
 > 5. Name all files to reflect their content or function.
 >
 {: .callout}
-> ## Tip: ProjectTemplate - a possible solution
->
-> One way to automate the management of projects is to install the third-party package, `ProjectTemplate`.
-> This package will set up an ideal directory structure for project management.
-> This is very useful as it enables you to have your analysis pipeline/workflow organised and structured.
-> Together with the default RStudio project functionality and Git you will be able to keep track of your
-> work as well as be able to share your work with collaborators.
->
-> 1. Install `ProjectTemplate`.
-> 2. Load the library
-> 3. Initialise the project:
->
-> 
-> ~~~
-> install.packages("ProjectTemplate")
-> library("ProjectTemplate")
-> create.project("../my_project", merge.strategy = "allow.non.conflict")
-> ~~~
-> {: .language-r}
->
-> For more information on ProjectTemplate and its functionality visit the
-> home page [ProjectTemplate](http://projecttemplate.net/index.html)
-{: .callout}
 
 ### Save the data in the data directory
 
@@ -192,74 +162,4 @@ Now we have a good directory structure we will now place/save the data file in t
 >
 > We will load and inspect these data later.
 {: .challenge}
-> ## Challenge 2
-> It is useful to get some general idea about the dataset, directly from the
-> command line, before loading it into R. Understanding the dataset better
-> will come in handy when making decisions on how to load it in R. Use the command-line
-> shell to answer the following questions:
-> 1. What is the size of the file?
-> 2. How many rows of data does it contain?
-> 3. What kinds of values are stored in this file?
->
-> > ## Solution to Challenge 2
-> >
-> > By running these commands in the shell:
-> > 
-> > ~~~
-> > ls -lh data/gapminder.csv
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > 
-> > ~~~
-> > -rw-r--r--  1 pea25i  348785    80K 20 Mar 11:17 data/gapminder.csv
-> > ~~~
-> > {: .output}
-> > The file size is 80K.
-> > 
-> > ~~~
-> > wc -l data/gapminder.csv
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > 
-> > ~~~
-> >     1705 data/gapminder.csv
-> > ~~~
-> > {: .output}
-> > There are 1705 lines. The data looks like:
-> > 
-> > ~~~
-> > head data/gapminder.csv
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > 
-> > ~~~
-> > country,continent,year,lifeExp,pop,gdpPercap
-> > Afghanistan,Asia,1952,28.801,8425333,779.4453145
-> > Afghanistan,Asia,1957,30.332,9240934,820.8530296
-> > Afghanistan,Asia,1962,31.997,10267083,853.10071
-> > Afghanistan,Asia,1967,34.02,11537966,836.1971382
-> > Afghanistan,Asia,1972,36.088,13079460,739.9811058
-> > Afghanistan,Asia,1977,38.438,14880372,786.11336
-> > Afghanistan,Asia,1982,39.854,12881816,978.0114388
-> > Afghanistan,Asia,1987,40.822,13867957,852.3959448
-> > Afghanistan,Asia,1992,41.674,16317921,649.3413952
-> > ~~~
-> > {: .output}
-> {: .solution}
-{: .challenge}
-> ## Tip: command line in R Studio
->
-> You can quickly open up a shell in RStudio using the **Tools -> Shell...** menu item.
-{: .callout}
-
-
 

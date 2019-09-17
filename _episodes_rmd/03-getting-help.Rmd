@@ -20,16 +20,15 @@ knitr_fig_path("03-")
 
 ## Reading Help files
 
-R, and every package, provide help files for functions. The general syntax to search for help on any
-function, "function_name", from a specific function that is in a package loaded into your
-namespace (your interactive R session):
+R, and every package, provide help files for functions. The general syntax to search for help on functions is:
 
 ```{r help, eval=FALSE}
 ?function_name
 help(function_name)
 ```
 
-This will load up a help page in RStudio (or as plain text in R by itself).
+This will load up a help page in RStudio. It will work as long as you have loaded the package that the function 
+belongs to (i.e., the function is in your 'namespace'). 
 
 Each help page is broken down into sections:
 
