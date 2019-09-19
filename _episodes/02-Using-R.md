@@ -23,28 +23,10 @@ source: Rmd
 
 
 
-## Introduction to R
-
-Your time in R will be split between the R interactive console working 
-in scripts. The console is where you will run all of your code, and can 
-be a useful environment to try out ideas before adding them to an R script
-file. This console in RStudio is the same as the one you would get if
-you typed in `R` in your command-line environment.
-
-*Anything that you want to keep needs to go in a script.*
-
-The first thing you will see in the R interactive session is a bunch
-of information, followed by a ">" and a blinking cursor. In many ways
-this is similar to the shell environment you learned about during the
-shell lessons: it operates on the same idea of a "Read, evaluate,
-print loop": you type in commands, press <kbd>Return</kbd>, R tries to execute them, and then
-returns a result. Alternatively, you can type the commands into a script
-file and send them to the R console to be executed with <kbd>Ctrl</kbd>+<kbd>Return</kbd> 
-(in Windows and Linux) or <kbd>⌘</kbd>+<kbd>Return</kbd> on OS X.
-
 ## Using R as a calculator
 
 The simplest thing you could do with R is do arithmetic:
+Open an R script, save it, and type in the following:
 
 
 ~~~
@@ -58,12 +40,16 @@ The simplest thing you could do with R is do arithmetic:
 [1] 101
 ~~~
 {: .output}
+Send this command to the R console to be executed with <kbd>Ctrl</kbd>+<kbd>Return</kbd>.
 
 And R will print out the answer, with a preceding "[1]". Don't worry about this
 for now, we'll explain that later. For now think of it as indicating output.
 
-Like bash, if you type in an incomplete command, R will wait for you to
-complete it:
+And R will print out the answer, with a preceding "[1]". Don't worry about this
+for now, we'll explain that later. For now think of it as indicating output.
+
+What happens if your command is incomplete? Try writing this in a script and running it with
+<kbd>Ctrl</kbd>+<kbd>Return</kbd>:
 
 ~~~
 > 1 +
@@ -80,18 +66,17 @@ means it's waiting for you to complete the command. If you want to cancel
 a command you can simply hit <kbd>Esc</kbd> and RStudio will give you back the ">"
 prompt.
 
+
 > ## Tip: Cancelling commands
 >
-> If you're using R from the commandline instead of from within RStudio,
-> you need to use <kbd>Ctrl</kbd>+<kbd>C</kbd> instead of <kbd>Esc</kbd>
-> to cancel the command. This applies to Mac users as well!
+> You can also cancel commands using <kbd>Ctrl</kbd>+<kbd>C</kbd> instead of <kbd>Esc</kbd>.
+> This applies to Mac users as well!
 >
 > Cancelling a command isn't only useful for killing incomplete commands:
 > you can also use it to tell R to stop running code (for example if it's
-> taking much longer than you expect), or to get rid of the code you're
-> currently writing.
->
+> taking much longer than you expect).
 {: .callout}
+
 
 When using R as a calculator, the order of operations is the same as you
 would have learned back in school.
@@ -256,6 +241,25 @@ We can also do comparison in R:
 
 > ## Tip: Comparing Numbers
 >
+> Try this code:
+> ~~~
+> pi
+> ~~~
+> {: .r}
+>
+> ~~~
+> [1] 3.141593
+> ~~~
+> {: .output}
+>
+> Now try:
+> ~~~
+> pi == 3.141593
+> ~~~
+> {: .r}
+>
+> What is the explanation for this output?
+>
 > A word of warning about comparing numbers: you should
 > never use `==` to compare two numbers unless they are
 > integers (a data type which can specifically represent
@@ -273,7 +277,6 @@ We can also do comparison in R:
 > Further reading: [http://floating-point-gui.de/](http://floating-point-gui.de/)
 >
 {: .callout}
-
 
 ## Variables and assignment
 
@@ -707,7 +710,7 @@ ls()
 
 > ## Tip: hidden objects
 >
-> Like in the shell, `ls` will hide any variables or functions starting
+> `ls` will hide any variables or functions starting
 > with a "." by default. To list all objects, type `ls(all.names=TRUE)`
 > instead
 >
@@ -758,7 +761,7 @@ function (name, pos = -1L, envir = as.environment(pos), all.names = FALSE,
     }
     else all.names
 }
-<bytecode: 0x7fb69fbace88>
+<bytecode: 0x7fc0b6181598>
 <environment: namespace:base>
 ~~~
 {: .output}
