@@ -155,14 +155,18 @@ gapminder_sr
 ```
 
 > ## Challenge 3
-> Which columns are shared between `gapminder` and `gapminder_sr`? 
+> Which columns are shared between `gapminder` and `gapminder_sr`?. 
 >
-> Compare the output of `left`, `full` and `inner` joins for these two datasets.
-> What are the differences? What are they due to?
+> Compare the output of `left`, `full` and `inner` joins for these two datasets. You may notice that it is possible to join on multiple columns. 
+> For example:
+> ~~~~
+> full_join(gapminder, gapminder_sr)
+> ~~~~ 
+> What are the differences between these three joins? What causes these differences?
 > > ## Solution to Challenge 3
 > > The two datasets share the `country` and `year` columns.
 > > 
-> > The output from `outer_join` has the most rows, because it is keeping all the rows from both 
+> > The output from `full_join` has the most rows, because it is keeping all the rows from both 
 > > dataframes. `inner_join` is only including those rows that match. and has the least rows. The 
 > > `left_join` output will depend on which data frame was provided first and has the same number of
 > > rows as that data frame. 
