@@ -1,9 +1,9 @@
 ---
-title: Creating New Variables
+title: Creating New Columns
 teaching: 30
 exercises: 15
 questions:
-  - "How can I create new variables in my data frame?"
+  - "How can I create new columns of data in my data frame?"
   - "How do I deal with a data frame made up of different groups?"
 objectives:
   - "Create new columns by performing calculations on old variables."
@@ -102,8 +102,8 @@ mutate(
 > of dollars
 > > ## Solution to Challenge 3
 > > ``` {r mutate-sol-3}
-> > gapminder %>% 
-> >   mutate(
+> > mutate(
+> >   gapminder,
 > >     life_exp_days = lifeExp * 365,
 > >     gdp_billion = gdpPercap * pop / 10^9
 > > )
