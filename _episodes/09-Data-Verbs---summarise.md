@@ -263,85 +263,6 @@ arrange(gapminder, desc(gdpPercap))
 > {: .solution}
 {: .challenge}
 
-If you provide multiple variables to sort by, `arrange()` will initially sort by the first variable,
-with any ties broken by the next variable and so on.
-
-> ## Challenge 4
-> Create a new data frame called `summarised_gdp` which calculates the `mean_gdp_per_cap` per 
-> continent for each year. Remember that `group_by()` can be given multiple grouping variables.
->
-> Observe the result when you run each of the following two lines. What are the differences and 
-> when might you use one over the other?
-> ~~~~
-> arrange(summarised_gdp, desc(year), desc(mean_gdp_per_cap))
-> ~~~~
-> {: .language-r}
-> ~~~~
-> arrange(summarised_gdp, desc(mean_gdp_per_cap), desc(year))
-> ~~~~
-> {: .language-r}
-> > ## Solution to Challenge 4
-> > 
-> > ~~~
-> > gap_by_cont_year <- group_by(gapminder, continent, year)
-> > 
-> > summarised_gdp <- summarise(gap_by_cont_year, mean_gdp_per_cap = mean(gdpPercap))
-> > 
-> > arrange(summarised_gdp, desc(year), desc(mean_gdp_per_cap))
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > ~~~
-> > # A tibble: 60 x 3
-> > # Groups:   continent [5]
-> >    continent  year mean_gdp_per_cap
-> >    <chr>     <dbl>            <dbl>
-> >  1 Oceania    2007           29810.
-> >  2 Europe     2007           25054.
-> >  3 Asia       2007           12473.
-> >  4 Americas   2007           11003.
-> >  5 Africa     2007            3089.
-> >  6 Oceania    2002           26939.
-> >  7 Europe     2002           21712.
-> >  8 Asia       2002           10174.
-> >  9 Americas   2002            9288.
-> > 10 Africa     2002            2599.
-> > # … with 50 more rows
-> > ~~~
-> > {: .output}
-> > 
-> > 
-> > 
-> > ~~~
-> > arrange(summarised_gdp, desc(mean_gdp_per_cap), desc(year))
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > ~~~
-> > # A tibble: 60 x 3
-> > # Groups:   continent [5]
-> >    continent  year mean_gdp_per_cap
-> >    <chr>     <dbl>            <dbl>
-> >  1 Oceania    2007           29810.
-> >  2 Oceania    2002           26939.
-> >  3 Europe     2007           25054.
-> >  4 Oceania    1997           24024.
-> >  5 Europe     2002           21712.
-> >  6 Oceania    1992           20894.
-> >  7 Oceania    1987           20448.
-> >  8 Europe     1997           19077.
-> >  9 Oceania    1982           18555.
-> > 10 Oceania    1977           17284.
-> > # … with 50 more rows
-> > ~~~
-> > {: .output}
-> {: .solution}
-{: .challenge}
-
 ## Counting things
 A very common summary operation is to count the number of observations. The `n()`
 function will help simplify this process. `n()` will return the number of rows in the data frame (or
@@ -420,11 +341,11 @@ summarise(gapminder_by_country, se_pop = sd(pop) / sqrt(n()) )
 ~~~
 {: .output}
 
-> ## Challenge 5
+> ## Challenge 4
 > Let's try to put together all three functions introduced here. Produce a data frame that summarises
 > the number of rows for each continent, sorted from highest to lowest. Use 
 > `group_by()`, `summarise()`, and `arrange()` in that order to achieve it.
-> > ## Solution to Challenge 5
+> > ## Solution to Challenge 4
 > > 
 > > ~~~
 > > gap_by_cont <- group_by(gapminder, continent) 

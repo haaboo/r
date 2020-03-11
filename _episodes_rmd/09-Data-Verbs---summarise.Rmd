@@ -99,36 +99,6 @@ arrange(gapminder, desc(gdpPercap))
 > {: .solution}
 {: .challenge}
 
-If you provide multiple variables to sort by, `arrange()` will initially sort by the first variable,
-with any ties broken by the next variable and so on.
-
-> ## Challenge 4
-> Create a new data frame called `summarised_gdp` which calculates the `mean_gdp_per_cap` per 
-> continent for each year. Remember that `group_by()` can be given multiple grouping variables.
->
-> Observe the result when you run each of the following two lines. What are the differences and 
-> when might you use one over the other?
-> ~~~~
-> arrange(summarised_gdp, desc(year), desc(mean_gdp_per_cap))
-> ~~~~
-> {: .language-r}
-> ~~~~
-> arrange(summarised_gdp, desc(mean_gdp_per_cap), desc(year))
-> ~~~~
-> {: .language-r}
-> > ## Solution to Challenge 4
-> > ``` {r summarise-sol-4}
-> > gap_by_cont_year <- group_by(gapminder, continent, year)
-> >
-> > summarised_gdp <- summarise(gap_by_cont_year, mean_gdp_per_cap = mean(gdpPercap))
-> >
-> > arrange(summarised_gdp, desc(year), desc(mean_gdp_per_cap))
-> >
-> > arrange(summarised_gdp, desc(mean_gdp_per_cap), desc(year))
-> > ```
-> {: .solution}
-{: .challenge}
-
 ## Counting things
 A very common summary operation is to count the number of observations. The `n()`
 function will help simplify this process. `n()` will return the number of rows in the data frame (or
@@ -148,12 +118,12 @@ For instance, if we wanted to get the standard error of the population per count
 summarise(gapminder_by_country, se_pop = sd(pop) / sqrt(n()) )
 ```
 
-> ## Challenge 5
+> ## Challenge 4
 > Let's try to put together all three functions introduced here. Produce a data frame that summarises
 > the number of rows for each continent, sorted from highest to lowest. Use 
 > `group_by()`, `summarise()`, and `arrange()` in that order to achieve it.
-> > ## Solution to Challenge 5
-> > ``` {r summarise-sol-5}
+> > ## Solution to Challenge 4
+> > ``` {r summarise-sol-4}
 > > gap_by_cont <- group_by(gapminder, continent) 
 > > 
 > > count_by_cont <- summarise(gap_by_cont, num_rows = n())
