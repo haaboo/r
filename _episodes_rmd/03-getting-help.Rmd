@@ -124,56 +124,19 @@ sessionInfo()
 {: .challenge}
 
 > ## Challenge 2
->
-> Look at the help for the `paste` function. You'll need to use this later.
-> What is the difference between the `sep` and `collapse` arguments?
->
+> 
+> Look at the help for the `sum` function. It has the `na.rm` agrument to control how it deals with missing values.
+> 
+> Run the final two code examples at the bottom of the help file. What result does each give?
 > > ## Solution to Challenge 2
-> >
-> > To look at the help for the `paste()` function, use:
-> > ```{r, eval=FALSE}
-> > help("paste")
-> > ?paste
+> > ```{r sol-ch2}
+> > sum(1:5, NA)
+> > sum(1:5, NA, na.rm = TRUE)
 > > ```
-> > The difference between `sep` and `collapse` is a little
-> > tricky. The `paste` function accepts any number of arguments, each of which
-> > can be a vector of any length. The `sep` argument specifies the string
-> > used between concatenated terms — by default, a space. The result is a
-> > vector as long as the longest argument supplied to `paste`. In contrast,
-> > `collapse` specifies that after concatenation the elements are *collapsed*
-> > together using the given separator, the result being a single string.
-> > e.g. 
-> > ```{r} 
-> > paste(c("a","b"), "c")
-> > paste(c("a","b"), "c", sep = ",")
-> > paste(c("a","b"), "c", collapse = "|")
-> > paste(c("a","b"), "c", sep = ",", collapse = "|")
-> > ```
-> > (For more information,
-> > scroll to the bottom of the `?paste` help page and look at the
-> > examples, or try `example('paste')`.)
+> > The first line gives a result of `NA`. But when `na.rm = TRUE` in the second, `sum` first removes the `NA` value 
+> > and then calculates the sum of 1, 2, 3, 4, & 5 giving 15.
 > {: .solution}
 {: .challenge}
-
-> ## Challenge 3
-> Use help to find a function (and its associated parameters) that you could
-> use to load data from a csv file in which columns are delimited with "\t"
-> (tab) and the decimal point is a "." (period). This check for decimal
-> separator is important, especially if you are working with international
-> colleagues, because different countries have different conventions for the
-> decimal point (i.e. comma vs period).
-> hint: use `??csv` to lookup csv related functions.
-> > ## Solution to Challenge 3
-> >
-> > The standard R function for reading tab-delimited files with a period
-> > decimal separator is read.delim(). You can also do this with
-> > `read.table(file, sep="\t")` (the period is the *default* decimal
-> > separator for `read.table()`, although you may have to change
-> > the `comment.char` argument as well if your data file contains
-> > hash (#) characters
-> {: .solution}
-{: .challenge}
-
 ## Other ports of call
 
 * [Quick R](http://www.statmethods.net/)

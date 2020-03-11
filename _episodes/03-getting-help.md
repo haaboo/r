@@ -19,9 +19,7 @@ source: Rmd
 
 ## Reading Help files
 
-R, and every package, provide help files for functions. The general syntax to search for help on any
-function, "function_name", from a specific function that is in a package loaded into your
-namespace (your interactive R session):
+R, and every package, provide help files for functions. The general syntax to search for help on functions is:
 
 
 ~~~
@@ -30,7 +28,8 @@ help(function_name)
 ~~~
 {: .language-r}
 
-This will load up a help page in RStudio (or as plain text in R by itself).
+This will load up a help page in RStudio. It will work as long as you have loaded the package that the function 
+belongs to (i.e., the function is in your 'namespace'). 
 
 Each help page is broken down into sections:
 
@@ -122,13 +121,13 @@ sessionInfo()
 
 
 ~~~
-R version 3.5.1 (2018-07-02)
+R version 3.6.1 (2019-07-05)
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS High Sierra 10.13.6
 
 Matrix products: default
-BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
@@ -137,13 +136,13 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] knitr_1.21              requirements_0.0.0.9000 remotes_2.0.2          
+[1] knitr_1.28              requirements_0.0.0.9000 remotes_2.1.1          
 
 loaded via a namespace (and not attached):
- [1] compiler_3.5.1  magrittr_1.5    htmltools_0.3.6 tools_3.5.1    
- [5] yaml_2.2.0      Rcpp_1.0.0      stringi_1.3.1   rmarkdown_1.11 
- [9] stringr_1.4.0   xfun_0.5        digest_0.6.18   rlang_0.3.1    
-[13] evaluate_0.12  
+ [1] compiler_3.6.1  magrittr_1.5    htmltools_0.4.0 tools_3.6.1    
+ [5] yaml_2.2.1      Rcpp_1.0.3      stringi_1.4.6   rmarkdown_2.1  
+ [9] stringr_1.4.0   xfun_0.12       digest_0.6.25   rlang_0.4.5    
+[13] evaluate_0.14  
 ~~~
 {: .output}
 
@@ -162,106 +161,41 @@ loaded via a namespace (and not attached):
 {: .challenge}
 
 > ## Challenge 2
->
-> Look at the help for the `paste` function. You'll need to use this later.
-> What is the difference between the `sep` and `collapse` arguments?
->
+> 
+> Look at the help for the `sum` function. It has the `na.rm` agrument to control how it deals with missing values.
+> 
+> Run the final two code examples at the bottom of the help file. What result does each give?
 > > ## Solution to Challenge 2
-> >
-> > To look at the help for the `paste()` function, use:
 > > 
 > > ~~~
-> > help("paste")
-> > ?paste
-> > ~~~
-> > {: .language-r}
-> > The difference between `sep` and `collapse` is a little
-> > tricky. The `paste` function accepts any number of arguments, each of which
-> > can be a vector of any length. The `sep` argument specifies the string
-> > used between concatenated terms — by default, a space. The result is a
-> > vector as long as the longest argument supplied to `paste`. In contrast,
-> > `collapse` specifies that after concatenation the elements are *collapsed*
-> > together using the given separator, the result being a single string.
-> > e.g. 
-> > 
-> > ~~~
-> > paste(c("a","b"), "c")
+> > sum(1:5, NA)
 > > ~~~
 > > {: .language-r}
 > > 
 > > 
 > > 
 > > ~~~
-> > [1] "a c" "b c"
+> > [1] NA
 > > ~~~
 > > {: .output}
 > > 
 > > 
 > > 
 > > ~~~
-> > paste(c("a","b"), "c", sep = ",")
+> > sum(1:5, NA, na.rm = TRUE)
 > > ~~~
 > > {: .language-r}
 > > 
 > > 
 > > 
 > > ~~~
-> > [1] "a,c" "b,c"
+> > [1] 15
 > > ~~~
 > > {: .output}
-> > 
-> > 
-> > 
-> > ~~~
-> > paste(c("a","b"), "c", collapse = "|")
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > ~~~
-> > [1] "a c|b c"
-> > ~~~
-> > {: .output}
-> > 
-> > 
-> > 
-> > ~~~
-> > paste(c("a","b"), "c", sep = ",", collapse = "|")
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > ~~~
-> > [1] "a,c|b,c"
-> > ~~~
-> > {: .output}
-> > (For more information,
-> > scroll to the bottom of the `?paste` help page and look at the
-> > examples, or try `example('paste')`.)
+> > The first line gives a result of `NA`. But when `na.rm = TRUE` in the second, `sum` first removes the `NA` value 
+> > and then calculates the sum of 1, 2, 3, 4, & 5 giving 15.
 > {: .solution}
 {: .challenge}
-
-> ## Challenge 3
-> Use help to find a function (and its associated parameters) that you could
-> use to load data from a csv file in which columns are delimited with "\t"
-> (tab) and the decimal point is a "." (period). This check for decimal
-> separator is important, especially if you are working with international
-> colleagues, because different countries have different conventions for the
-> decimal point (i.e. comma vs period).
-> hint: use `??csv` to lookup csv related functions.
-> > ## Solution to Challenge 3
-> >
-> > The standard R function for reading tab-delimited files with a period
-> > decimal separator is read.delim(). You can also do this with
-> > `read.table(file, sep="\t")` (the period is the *default* decimal
-> > separator for `read.table()`, although you may have to change
-> > the `comment.char` argument as well if your data file contains
-> > hash (#) characters
-> {: .solution}
-{: .challenge}
-
 ## Other ports of call
 
 * [Quick R](http://www.statmethods.net/)
